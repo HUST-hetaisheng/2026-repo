@@ -139,6 +139,15 @@ An alternative scoring system combining \quad
 judges’ scores and fan votes is proposed and evaluated to determine whether it improves fairness or other aspects of the competition.
 
 
+\section{Preparations for Modeling}
+
+\subsection{Model Assumptions}
+
+\subsection{Notations}
+
+\subsection{Data Processing}
+
+
 % ============================================
 % Full modeling for Question 1 (all seasons)
 % ============================================
@@ -267,18 +276,18 @@ We estimate weekly fan vote \emph{shares}
 f_{i,t}\ge 0,\qquad \sum_{i\in A_t} f_{i,t}=1,
 \end{equation}
 and define judge shares $j_{i,t}=J_{i,t}/\sum_{k\in A_t}J_{k,t}$. Let $E_t\subseteq A_t$ be the vote-determined
-eliminated set (excluding \texttt{Withdrew}) and $S_t=A_t\setminus E_t$.
+eliminated set (excluding \textit{Withdrew}) and $S_t=A_t\setminus E_t$.
 
 \subsection{Season-Dependent Rule Regimes}
 The competition uses three different rules across its history:
 \begin{itemize}
 \item \textbf{S1--2 (Rank)}: combined rank = judge rank + fan rank; the worst sum is eliminated.
 \item \textbf{S3--27 (Percent)}: combined score = judge share + fan share; the smallest sum is eliminated.
-\item \textbf{S28--34 (Bottom2 + judges' save)}: bottom two by combined rank; judges choose whom to eliminate.
+\item \textbf{S28--34 (Bottom2 + judges' choice)}: bottom two by combined rank; judges choose whom to eliminate.
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/rules_of_score_combining_and_couple_elimination.png}
-    \caption{Enter Caption}
+    \includegraphics[width=0.8\linewidth]{figures/rules_chart.png}
+    \caption{The Rules'Change}
     \label{fig:placeholder}
 \end{figure}
 \end{itemize}
@@ -315,7 +324,7 @@ where $\mathcal{L}$ is a softmax negative log-likelihood for multi-elimination w
 \end{enumerate}
 
 \paragraph{Finals and no-elimination weeks.} For the final week, we enforce the ranking order
-$c_{\pi(1),T}>c_{\pi(2),T}>\cdots$ using \texttt{placement}. For no-elimination weeks,
+$c_{\pi(1),T}>c_{\pi(2),T}>\cdots$ using \textit{placement}. For no-elimination weeks,
 we interpolate $f_{i,t}$ from adjacent weeks with the same active set.
 
 \subsection{Regime B: Rank Seasons (S1--2)}
@@ -338,7 +347,7 @@ The bottom two are the contestants with the two highest combined ranks.
 In single-elimination weeks, the eliminated contestant $e$ is known, but the bottom-two partner $b$ is unobserved.
 
 \paragraph{Probabilistic Judges' Save Model.}
-We model the judges' decision probabilistically. Given bottom-two contestants $\{e, b\}$, the probability
+We model the judges' decision probabi listically. Given bottom-two contestants $\{e, b\}$, the probability
 that judges eliminate $e$ (and save $b$) is:
 \begin{equation}
 \Pr(\text{elim } e \mid e, b) = \sigma\left(\kappa(J_{b,t} - J_{e,t})\right),
@@ -349,12 +358,9 @@ This encodes the intuition that judges prefer to save the higher-scoring contest
 
 \paragraph{Partner Selection.}
 For each candidate partner $b \in A_t \setminus \{e\}$:
-\begin{enumerate}
-\item Check feasibility: can fan ranks be assigned so that $\{e, b\}$ form the bottom two?
-\item If feasible, compute $\Pr(\text{elim } e \mid e, b)$ via Eq.~\eqref{eq:judges_save}.
-\item Select the partner with highest elimination probability (deterministic mode) or sample from
+if  fan ranks can be assigned and $\{e, b\}$ form the bottom two , compute $\Pr(\text{elim } e \mid e, b)$ via Eq.~\eqref{eq:judges_save}. And then select the partner with highest elimination probability (deterministic mode) or sample from
 the normalized distribution (stochastic mode for ensemble).
-\end{enumerate}
+
 
 \paragraph{Ensemble Sampling.}
 In ensemble runs, we sample the partner from the probability distribution, capturing uncertainty
