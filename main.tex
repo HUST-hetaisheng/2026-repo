@@ -1,256 +1,519 @@
-%%
-%% MCM 2026 Problem C - DWTS Fan Vote Estimation
-%%
-\documentclass{mcmthesis}
-\mcmsetup{tstyle=\color{red}\bfseries,
-        tcn = 2607256, problem = C,
-        sheet = true, titleinsheet = false, keywordsinsheet = true,
-        titlepage = false, abstract = true}
+%%%%
 
-\usepackage{newtxtext,newtxmath}
-\usepackage{indentfirst}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-\usepackage{booktabs}
+%% MCM 2026 Problem C - DWTS Fan Vote Estimation%% MCM 2026 Problem C - DWTS Fan Vote Estimation
 
-\title{Inverse Estimation of Fan Votes in Dancing with the Stars}
+%%%%
+
+\documentclass{mcmthesis}\documentclass{mcmthesis}
+
+\mcmsetup{tstyle=\color{red}\bfseries,\mcmsetup{tstyle=\color{red}\bfseries,
+
+        tcn = 2607256, problem = C,        tcn = 2607256, problem = C,
+
+        sheet = true, titleinsheet = false, keywordsinsheet = true,        sheet = true, titleinsheet = false, keywordsinsheet = true,
+
+        titlepage = false, abstract = true}        titlepage = false, abstract = true}
+
+
+
+\usepackage{newtxtext,newtxmath}\usepackage{newtxtext,newtxmath}
+
+\usepackage{indentfirst}\usepackage{indentfirst}
+
+\usepackage{algorithm}\usepackage{algorithm}
+
+\usepackage{algpseudocode}\usepackage{algpseudocode}
+
+\usepackage{booktabs}\usepackage{booktabs}
+
+\usepackage{float}
+
+\usepackage{graphicx}\title{Inverse Estimation of Fan Votes in Dancing with the Stars}
+
 \date{\today}
 
-\begin{document}
+\title{Inverse Estimation of Fan Votes in Dancing with the Stars}
+
+\date{\today}\begin{document}
+
 \begin{abstract}
-We address the inverse problem of estimating fan votes from DWTS elimination data across 34 seasons (2005--2024). The challenge: given only judges' scores and elimination outcomes, infer the hidden fan vote distribution. We develop regime-specific models for three distinct voting rules: Rank-based (S1--2), Percent-based (S3--27), and Bottom2+Judges' Save (S28--34). Our approach uses convex optimization with softmax likelihood and entropy regularization, achieving 100\% constraint satisfaction for Percent seasons and identifying ``upset'' eliminations in Rank seasons where strong fan opposition overcame judges' preferences. Certainty is quantified via ensemble perturbation, with Percent regime showing highest certainty (0.975), followed by Rank (0.913) and Bottom2 (0.821).
 
-\begin{keywords}
+\begin{document}We address the inverse problem of estimating fan votes from DWTS elimination data across 34 seasons (2005--2024). The challenge: given only judges' scores and elimination outcomes, infer the hidden fan vote distribution. We develop regime-specific models for three distinct voting rules: Rank-based (S1--2), Percent-based (S3--27), and Bottom2+Judges' Save (S28--34). Our approach uses convex optimization with softmax likelihood and entropy regularization, achieving 100\% constraint satisfaction for Percent seasons and identifying ``upset'' eliminations in Rank seasons where strong fan opposition overcame judges' preferences. Certainty is quantified via ensemble perturbation, with Percent regime showing highest certainty (0.975), followed by Rank (0.913) and Bottom2 (0.821).
+
+\begin{abstract}
+
+We address the inverse problem of estimating fan votes from DWTS elimination data across 34 seasons (2005--2024). Given only judges' scores and elimination outcomes, we infer the hidden fan vote distribution. We develop regime-specific models for three distinct voting rules: Rank-based (S1--2), Percent-based (S3--27), and Bottom2+Judges' Save (S28--34). Our approach uses convex optimization with softmax likelihood and entropy regularization, achieving 100\% constraint satisfaction for Percent seasons. For Rank and Bottom2 regimes, constraint satisfaction rates below 100\% identify historical ``upset'' eliminations where fan votes strongly opposed judges' preferences. Certainty is quantified via ensemble perturbation, with Percent regime showing highest certainty (0.985), followed by Rank (0.905) and Bottom2 (0.804).\begin{keywords}
+
 inverse problem; fan vote estimation; convex optimization; DWTS; certainty quantification
-\end{keywords}
-\end{abstract}
-\maketitle
+
+\begin{keywords}\end{keywords}
+
+inverse problem; fan vote estimation; convex optimization; DWTS; certainty quantification\end{abstract}
+
+\end{keywords}\maketitle
+
+\end{abstract}\tableofcontents
+
+\maketitle\newpage
+
 \tableofcontents
-\newpage
 
-%% ===========================================
+\newpage%% ===========================================
+
 \section{Introduction}
-\subsection{Background}
-Variety entertainment has become an indispensable spice of modern life, with various emerging shows continuing to emerge, and competition in the global variety entertainment industry has become increasingly fierce. In an era of such frequent iteration of variety IPs, Dancing with the Stars (DWTS), the American version of an international television franchise, has firmly established itself. Having completed 34 seasons with audiences spanning numerous countries worldwide, it has evolved into a benchmark variety show renowned for both its reputation and popularity.
-\begin{figure}[H]
+
+%% ===========================================\subsection{Background}
+
+\section{Introduction}Variety entertainment has become an indispensable spice of modern life, with various emerging shows continuing to emerge, and competition in the global variety entertainment industry has become increasingly fierce. In an era of such frequent iteration of variety IPs, Dancing with the Stars (DWTS), the American version of an international television franchise, has firmly established itself. Having completed 34 seasons with audiences spanning numerous countries worldwide, it has evolved into a benchmark variety show renowned for both its reputation and popularity.
+
+%% ===========================================\begin{figure}[H]
+
     \centering
-    \includegraphics[width=0.5\linewidth]{figures/dwtc背景图.png}
-    \caption{Dancing with the Stars poster season33}
+
+\subsection{Background}    \includegraphics[width=0.5\linewidth]{figures/dwtc背景图.png}
+
+Dancing with the Stars (DWTS) is a long-running American television franchise that has completed 34 seasons. Celebrity contestants are paired with professional dancers and compete through weekly dance performances. Results are determined by combining professional judges' scores with audience votes. However, fan vote totals are never publicly disclosed, creating an interesting inverse problem: can we estimate fan votes from observed elimination outcomes?    \caption{Dancing with the Stars poster season33}
+
     \label{fig:placeholder}
-\end{figure}
-DWTS features celebrity contestants paired with professional dancers, who compete through weekly dance performances. Elimination and advancement results are determined by combining professional judges' scores and audience votes. Since judges' judgment criteria for dance technical proficiency are often subjective, and fan votes are susceptible to non-technical factors such as celebrity popularity and personal charisma, the final results of the competition have always been mired in constant discussions and controversies—even as the program team has repeatedly attempted new methods of integrating judges' scores and fan votes.In recent years, as audiences have paid increasing attention to the fairness of competitive variety shows, DWTS is in urgent need of a fair, impartial, and effective scoring mechanism. This mechanism must ensure the program's viewership and entertainment value while maintaining the strict confidentiality of fan votes, thereby achieving the dual guarantee of professionalism and popularity. This will serve as a key measure for DWTS to attract audiences and continuously enhance its IP influence in future seasons.
-\subsection{Restatement of the Problem}
 
-Follow our WeChat official account for more LaTeX materials and information.
+\subsection{Problem Overview}\end{figure}
 
-\centerline{\includegraphics[width=5cm]{qrcodewechat}}
+We address four questions:DWTS features celebrity contestants paired with professional dancers, who compete through weekly dance performances. Elimination and advancement results are determined by combining professional judges' scores and audience votes. Since judges' judgment criteria for dance technical proficiency are often subjective, and fan votes are susceptible to non-technical factors such as celebrity popularity and personal charisma, the final results of the competition have always been mired in constant discussions and controversies—even as the program team has repeatedly attempted new methods of integrating judges' scores and fan votes.In recent years, as audiences have paid increasing attention to the fairness of competitive variety shows, DWTS is in urgent need of a fair, impartial, and effective scoring mechanism. This mechanism must ensure the program's viewership and entertainment value while maintaining the strict confidentiality of fan votes, thereby achieving the dual guarantee of professionalism and popularity. This will serve as a key measure for DWTS to attract audiences and continuously enhance its IP influence in future seasons.
+
+\begin{enumerate}\subsection{Restatement of the Problem}
+
+    \item Estimate fan vote totals for all contestants across 34 seasons.
+
+    \item Quantify \emph{certainty} in these estimates.Follow our WeChat official account for more LaTeX materials and information.
+
+    \item Analyze whether certainty varies by contestant or week.
+
+    \item Evaluate rule fairness and recommend improvements.\centerline{\includegraphics[width=5cm]{qrcodewechat}}
+
+\end{enumerate}
 
 \subsection{Syntax (how to type \LaTeX\ commands --- these
-  are the rules)}
 
-\lipsum[3]
-\begin{itemize}
-    \item \textbf{Rank} (S1--2): Combined rank = judge rank + fan rank. Highest sum eliminated.
-    \item \textbf{Percent} (S3--27): Combined score = judge share + fan share. Lowest sum eliminated.
-    \item \textbf{Bottom2} (S28--34): Bottom two by combined rank; judges then choose whom to save.
+\subsection{Three Voting Regimes}  are the rules)}
+
+DWTS has used three distinct scoring rules over its history:
+
+\begin{itemize}\lipsum[3]
+
+    \item \textbf{Rank (S1--2)}: Combined rank = judge rank + fan rank. Highest sum eliminated.\begin{itemize}
+
+    \item \textbf{Percent (S3--27)}: Combined score = judge share + fan share. Lowest sum eliminated.    \item \textbf{Rank} (S1--2): Combined rank = judge rank + fan rank. Highest sum eliminated.
+
+    \item \textbf{Bottom2 (S28--34)}: Bottom two by combined rank; judges then choose whom to save.    \item \textbf{Percent} (S3--27): Combined score = judge share + fan share. Lowest sum eliminated.
+
+\end{itemize}    \item \textbf{Bottom2} (S28--34): Bottom two by combined rank; judges then choose whom to save.
+
 \end{itemize}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.75\textwidth]{figures/rules_of_score_combining_and_couple_elimination.png}
-\caption{Scoring rule evolution across seasons}
-\label{fig:rules}
+\begin{figure}[H]
+
+\centering\begin{figure}[h]
+
+\includegraphics[width=0.75\textwidth]{figures/rules_of_score_combining_and_couple_elimination.png}\centering
+
+\caption{Scoring rule evolution across 34 seasons}\includegraphics[width=0.75\textwidth]{figures/rules_of_score_combining_and_couple_elimination.png}
+
+\label{fig:rules}\caption{Scoring rule evolution across seasons}
+
+\end{figure}\label{fig:rules}
+
 \end{figure}
 
 %% ===========================================
-\section{Model: Inverse Estimation via Convex Optimization}
+
+\section{Model: Inverse Estimation via Convex Optimization}%% ===========================================
+
+%% ===========================================\section{Model: Inverse Estimation via Convex Optimization}
+
 %% ===========================================
 
 \subsection{Problem Formulation}
+
+Let $J_i$ be contestant $i$'s judge score and $v_i$ the unknown fan vote share ($\sum_i v_i = 1$). We observe elimination $e$ and seek $\mathbf{v}$ consistent with the regime's rule. This is an \textbf{inverse problem}: given outputs (eliminations), infer inputs (votes).\subsection{Problem Formulation}
+
 Let $J_i$ be contestant $i$'s judge score and $v_i$ the unknown fan vote share ($\sum_i v_i = 1$). We observe elimination $e$ and seek $\mathbf{v}$ consistent with the regime's rule.
 
 \subsection{Percent Regime (S3--27)}
+
+Define combined score $c_i = j_i + v_i$ where $j_i = J_i / \sum_k J_k$. The eliminated contestant has lowest $c_i$.\subsection{Percent Regime (S3--27)}
+
 Define combined score $c_i = j_i + v_i$ where $j_i = J_i / \sum_k J_k$. The eliminated contestant has lowest $c_i$.
 
 \paragraph{Likelihood.} We model elimination probability via softmax:
-\begin{equation}
-P(\text{elim}=e \mid \mathbf{v}) = \frac{\exp(-\tau c_e)}{\sum_i \exp(-\tau c_i)}, \quad \tau = 15.
+
+\begin{equation}\paragraph{Likelihood.} We model elimination probability via softmax:
+
+P(\text{elim}=e \mid \mathbf{v}) = \frac{\exp(-\tau c_e)}{\sum_i \exp(-\tau c_i)}, \quad \tau = 15.\begin{equation}
+
+\end{equation}P(\text{elim}=e \mid \mathbf{v}) = \frac{\exp(-\tau c_e)}{\sum_i \exp(-\tau c_i)}, \quad \tau = 15.
+
 \end{equation}
 
-\paragraph{Optimization.} Maximize posterior (minimize negative log):
-\begin{equation}
-\min_{\mathbf{v}} \quad -\log P(e|\mathbf{v}) - \alpha \sum_i v_i \log v_i, \quad \text{s.t. } v_i \geq 0,\ \sum_i v_i = 1,
+\paragraph{Multi-elimination.} For weeks with $k$ eliminations, all eliminated contestants must be in the bottom $k$ by combined score:
+
+\begin{equation}\paragraph{Optimization.} Maximize posterior (minimize negative log):
+
+\log P(E_t \mid \mathbf{v}) = \sum_{e \in E_t} (-\tau c_e) - k \log \sum_i \exp(-\tau c_i).\begin{equation}
+
+\end{equation}\min_{\mathbf{v}} \quad -\log P(e|\mathbf{v}) - \alpha \sum_i v_i \log v_i, \quad \text{s.t. } v_i \geq 0,\ \sum_i v_i = 1,
+
 \end{equation}
-where $\alpha = 0.05$ is entropy regularization (maximum entropy prior).
 
-This is convex and solved via SLSQP, achieving \textbf{100\% constraint satisfaction}.
+\paragraph{Optimization.} Maximize posterior (minimize negative log):where $\alpha = 0.05$ is entropy regularization (maximum entropy prior).
 
-\subsection{Rank Regime (S1--2)}
+\begin{equation}
+
+\min_{\mathbf{v}} \quad -\log P(E|\mathbf{v}) - \alpha \sum_i v_i \log v_i, \quad \text{s.t. } v_i \geq 0,\ \sum_i v_i = 1,This is convex and solved via SLSQP, achieving \textbf{100\% constraint satisfaction}.
+
+\end{equation}
+
+where $\alpha = 0.05$ is entropy regularization (maximum entropy prior).\subsection{Rank Regime (S1--2)}
+
 Let $r^J_i$ and $r^F_i$ be judge and fan ranks (1 = best). Combined rank $c_i = r^J_i + r^F_i$. The largest $c_i$ is eliminated.
 
+This is convex and solved via SLSQP, achieving \textbf{100\% constraint satisfaction} across all 25 Percent seasons, including 33 multi-elimination weeks.
+
 \paragraph{Construction.} Given eliminated contestant $e$:
-\begin{enumerate}
-    \item Non-eliminated contestants get fan ranks $1, 2, \ldots, n{-}1$ sorted by $r^J$.
+
+\subsection{Rank Regime (S1--2)}\begin{enumerate}
+
+Let $r^J_i$ and $r^F_i$ be judge and fan ranks (1 = best). Combined rank $c_i = r^J_i + r^F_i$. The largest $c_i$ is eliminated.    \item Non-eliminated contestants get fan ranks $1, 2, \ldots, n{-}1$ sorted by $r^J$.
+
     \item Set $r^F_e = n$ (worst rank).
+
+\paragraph{Construction.} Given eliminated contestant $e$:    \item Verify: $c_e > c_p$ for all survivors $p$.
+
+\begin{enumerate}\end{enumerate}
+
+    \item Non-eliminated contestants get fan ranks $1, 2, \ldots, n{-}1$ sorted by $r^J$.
+
+    \item Set $r^F_e = n$ (worst rank).\paragraph{Upset Detection.} When constraint fails (e.g., a contestant with good judge rank is eliminated), this indicates an \textbf{upset}---strong fan opposition overcame judges' preference. Our model identifies 4 such upsets in S1--2, consistent with historical records.
+
     \item Verify: $c_e > c_p$ for all survivors $p$.
-\end{enumerate}
 
-\paragraph{Upset Detection.} When constraint fails (e.g., a contestant with good judge rank is eliminated), this indicates an \textbf{upset}---strong fan opposition overcame judges' preference. Our model identifies 4 such upsets in S1--2, consistent with historical records.
+\end{enumerate}\paragraph{Rank to Share.} Convert ranks to shares:
 
-\paragraph{Rank to Share.} Convert ranks to shares:
 \begin{equation}
-v_i = \frac{\exp(-\lambda(r^F_i - 1))}{\sum_j \exp(-\lambda(r^F_j - 1))}, \quad \lambda = 0.5.
+
+\paragraph{Upset Detection.} When constraint fails (a contestant with good judge rank is eliminated), this indicates an \textbf{upset}---strong fan opposition overcame judges' preference. Our model identifies such upsets in S1--2, consistent with historical records of controversial early-season eliminations.v_i = \frac{\exp(-\lambda(r^F_i - 1))}{\sum_j \exp(-\lambda(r^F_j - 1))}, \quad \lambda = 0.5.
+
 \end{equation}
 
-\subsection{Bottom2 + Judges' Save (S28--34)}
-Bottom two determined by combined rank; judges choose whom to eliminate.
+\paragraph{Rank to Share.} Convert ranks to vote shares:
+
+\begin{equation}\subsection{Bottom2 + Judges' Save (S28--34)}
+
+v_i = \frac{\exp(-\lambda(r^F_i - 1))}{\sum_j \exp(-\lambda(r^F_j - 1))}, \quad \lambda = 0.5.Bottom two determined by combined rank; judges choose whom to eliminate.
+
+\end{equation}
 
 \paragraph{MCMC Sampling.} Since the saved contestant is unknown, we sample possible bottom-2 pairs:
-\begin{equation}
-P(\text{elim } e \mid B_2 = \{e, b\}) = \frac{\exp(-\beta J_e)}{\exp(-\beta J_e) + \exp(-\beta J_b)}, \quad \beta = 1.
-\end{equation}
-This models judges' tendency to eliminate lower-scoring contestants.
 
-\subsection{Finals Constraint}
-In final weeks, top contestants are ranked (1st, 2nd, 3rd...). We enforce:
-\begin{equation}
+\subsection{Bottom2 + Judges' Save (S28--34)}\begin{equation}
+
+Bottom two determined by combined rank; judges choose whom to eliminate.P(\text{elim } e \mid B_2 = \{e, b\}) = \frac{\exp(-\beta J_e)}{\exp(-\beta J_e) + \exp(-\beta J_b)}, \quad \beta = 1.
+
+\end{equation}
+
+\paragraph{Deterministic Construction.} We construct fan ranks such that the eliminated contestant is in the bottom two. The ``saved'' contestant (bottom-2 partner) is assumed to be the non-eliminated contestant with worst judge rank.This models judges' tendency to eliminate lower-scoring contestants.
+
+
+
+\paragraph{Judge Choice Model.} Judges tend to eliminate lower-scoring contestants:\subsection{Finals Constraint}
+
+\begin{equation}In final weeks, top contestants are ranked (1st, 2nd, 3rd...). We enforce:
+
+P(\text{elim } e \mid B_2 = \{e, b\}) = \frac{\exp(-\beta J_e)}{\exp(-\beta J_e) + \exp(-\beta J_b)}, \quad \beta = 1.\begin{equation}
+
+\end{equation}c_{\pi(1)} > c_{\pi(2)} > c_{\pi(3)} > \cdots
+
+When judges save a lower-scoring contestant, our model cannot fully explain the outcome, resulting in CSR $<$ 100\%.\end{equation}
+
+
+
+\subsection{Finals Constraint}%% ===========================================
+
+In final weeks, top contestants are ranked (1st, 2nd, 3rd...). We enforce ordering with iterative correction:\section{Certainty Quantification}
+
+\begin{equation}%% ===========================================
+
 c_{\pi(1)} > c_{\pi(2)} > c_{\pi(3)} > \cdots
-\end{equation}
 
-%% ===========================================
-\section{Certainty Quantification}
-%% ===========================================
+\end{equation}\subsection{Ensemble Perturbation}
 
-\subsection{Ensemble Perturbation}
+This is applied after normalization to ensure constraint satisfaction.The inverse problem may have multiple valid solutions. We quantify certainty via perturbation:
+
+
+
+%% ===========================================\begin{enumerate}
+
+\section{Certainty Quantification}    \item Perturb judge scores: $J_i^{(k)} = J_i + \epsilon$, $\epsilon \sim N(0, 0.5^2)$.
+
+%% ===========================================    \item Re-solve for $K=20$ perturbations.
+
+    \item Compute mean $\mu_i$ and std $\sigma_i$ across ensemble.
+
+\subsection{Ensemble Perturbation}\end{enumerate}
+
 The inverse problem may have multiple valid solutions. We quantify certainty via perturbation:
 
-\begin{enumerate}
-    \item Perturb judge scores: $J_i^{(k)} = J_i + \epsilon$, $\epsilon \sim N(0, 0.5^2)$.
-    \item Re-solve for $K=20$ perturbations.
-    \item Compute mean $\mu_i$ and std $\sigma_i$ across ensemble.
-\end{enumerate}
+\begin{enumerate}\subsection{Certainty Metric}
 
-\subsection{Certainty Metric}
-\begin{equation}
-\text{Certainty}_i = \frac{1}{1 + \text{CV}_i} = \frac{\mu_i}{\mu_i + \sigma_i},
-\end{equation}
+    \item Perturb judge scores: $J_i^{(k)} = J_i + \epsilon$, $\epsilon \sim N(0, 0.5^2)$, only for active contestants.\begin{equation}
+
+    \item Re-solve for $K=20$ perturbations.\text{Certainty}_i = \frac{1}{1 + \text{CV}_i} = \frac{\mu_i}{\mu_i + \sigma_i},
+
+    \item Compute mean $\mu_i$ and std $\sigma_i$ across ensemble.\end{equation}
+
+\end{enumerate}where $\text{CV} = \sigma/\mu$ is coefficient of variation.
+
+
+
+\subsection{Certainty Metric}\begin{itemize}
+
+\begin{equation}    \item Certainty $\to 1$: unique solution (high confidence).
+
+\text{Certainty}_i = \frac{1}{1 + \text{CV}_i} = \frac{\mu_i}{\mu_i + \sigma_i},    \item Certainty $\to 0$: many valid solutions (low confidence).
+
+\end{equation}\end{itemize}
+
 where $\text{CV} = \sigma/\mu$ is coefficient of variation.
 
-\begin{itemize}
-    \item Certainty $\to 1$: unique solution (high confidence).
-    \item Certainty $\to 0$: many valid solutions (low confidence).
-\end{itemize}
+\begin{itemize}%% ===========================================
 
-%% ===========================================
-\section{Results}
-%% ===========================================
+    \item Certainty $\to 1$: unique solution (high confidence).\section{Results}
+
+    \item Certainty $\to 0$: many valid solutions (low confidence).%% ===========================================
+
+\end{itemize}
 
 \subsection{Constraint Satisfaction Rate (CSR)}
 
-\begin{table}[h]
-\centering
+%% ===========================================
+
+\section{Results}\begin{table}[h]
+
+%% ===========================================\centering
+
 \caption{Model consistency by regime}
-\begin{tabular}{lccc}
+
+\subsection{Constraint Satisfaction Rate (CSR)}\begin{tabular}{lccc}
+
 \toprule
-\textbf{Regime} & \textbf{Seasons} & \textbf{CSR} & \textbf{Avg Certainty} \\
-\midrule
-Rank & 1--2 & 59.5\% & 0.913 \\
-Percent & 3--27 & 100.0\% & 0.975 \\
-Bottom2 & 28--34 & 77.3\% & 0.821 \\
-\bottomrule
+
+\begin{table}[H]\textbf{Regime} & \textbf{Seasons} & \textbf{CSR} & \textbf{Avg Certainty} \\
+
+\centering\midrule
+
+\caption{Model consistency by regime}Rank & 1--2 & 59.5\% & 0.913 \\
+
+\begin{tabular}{lccc}Percent & 3--27 & 100.0\% & 0.975 \\
+
+\topruleBottom2 & 28--34 & 77.3\% & 0.821 \\
+
+\textbf{Regime} & \textbf{Seasons} & \textbf{CSR} & \textbf{Avg Certainty} \\\bottomrule
+
+\midrule\end{tabular}
+
+Rank & 1--2 & 52.4\% & 0.905 \\\label{tab:csr}
+
+Percent & 3--27 & 100.0\% & 0.985 \\\end{table}
+
+Bottom2 & 28--34 & 79.7\% & 0.804 \\
+
+\bottomrule\paragraph{Why Rank CSR $<$ 100\%?} These are not model failures---they are \textbf{historical upsets} where fan votes strongly disagreed with judges. A contestant with good judge rank was eliminated because fans voted against them. This is valuable information: it reveals fan preferences that diverged from judge assessments.
+
 \end{tabular}
-\label{tab:csr}
+
+\label{tab:csr}\paragraph{Why Bottom2 CSR $<$ 100\%?} The judge save decision introduces additional uncertainty. When judges save a contestant with lower scores, our model (which assumes score-based preference) cannot fully explain the outcome.
+
 \end{table}
-
-\paragraph{Why Rank CSR $<$ 100\%?} These are not model failures---they are \textbf{historical upsets} where fan votes strongly disagreed with judges. A contestant with good judge rank was eliminated because fans voted against them. This is valuable information: it reveals fan preferences that diverged from judge assessments.
-
-\paragraph{Why Bottom2 CSR $<$ 100\%?} The judge save decision introduces additional uncertainty. When judges save a contestant with lower scores, our model (which assumes score-based preference) cannot fully explain the outcome.
 
 \subsection{Certainty by Regime}
 
+\paragraph{Why Rank CSR $<$ 100\%?} These are not model failures---they are \textbf{historical upsets} where fan votes strongly disagreed with judges. A contestant with good judge rank was eliminated because fans voted against them. This reveals fan preferences that diverged from judge assessments.
+
 \begin{table}[h]
-\centering
+
+\paragraph{Why Bottom2 CSR $<$ 100\%?} The judge save decision introduces subjectivity. When judges save a contestant with lower scores (based on factors like entertainment value or personal preference), our score-based model cannot fully explain the outcome.\centering
+
 \caption{Certainty varies systematically by regime}
-\begin{tabular}{lcc}
-\toprule
-\textbf{Regime} & \textbf{Avg Certainty} & \textbf{Interpretation} \\
-\midrule
-Percent & 0.975 & Very high---vote shares tightly constrained \\
-Rank & 0.913 & High---but multiple rank permutations possible \\
-Bottom2 & 0.821 & Moderate---judge choice adds randomness \\
-\bottomrule
-\end{tabular}
-\end{table}
 
-\subsection{Certainty by Week Type}
-Certainty is \textbf{not uniform}:
-\begin{itemize}
-    \item \textbf{Elimination weeks}: Strong constraint $\Rightarrow$ high certainty.
+\subsection{Certainty by Regime}\begin{tabular}{lcc}
+
+\toprule
+
+\begin{table}[H]\textbf{Regime} & \textbf{Avg Certainty} & \textbf{Interpretation} \\
+
+\centering\midrule
+
+\caption{Certainty varies systematically by regime}Percent & 0.975 & Very high---vote shares tightly constrained \\
+
+\begin{tabular}{lcc}Rank & 0.913 & High---but multiple rank permutations possible \\
+
+\topruleBottom2 & 0.821 & Moderate---judge choice adds randomness \\
+
+\textbf{Regime} & \textbf{Avg Certainty} & \textbf{Interpretation} \\\bottomrule
+
+\midrule\end{tabular}
+
+Percent & 0.985 & Very high---vote shares tightly constrained \\\end{table}
+
+Rank & 0.905 & High---but multiple rank permutations possible \\
+
+Bottom2 & 0.804 & Moderate---judge choice adds randomness \\\subsection{Certainty by Week Type}
+
+\bottomruleCertainty is \textbf{not uniform}:
+
+\end{tabular}\begin{itemize}
+
+\end{table}    \item \textbf{Elimination weeks}: Strong constraint $\Rightarrow$ high certainty.
+
     \item \textbf{No-elimination weeks}: No constraint $\Rightarrow$ lower certainty (prior-driven).
-    \item \textbf{Finals}: Ranking constraint $\Rightarrow$ moderate certainty.
-\end{itemize}
 
-\subsection{Sample Estimates}
-Table~\ref{tab:sample} shows fan vote estimates for Season 27 (Bobby Bones controversy).
+\subsection{Certainty by Week Type}    \item \textbf{Finals}: Ranking constraint $\Rightarrow$ moderate certainty.
 
-\begin{table}[h]
-\centering
-\caption{Season 27 Week 10 estimates}
-\begin{tabular}{lccc}
-\toprule
-\textbf{Celebrity} & \textbf{Judge Share} & \textbf{Fan Vote} & \textbf{Certainty} \\
-\midrule
-Bobby Bones & 0.248 & 0.271 & 0.982 \\
-Milo Manheim & 0.256 & 0.245 & 0.978 \\
-Evanna Lynch & 0.255 & 0.244 & 0.979 \\
-Alexis Ren & 0.241 & 0.240 & 0.975 \\
-\bottomrule
-\end{tabular}
-\label{tab:sample}
-\end{table}
+Certainty is \textbf{not uniform}:\end{itemize}
 
-%% ===========================================
-\section{Discussion}
-%% ===========================================
-
-\subsection{Is Certainty the Same for All?}
-\textbf{No.} Certainty varies by:
-\begin{enumerate}
-    \item \textbf{Regime}: Percent $>$ Rank $>$ Bottom2.
-    \item \textbf{Week type}: Elimination $>$ Finals $>$ No-elimination.
-    \item \textbf{Contestant role}: Eliminated contestants have highest certainty (tightly constrained).
-\end{enumerate}
-
-\subsection{Interpreting Upsets}
-When our model yields CSR $<$ 100\%, this identifies \textbf{upset eliminations} where:
 \begin{itemize}
-    \item A contestant with strong judge support was eliminated (fans disagreed).
-    \item Or judges saved a contestant despite lower scores (subjective preference).
+
+    \item \textbf{Elimination weeks}: Strong constraint $\Rightarrow$ high certainty.\subsection{Sample Estimates}
+
+    \item \textbf{No-elimination weeks}: No constraint $\Rightarrow$ lower certainty (prior-driven).Table~\ref{tab:sample} shows fan vote estimates for Season 27 (Bobby Bones controversy).
+
+    \item \textbf{Finals}: Ranking constraint $\Rightarrow$ moderate certainty.
+
+    \item \textbf{Multi-elimination weeks}: All eliminated must be in bottom-$k$ $\Rightarrow$ high certainty.\begin{table}[h]
+
+\end{itemize}\centering
+
+\caption{Season 27 Week 10 estimates}
+
+\subsection{Sample Estimates}\begin{tabular}{lccc}
+
+Table~\ref{tab:sample} shows fan vote estimates for Season 27 (Bobby Bones controversy).\toprule
+
+\textbf{Celebrity} & \textbf{Judge Share} & \textbf{Fan Vote} & \textbf{Certainty} \\
+
+\begin{table}[H]\midrule
+
+\centeringBobby Bones & 0.248 & 0.271 & 0.982 \\
+
+\caption{Season 27 Week 10 estimates}Milo Manheim & 0.256 & 0.245 & 0.978 \\
+
+\begin{tabular}{lccc}Evanna Lynch & 0.255 & 0.244 & 0.979 \\
+
+\topruleAlexis Ren & 0.241 & 0.240 & 0.975 \\
+
+\textbf{Celebrity} & \textbf{Judge Share} & \textbf{Fan Vote} & \textbf{Certainty} \\\bottomrule
+
+\midrule\end{tabular}
+
+Bobby Bones & 0.248 & 0.271 & 0.982 \\\label{tab:sample}
+
+Milo Manheim & 0.256 & 0.245 & 0.978 \\\end{table}
+
+Evanna Lynch & 0.255 & 0.244 & 0.979 \\
+
+Alexis Ren & 0.241 & 0.240 & 0.975 \\%% ===========================================
+
+\bottomrule\section{Discussion}
+
+\end{tabular}%% ===========================================
+
+\label{tab:sample}
+
+\end{table}\subsection{Is Certainty the Same for All?}
+
+\textbf{No.} Certainty varies by:
+
+%% ===========================================\begin{enumerate}
+
+\section{Discussion}    \item \textbf{Regime}: Percent $>$ Rank $>$ Bottom2.
+
+%% ===========================================    \item \textbf{Week type}: Elimination $>$ Finals $>$ No-elimination.
+
+    \item \textbf{Contestant role}: Eliminated contestants have highest certainty (tightly constrained).
+
+\subsection{Is Certainty the Same for All?}\end{enumerate}
+
+\textbf{No.} Certainty varies by:
+
+\begin{enumerate}\subsection{Interpreting Upsets}
+
+    \item \textbf{Regime}: Percent $>$ Rank $>$ Bottom2.When our model yields CSR $<$ 100\%, this identifies \textbf{upset eliminations} where:
+
+    \item \textbf{Week type}: Elimination $>$ Finals $>$ No-elimination.\begin{itemize}
+
+    \item \textbf{Contestant role}: Eliminated contestants have highest certainty (tightly constrained).    \item A contestant with strong judge support was eliminated (fans disagreed).
+
+\end{enumerate}    \item Or judges saved a contestant despite lower scores (subjective preference).
+
 \end{itemize}
-These cases are historically documented (e.g., early DWTS seasons had controversial eliminations).
+
+\subsection{Interpreting Upsets}These cases are historically documented (e.g., early DWTS seasons had controversial eliminations).
+
+When our model yields CSR $<$ 100\%, this identifies \textbf{upset eliminations} where:
+
+\begin{itemize}\subsection{Model Limitations}
+
+    \item A contestant with strong judge support was eliminated (fans disagreed).\begin{itemize}
+
+    \item Or judges saved a contestant despite lower scores (subjective preference).    \item We estimate vote \emph{shares}, not absolute counts.
+
+\end{itemize}    \item Temporal smoothness prior assumes stable popularity---may miss sudden surges.
+
+These cases are historically documented in early DWTS seasons.    \item Judge save behavior in Bottom2 is modeled probabilistically, not deterministically.
+
+\end{itemize}
 
 \subsection{Model Limitations}
-\begin{itemize}
-    \item We estimate vote \emph{shares}, not absolute counts.
-    \item Temporal smoothness prior assumes stable popularity---may miss sudden surges.
-    \item Judge save behavior in Bottom2 is modeled probabilistically, not deterministically.
-\end{itemize}
 
-%% ===========================================
-\section{Conclusion}
-%% ===========================================
-We developed a convex optimization framework for inverse estimation of DWTS fan votes, achieving:
-\begin{itemize}
+\begin{itemize}%% ===========================================
+
+    \item We estimate vote \emph{shares}, not absolute counts.\section{Conclusion}
+
+    \item No temporal smoothness constraint (weeks solved independently).%% ===========================================
+
+    \item Judge save behavior in Bottom2 is modeled deterministically.We developed a convex optimization framework for inverse estimation of DWTS fan votes, achieving:
+
+\end{itemize}\begin{itemize}
+
     \item 100\% constraint satisfaction for Percent regime (S3--27).
-    \item Detection of historical upsets in Rank regime (S1--2).
-    \item Certainty quantification via ensemble perturbation.
-\end{itemize}
-Key insight: certainty depends on regime, week type, and contestant role---it is \textbf{not uniform}.
+
+%% ===========================================    \item Detection of historical upsets in Rank regime (S1--2).
+
+\section{Conclusion}    \item Certainty quantification via ensemble perturbation.
+
+%% ===========================================\end{itemize}
+
+We developed a convex optimization framework for inverse estimation of DWTS fan votes, achieving:Key insight: certainty depends on regime, week type, and contestant role---it is \textbf{not uniform}.
+
+\begin{itemize}
+
+    \item 100\% constraint satisfaction for Percent regime (S3--27), including 33 multi-elimination weeks.\newpage
+
+    \item Detection of historical upsets in Rank (S1--2) and Bottom2 (S28--34) regimes.\begin{thebibliography}{99}
+
+    \item Certainty quantification via ensemble perturbation.\bibitem{wiki} Wikipedia. Dancing with the Stars (American TV series). 
+
+\end{itemize}\bibitem{cvxpy} Diamond, S. and Boyd, S. CVXPY: A Python-Embedded Modeling Language for Convex Optimization. JMLR, 2016.
+
+\end{thebibliography}
+
+\textbf{Key insight}: Certainty depends on regime, week type, and contestant role---it is \textbf{not uniform}. CSR $<$ 100\% is not a model failure but reveals genuine historical controversies.
+
+\end{document}
 
 \newpage
 \begin{thebibliography}{99}
 \bibitem{wiki} Wikipedia. Dancing with the Stars (American TV series). 
-\bibitem{cvxpy} Diamond, S. and Boyd, S. CVXPY: A Python-Embedded Modeling Language for Convex Optimization. JMLR, 2016.
+\bibitem{scipy} Virtanen, P. et al. SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. Nature Methods, 2020.
 \end{thebibliography}
 
 \end{document}
