@@ -197,10 +197,50 @@ We determine each contestant's last active week
 \begin{equation}
 \mathrm{exit}(i)=\max\{t\le T: J_{i,t}>0\}.
 \end{equation}
-We treat \texttt{Withdrew} as exogenous attrition (not vote-determined): it contributes to $A_t$ before exit,
-but is excluded from vote-based elimination constraints.
+We classify each contestant's exit into three categories based on the \texttt{results} field:
 
-For each week $t$, let $E_t\subseteq A_t$ be the observed \emph{vote-determined} eliminated set (possibly multiple),
+\paragraph{Case 1: Vote-determined elimination (normal case).}
+If $\texttt{results}=\texttt{"Eliminated Week }t\texttt{"}$, contestant $i$ was eliminated by vote at week $t$.
+This provides a \textbf{hard constraint}: $i$ must have the lowest (Percent) or highest (Rank) combined score among $A_t$.
+
+\paragraph{Case 2: Withdrew (exogenous attrition).}
+If $\texttt{results}=\texttt{"Withdrew"}$, the contestant left for non-voting reasons (injury, personal, etc.).
+\begin{itemize}
+\item Withdrew contestants contribute to $A_t$ in weeks before exit.
+\item They are \textbf{excluded from elimination constraints}: no vote inference is derived from their exit.
+\item Their vote shares are still estimated (regularized toward uniform) but with \textbf{high uncertainty}.
+\end{itemize}
+
+\paragraph{Case 3: Finals ranking (last week).}
+In the final week $T$, no elimination occurs. Instead, the top 3--5 contestants are \textbf{ranked} (1st, 2nd, 3rd, ...).
+Let $\pi:\{1,\dots,|A_T|\}\to A_T$ be the observed ranking ($\pi(1)$ is the winner).
+This provides \textbf{ordering constraints}:
+\begin{equation}
+c_{\pi(1),T} > c_{\pi(2),T} > c_{\pi(3),T} > \cdots
+\label{eq:finals_order}
+\end{equation}
+
+\paragraph{Week classification.}
+For each week $t<T$, we classify:
+\begin{equation}
+\text{WeekType}(t) = 
+\begin{cases}
+\texttt{normal} & |E_t|=1 \text{ (single elimination)},\\
+\texttt{multi} & |E_t|>1 \text{ (double/triple elimination)},\\
+\texttt{none} & |E_t|=0 \text{ (no elimination this week)},\\
+\texttt{withdrew} & \text{only Withdrew exits, no vote-based elim}.
+\end{cases}
+\end{equation}
+
+\paragraph{Constraint strength by week type.}
+\begin{itemize}
+\item \textbf{Normal weeks} ($|E_t|=1$): Strong constraint; eliminated contestant has worst score.
+\item \textbf{Multi-elimination weeks} ($|E_t|>1$): All $e\in E_t$ must be in the bottom $|E_t|$ positions.
+\item \textbf{No-elimination weeks} ($|E_t|=0$): No constraint on ordering; only regularization applies; \textbf{low certainty}.
+\item \textbf{Finals week}: Ordering constraint Eq.~\eqref{eq:finals_order} instead of elimination constraint.
+\end{itemize}
+
+For each week $t$, let $E_t\subseteq A_t$ be the observed \emph{vote-determined} eliminated set (excluding Withdrew),
 and $S_t=A_t\setminus E_t$ be the survivors.
 
 \subsection{Unknown Fan Votes: Use Vote Shares (Identifiable)}
@@ -223,13 +263,26 @@ c_{i,t}=j_{i,t}+v_{i,t},
 \end{equation}
 and eliminated contestants should have the smallest combined scores.
 
+\paragraph{Handling different week types.}
+We apply different constraints based on week classification:
+\begin{itemize}
+\item \textbf{Normal elimination ($|E_t|=1$)}: Single constraint $c_{e,t}\le c_{p,t}+\delta_t$ for all $p\in S_t$.
+\item \textbf{Multi-elimination ($|E_t|>1$)}: All eliminated contestants must be in the bottom $|E_t|$:
+\begin{equation}
+c_{e,t}\le c_{p,t}+\delta_t,\quad \forall e\in E_t,\ \forall p\in S_t.
+\end{equation}
+\item \textbf{No-elimination ($|E_t|=0$)}: No constraint; only prior regularization applies. Mark as \textbf{low certainty}.
+\item \textbf{Withdrew week}: Exclude the withdrew contestant from $E_t$; apply constraints only to remaining $E_t$.
+\item \textbf{Finals week ($t=T$)}: Apply ranking constraint Eq.~\eqref{eq:finals_order} instead of elimination.
+\end{itemize}
+
 \paragraph{Elimination constraints with weekly slack.}
 To handle ties/special episodes/unknown details, we use a weekly slack $\delta_t\ge 0$:
 \begin{equation}
 c_{e,t}\le c_{p,t}+\delta_t,\qquad \forall e\in E_t,\ \forall p\in S_t.
 \label{eq:percent_elim}
 \end{equation}
-If $E_t=\emptyset$ (no elimination), we enforce $\delta_t=0$.
+If $E_t=\emptyset$ (no elimination), no constraint is applied (only regularization).
 
 \paragraph{Bayesian formulation with soft constraints.}
 We reformulate the problem in a Bayesian framework. Let $\bm v=(v_{i,t})$ denote all vote shares. The posterior is:
@@ -239,13 +292,23 @@ p(\bm v \mid \text{Elim}) \propto p(\text{Elim} \mid \bm v) \cdot p(\bm v),
 \end{equation}
 where the likelihood encodes elimination constraints and the prior encodes regularization.
 
-\paragraph{Soft elimination likelihood.}
+\paragraph{Soft elimination likelihood (for normal/multi-elimination weeks).}
 Instead of hard constraints, we use a softmax likelihood that the eliminated contestant has the lowest combined score:
 \begin{equation}
 p(e_t \mid \bm v_t) = \frac{\exp(-\tau \cdot c_{e_t,t})}{\sum_{i\in A_t}\exp(-\tau \cdot c_{i,t})},
 \label{eq:soft_elim}
 \end{equation}
 where $\tau>0$ is a temperature parameter. As $\tau\to\infty$, this approaches a hard constraint.
+
+For no-elimination weeks, we set $p(\text{no elim}\mid \bm v_t)=1$ (uninformative).
+
+\paragraph{Finals likelihood (ranking constraint).}
+For the finals week $T$, we use a Plackett-Luce ranking likelihood:
+\begin{equation}
+p(\pi \mid \bm v_T) = \prod_{k=1}^{|A_T|-1} \frac{\exp(\tau \cdot c_{\pi(k),T})}{\sum_{j=k}^{|A_T|}\exp(\tau \cdot c_{\pi(j),T})},
+\label{eq:plackett_luce}
+\end{equation}
+which assigns higher probability when contestants are ranked in order of their combined scores.
 
 \paragraph{Prior: entropy + temporal smoothness.}
 We impose a composite prior:
@@ -273,7 +336,7 @@ This is a convex optimization problem solvable by interior-point methods.
 Rank seasons use fan \emph{ranks} rather than vote shares. We infer weekly fan ranks and then map to vote shares.
 
 \paragraph{Known: judge ranks.}
-Let $r^J_{i,t}$ be the rank of $J_{i,t}$ among $A_t$ (higher score = better rank; ties use average-rank).
+Let $r^J_{i,t}$ be the rank of $J_{i,t}$ among $A_t$ (higher score = better rank = lower number; ties use average-rank).
 
 \paragraph{Unknown: fan ranks as a permutation.}
 Let $r^F_{i,t}\in\{1,\dots,|A_t|\}$ be the fan rank (1 is best). To enforce a permutation, introduce binary assignment:
@@ -288,12 +351,23 @@ r^F_{i,t}=\sum_{k}k\,x_{i,k,t}.
 \end{equation}
 
 \paragraph{Rule: combined rank and elimination.}
-Combined rank-sum:
+Combined rank-sum (lower is better):
 \begin{equation}
 c_{i,t}=r^J_{i,t}+r^F_{i,t}.
 \end{equation}
 Eliminated contestants should have the \emph{worst} (largest) $c_{i,t}$.
-We again allow weekly slack $\delta_t\ge 0$:
+
+\paragraph{Handling different week types (Rank regime).}
+\begin{itemize}
+\item \textbf{Normal elimination ($|E_t|=1$)}: $c_{e,t}\ge c_{p,t}-\delta_t$ for all $p\in S_t$.
+\item \textbf{Multi-elimination ($|E_t|>1$)}: All eliminated contestants in bottom $|E_t|$ by combined rank.
+\item \textbf{No-elimination ($|E_t|=0$)}: No constraint; fan ranks regularized toward previous week.
+\item \textbf{Withdrew}: Exclude from constraints; assign average rank with high uncertainty.
+\item \textbf{Finals ($t=T$)}: Enforce ordering $c_{\pi(1),T}<c_{\pi(2),T}<c_{\pi(3),T}<\cdots$
+\end{itemize}
+
+\paragraph{Elimination constraints.}
+We allow weekly slack $\delta_t\ge 0$:
 \begin{equation}
 c_{e,t}\ge c_{p,t}-\delta_t,\qquad \forall e\in E_t,\ \forall p\in S_t.
 \label{eq:rank_elim}
@@ -323,12 +397,22 @@ In this regime, the eliminated contestant must be among the bottom two by combin
 and judges then choose which of the bottom two leaves.
 
 \paragraph{Step 1 (Bottom2 by combined ranks).}
-Using the same combined rank $c_{i,t}=r^J_{i,t}+r^F_{i,t}$, define bottom-two set $B_t$:
+Using the same combined rank $c_{i,t}=r^J_{i,t}+r^F_{i,t}$ (higher value = worse), define bottom-two set $B_t$:
 \begin{equation}
-|B_t|=2,\quad c_{b,t}\ge c_{p,t}-\delta_t,\ \ \forall b\in B_t,\ \forall p\in A_t\setminus B_t.
+|B_t|=2,\quad c_{p,t} \le c_{b,t}+\delta_t,\ \ \forall b\in B_t,\ \forall p\in A_t\setminus B_t.
 \label{eq:bottom2}
 \end{equation}
+This means contestants in the bottom two have combined ranks at least as bad as (or worse than) non-bottom contestants.
 Observed elimination $e\in E_t$ must satisfy $e\in B_t$.
+
+\paragraph{Handling special cases in Regime C.}
+\begin{itemize}
+\item \textbf{No-elimination week ($|E_t|=0$)}: No bottom-2 constraint; only regularization applies.
+\item \textbf{Multi-elimination ($|E_t|>1$)}: Extend to bottom-$|E_t|+1$ set (rare in this regime).
+\item \textbf{Withdrew}: Contestant exits but is not placed in $B_t$; excluded from all constraints.
+\item \textbf{Finals week ($t=T$)}: No bottom-2 mechanism; use ranking constraint Eq.~\eqref{eq:finals_order}.
+\item \textbf{Unknown bottom-2 partner}: If only $e$ (eliminated) is known but not $b$ (saved), we enumerate all possible $b\in A_t\setminus\{e\}$.
+\end{itemize}
 
 \paragraph{Step 2 (Judges choose within Bottom2).}
 Let the other bottom-two contestant be $b$ (saved).
@@ -378,28 +462,59 @@ If contestant $i$ is eliminated before $j$, there must exist at least one week w
 \end{equation}
 
 % ------------------------------------------------
-\subsection{Consistency Evaluation Metrics}
+\subsection{Consistency Measures (Answering: Does the model produce correct eliminations?)}
 Given estimated $\hat v_{i,t}$, we re-compute eliminations under the regime rule and compare with observed $E_t$.
-We report multiple metrics:
 
-\paragraph{Primary metrics.}
-\begin{align}
-\text{Exact-set accuracy} &= \frac{1}{N_{\text{elim}}}\sum_{t:E_t\neq\emptyset}\mathbf{1}(\hat E_t=E_t),\\
-\text{Jaccard}(t) &= \frac{|\hat E_t\cap E_t|}{|\hat E_t\cup E_t|},\qquad
-\overline{\text{Jaccard}}=\text{mean}_t\,\text{Jaccard}(t),\\
-\text{Margin}(t) &=
-\begin{cases}
-\hat c_{(m+1),t}-\hat c_{(m),t}, & \text{Percent (smallest eliminated)}\\
-\hat c_{(n),t}-\hat c_{(n-1),t}, & \text{Rank (largest eliminated)}
-\end{cases}
-\end{align}
-where $m=|E_t|$ and order statistics are computed among active contestants.
+\paragraph{Measure 1: Elimination Accuracy.}
+The fraction of weeks where the predicted eliminated contestant matches the actual:
+\begin{equation}
+\text{Accuracy} = \frac{1}{N_{\text{elim}}}\sum_{t:E_t\neq\emptyset}\mathbf{1}(\hat E_t=E_t).
+\label{eq:accuracy}
+\end{equation}
+A value of 1.0 means perfect consistency; our model targets $\geq 0.95$.
 
-\paragraph{Additional robustness metrics.}
-\begin{align}
-\text{AUC-ROC} &= \text{Area under ROC curve for predicting elimination probability},\\
-\tau_K &= \text{Kendall's } \tau \text{ between predicted and observed weekly rankings}.
-\end{align}
+\paragraph{Measure 2: Jaccard Similarity.}
+For weeks with multiple eliminations:
+\begin{equation}
+\text{Jaccard}(t) = \frac{|\hat E_t\cap E_t|}{|\hat E_t\cup E_t|},\qquad
+\overline{\text{Jaccard}}=\frac{1}{N_{\text{elim}}}\sum_{t}\text{Jaccard}(t).
+\end{equation}
+
+\paragraph{Measure 3: Margin of Victory.}
+How ``safely'' the eliminated contestant was identified (larger = more robust):
+\begin{equation}
+\text{Margin}(t) = |c_{\text{elim},t} - c_{\text{next},t}|,
+\end{equation}
+where $c_{\text{next},t}$ is the combined score of the contestant closest to elimination.
+
+% ------------------------------------------------
+\subsection{Certainty Measures (Answering: How confident are the estimates?)}
+The inverse problem admits multiple solutions. We quantify \emph{certainty} for each contestant-week estimate.
+
+\paragraph{Measure 1: Coefficient of Variation (CV).}
+\begin{equation}
+\text{CV}(i,t) = \frac{\sigma_{i,t}}{\mu_{i,t}},
+\end{equation}
+where $\mu_{i,t}$ and $\sigma_{i,t}$ are the mean and standard deviation across ensemble solutions.
+Lower CV indicates higher certainty. We report CV for each $(i,t)$.
+
+\paragraph{Measure 2: 95\% Confidence Interval Width.}
+\begin{equation}
+\text{Width}(i,t) = Q_{97.5\%}(\hat v_{i,t}) - Q_{2.5\%}(\hat v_{i,t}).
+\end{equation}
+Narrower intervals indicate higher certainty.
+
+\paragraph{Measure 3: Entropy of Posterior (for Bayesian approach).}
+\begin{equation}
+H(i,t) = -\int p(v_{i,t}\mid\text{Elim})\log p(v_{i,t}\mid\text{Elim})\,dv.
+\end{equation}
+Lower entropy means the posterior is more concentrated (higher certainty).
+
+\paragraph{When is certainty higher or lower?}
+\begin{itemize}
+\item \textbf{High certainty}: Weeks with elimination events (strong constraints), large margins, fewer active contestants.
+\item \textbf{Low certainty}: No-elimination weeks, very close contests, early weeks with many contestants, ambiguous judge scores.
+\end{itemize}
 
 % ------------------------------------------------
 \subsection{Uncertainty Quantification: Multi-Model Bayesian Ensemble}
