@@ -8,8 +8,13 @@ output_dir = os.path.join(os.path.dirname(__file__), '..', 'figures')
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
-# Set font to Times New Roman
+# Set font to Times New Roman and increase base sizes for readability
 plt.rcParams['font.family'] = 'Times New Roman'
+plt.rcParams['font.size'] = 13
+plt.rcParams['axes.titlesize'] = 18
+plt.rcParams['axes.labelsize'] = 14
+plt.rcParams['xtick.labelsize'] = 12
+plt.rcParams['ytick.labelsize'] = 12
 
 # Data definition
 total_seasons = 34
@@ -58,7 +63,7 @@ colors = {
 gray_color = '#d3d3d3'
 
 # Reduce figure height to shorten distance between tracks
-fig, ax = plt.subplots(figsize=(14, 4.5))
+fig, ax = plt.subplots(figsize=(16, 5.2))
 
 # Plot tracks
 y_positions = [3, 2, 1, 0] # Top to bottom
@@ -84,7 +89,7 @@ for i, track_name in enumerate(tracks):
 
 # Formatting
 ax.set_yticks(y_positions)
-ax.set_yticklabels(tracks, fontsize=12)
+ax.set_yticklabels(tracks, fontsize=13)
 ax.set_ylim(-0.5, 3.5)
 ax.set_xlim(0.5, 34.5)
 
@@ -92,7 +97,7 @@ ax.set_xlim(0.5, 34.5)
 ax.xaxis.tick_top()
 ax.xaxis.set_label_position('top') 
 ax.set_xticks(range(1, 35, 1)) # Mark every season
-ax.set_xlabel("Seasons", fontsize=12, labelpad=10)
+ax.set_xlabel("Seasons", fontsize=14, labelpad=12)
 
 # Remove spines except maybe top? or remove all box
 ax.spines['left'].set_visible(False)
@@ -103,7 +108,7 @@ ax.spines['bottom'].set_visible(False)
 # Grid for x-axis to see alignment better?
 ax.grid(axis='x', linestyle=':', alpha=0.5)
 
-plt.title("Rules of Score Combining & Couple Elimination", y=1.25, fontsize=16, weight='bold')
+plt.title("Rules of Score Combining & Couple Elimination", y=1.22, fontsize=20, weight='bold')
 
 # Create legend handles
 legend_handles = []
@@ -112,10 +117,10 @@ for track_name in tracks:
 legend_handles.append(mlines.Line2D([], [], color=gray_color, linestyle='--', linewidth=3, label='Rule Not Applied'))
 
 # Add legend below the plot
-ax.legend(handles=legend_handles, loc='upper center', bbox_to_anchor=(0.5, -0.05), ncol=3, frameon=False, fontsize=11)
+ax.legend(handles=legend_handles, loc='upper center', bbox_to_anchor=(0.5, -0.06), ncol=3, frameon=False, fontsize=12)
 
 plt.tight_layout()
 
 output_path = os.path.join(output_dir, 'rules_chart.png')
-plt.savefig(output_path, dpi=300)
+plt.savefig(output_path, dpi=600)
 print(f"Chart saved to {output_path}")

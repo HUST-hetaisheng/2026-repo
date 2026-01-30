@@ -138,81 +138,17 @@ The impacts of professional dancer traits and celebrity characteristics on compe
 An alternative scoring system combining judges’ scores and fan votes is proposed and evaluated to determine whether it improves fairness or other aspects of the competition.
 
 
-\subsection{Syntax (how to type \LaTeX\ commands --- these
-  are the rules)}
-
-\lipsum[3]
-\begin{itemize}
-\item the angular velocity of the bat,
-\item the velocity of the ball, and
-\item the position of impact along the bat.
-\end{itemize}
-\lipsum[4]
-\emph{center of percussion} [Brody 1986], \lipsum[5]
-
-\begin{Theorem} \label{thm:latex}
-\LaTeX
-\end{Theorem}
-\begin{Lemma} \label{thm:tex}
-\TeX .
-\end{Lemma}
-\begin{proof}
-The proof of theorem.
-\end{proof}
-
-\subsection{Other Assumptions}
-\lipsum[6]
-\begin{itemize}
-\item
-\item
-\item
-\item
-\end{itemize}
-
-\lipsum[7]
-
-\section{Analysis of the Problem}
-\begin{figure}[h]
-\small
-\centering
-\includegraphics[width=8cm]{example-image-a}
-\caption{The name of figure} \label{fig:aa}
-\end{figure}
-
-\lipsum[8] \eqref{aa}
-\begin{equation}
-a^2 \label{aa}
-\end{equation}
-
-\[
-  \begin{pmatrix}{*{20}c}
-  {a_{11} } & {a_{12} } & {a_{13} }  \\
-  {a_{21} } & {a_{22} } & {a_{23} }  \\
-  {a_{31} } & {a_{32} } & {a_{33} }  \\
-  \end{pmatrix}
-  = \frac{{Opposite}}{{Hypotenuse}}\cos ^{ - 1} \theta \arcsin \theta
-\]
-\lipsum[9]
-
-\[
-  p_{j}=\begin{cases} 0,&\text{if $j$ is odd}\\
-  r!\,(-1)^{j/2},&\text{if $j$ is even}
-  \end{cases}
-\]
-
-\lipsum[10]
-
-\[
-  \arcsin \theta  =
-  \mathop{{\int\!\!\!\!\!\int\!\!\!\!\!\int}} \limits_\varphi
-  {\mathop {\lim }\limits_{x \to \infty } \frac{{n!}}{{r!\left( {n - r}
-  \right)!}}} \eqno (1)
-\]
 % ============================================
 % Full modeling for Question 1 (all seasons)
 % ============================================
 
 \section{Model: Inverse Estimation of Fan Votes}
+
+\subsection{Problem Framing}
+The core challenge of Question 1 is an \emph{inverse problem}: fan vote totals are not publicly available, 
+yet the observed eliminations place constraints on what the votes could have been. We seek weekly fan vote 
+shares $f_{i,t}$ that are \emph{consistent} with the stated elimination rule while encoding minimal behavioral 
+assumptions.
 
 \subsection{Data Preparation and Notation}
 Let $J_{i,t}$ be contestant $i$'s total judges score in week $t$ (sum of available judges; missing values ignored).
@@ -229,48 +165,53 @@ The \texttt{results} text is used only to flag \texttt{Withdrew} cases, while fi
 
 We estimate weekly fan vote \emph{shares}
 \begin{equation}
-v_{i,t}\ge 0,\qquad \sum_{i\in A_t} v_{i,t}=1,
+f_{i,t}\ge 0,\qquad \sum_{i\in A_t} f_{i,t}=1,
 \end{equation}
 and define judge shares $j_{i,t}=J_{i,t}/\sum_{k\in A_t}J_{k,t}$. Let $E_t\subseteq A_t$ be the vote-determined
 eliminated set (excluding \texttt{Withdrew}) and $S_t=A_t\setminus E_t$.
 
-\subsection{Regime Overview}
-The competition uses three different rules:
+\subsection{Season-Dependent Rule Regimes}
+The competition uses three different rules across its history:
 \begin{itemize}
-\item \textbf{S1--2 (Rank)}: combined rank = judge rank + fan rank; the worst sum is eliminated.
-\item \textbf{S3--27 (Percent)}: combined score = judge share + fan share; the smallest sum is eliminated.
-\item \textbf{S28--34 (Bottom2 + judges' save)}: bottom two by combined rank; judges choose whom to eliminate.
+\item \textbf{Seasons 1--2 (Rank)}: Combined rank = judge rank + fan rank; the worst sum is eliminated.
+\item \textbf{Seasons 3--27 (Percent)}: Combined score = judge share + fan share; the smallest sum is eliminated.
+\item \textbf{Seasons 28--34 (Bottom2 + Judges' Save)}: Bottom two by combined rank; judges choose whom to eliminate.
 \end{itemize}
 
 \subsection{Regime A: Percent Seasons (S3--27)}
-\paragraph{Goal.} Infer $v_{i,t}$ so that eliminated contestants are in the bottom-$|E_t|$ by combined score
-$c_{i,t}=j_{i,t}+v_{i,t}$.
+\paragraph{Goal.} Infer $f_{i,t}$ so that eliminated contestants are in the bottom-$|E_t|$ by combined score
+$c_{i,t}=j_{i,t}+f_{i,t}$.
 
-\paragraph{Hard consistency constraints.} For each elimination week,
+\paragraph{Multi-elimination constraint (with slack).} For each elimination week,
 \begin{equation}
-c_{e,t}-c_{p,t}\le s_t,\qquad \forall e\in E_t,\ \forall p\in S_t,
+c_{e,t}\le c_{p,t}+\delta_t,\qquad \forall e\in E_t,\ \forall p\in S_t,
 \label{eq:percent_hard}
 \end{equation}
-with slack $s_t\ge 0$ to absorb ties and special episodes. If $E_t=\varnothing$, no ordering constraint is imposed.
+with slack $\delta_t\ge 0$ to absorb ties and special episodes. If $E_t=\varnothing$, no ordering constraint is imposed.
 
-\paragraph{Two-stage convex optimization.} Consistency is prioritized via a two-stage solve:
+\paragraph{Convex optimization.} We select the ``least-assumptive'' explanation:
+\begin{equation}
+\min_{f,\delta}\ \ 
+M\sum_{t=1}^{T}\delta_t
++\beta\sum_{t=2}^{T}\sum_{i\in A_t\cap A_{t-1}} (f_{i,t}-f_{i,t-1})^2
++\alpha\sum_{t=1}^{T}\sum_{i\in A_t} f_{i,t}\log f_{i,t},
+\label{eq:percent_obj}
+\end{equation}
+subject to the simplex constraints and Eq.~\eqref{eq:percent_hard}.
+The first term prioritizes consistency (minimal slack), the second encodes popularity persistence (temporal smoothness),
+and the third is negative entropy (preferring high-entropy solutions unless forced otherwise).
+
+\paragraph{Two-stage solve.} Consistency is prioritized via:
 \begin{enumerate}
-\item \textbf{Stage 1 (feasibility):} minimize $s_t$ subject to Eq.~\eqref{eq:percent_hard} and the simplex constraint.
-\item \textbf{Stage 2 (tie-break):} restrict $s_t\le s_t^\star+\varepsilon$ and minimize
-\begin{equation}
-\beta\,\mathcal{L}(\bm v_t)-\alpha\sum_{i\in A_t}v_{i,t}\log v_{i,t},
-\end{equation}
-where $\mathcal{L}$ is a softmax negative log-likelihood for multi-elimination weeks:
-\begin{equation}
-\mathcal{L}(\bm v_t)=\tau\sum_{e\in E_t}c_{e,t}+|E_t|\,\log\!\left(\sum_{i\in A_t}e^{-\tau c_{i,t}}\right).
-\end{equation}
+\item \textbf{Stage 1 (feasibility):} Minimize $\delta_t$ subject to constraints.
+\item \textbf{Stage 2 (tie-break):} Restrict $\delta_t\le \delta_t^\star+\varepsilon$ and minimize
+$\beta\,\mathcal{L}(\bm f_t)-\alpha\sum_{i}f_{i,t}\log f_{i,t}$,
+where $\mathcal{L}$ is a softmax negative log-likelihood for multi-elimination weeks.
 \end{enumerate}
-This preserves the elimination rule while selecting a neutral, high-entropy solution within the feasible set.
 
 \paragraph{Finals and no-elimination weeks.} For the final week, we enforce the ranking order
 $c_{\pi(1),T}>c_{\pi(2),T}>\cdots$ using \texttt{placement}. For no-elimination weeks,
-we interpolate $v_{i,t}$ from adjacent weeks with the same active set, avoiding unrealistic uniform or
-judge-equals-fan assumptions.
+we interpolate $f_{i,t}$ from adjacent weeks with the same active set.
 
 \subsection{Regime B: Rank Seasons (S1--2)}
 Let $r^J_{i,t}$ be the judge rank (1=best). Fan ranks $r^F_{i,t}$ must form a \emph{permutation} of
@@ -284,46 +225,79 @@ the best fan ranks to contestants with weak judge ranks, then perform swaps to s
 If no permutation makes all eliminated contestants the worst, we label the week as an \emph{upset}.
 Fan ranks are mapped to vote shares by
 \begin{equation}
-v_{i,t}=\frac{\exp(-\lambda(r^F_{i,t}-1))}{\sum_{p\in A_t}\exp(-\lambda(r^F_{p,t}-1))}.
+f_{i,t}=\frac{\exp(-\gamma(r^F_{i,t}-1))}{\sum_{p\in A_t}\exp(-\gamma(r^F_{p,t}-1))}.
 \end{equation}
 
 \subsection{Regime C: Bottom2 + Judges' Save (S28--34)}
 The bottom two are the contestants with the two highest combined ranks.
-In single-elimination weeks, the partner $b$ in the bottom two is unobserved.
-We enumerate each $b\in A_t\setminus\{e\}$, assign fan ranks to make $\{e,b\}$ the bottom two
-while keeping the remaining ranks aligned with judges, and choose the feasible candidate with minimal deviation.
-If no candidate yields a feasible bottom-two pair, we relax the constraint and record the week accordingly.
-Multi-elimination weeks in this regime fall back to the rank-permutation construction.
+In single-elimination weeks, the eliminated contestant $e$ is known, but the bottom-two partner $b$ is unobserved.
 
-\subsection{Validation and Certainty}
-\paragraph{Consistency.} We compute a \textbf{constraint satisfaction rate} (CSR): the fraction of elimination weeks
-whose inferred votes reproduce the observed elimination rule.
+\paragraph{Probabilistic Judges' Save Model.}
+We model the judges' decision probabilistically. Given bottom-two contestants $\{e, b\}$, the probability
+that judges eliminate $e$ (and save $b$) is:
+\begin{equation}
+\Pr(\text{elim } e \mid e, b) = \sigma\left(\kappa(J_{b,t} - J_{e,t})\right),
+\label{eq:judges_save}
+\end{equation}
+where $\sigma(\cdot)$ is the sigmoid function and $\kappa > 0$ controls sensitivity to score differences.
+This encodes the intuition that judges prefer to save the higher-scoring contestant.
 
-\paragraph{Certainty.} We perturb only active judge scores ($J_{i,t}>0$), re-solve the model, and compute
+\paragraph{Partner Selection.}
+For each candidate partner $b \in A_t \setminus \{e\}$:
+\begin{enumerate}
+\item Check feasibility: can fan ranks be assigned so that $\{e, b\}$ form the bottom two?
+\item If feasible, compute $\Pr(\text{elim } e \mid e, b)$ via Eq.~\eqref{eq:judges_save}.
+\item Select the partner with highest elimination probability (deterministic mode) or sample from
+the normalized distribution (stochastic mode for ensemble).
+\end{enumerate}
+
+\paragraph{Ensemble Sampling.}
+In ensemble runs, we sample the partner from the probability distribution, capturing uncertainty
+from both score perturbation \emph{and} judges' decision variability.
+Multi-elimination weeks fall back to the rank-permutation construction.
+
+\subsection{Consistency Measures}
+We compute the following metrics:
+\begin{itemize}
+\item \textbf{Exact-Set Accuracy (CSR):} Fraction of elimination weeks whose inferred votes reproduce the observed elimination.
+\item \textbf{Jaccard Similarity:} $\text{Jaccard}(t)=|\hat E_t\cap E_t|/|\hat E_t\cup E_t|$ for multi-elimination weeks.
+\item \textbf{Decisiveness Margin:} Gap between the $|E_t|$-th and $(|E_t|+1)$-th combined scores.
+\item \textbf{Slack:} For Percent seasons, the mean slack $\overline{\delta}$ summarizes how often constraints must be relaxed.
+\end{itemize}
+
+\subsection{Certainty Measures}
+We quantify certainty via a perturb-and-resolve ensemble ($K=20$ runs):
+\begin{itemize}
+\item Perturb only active judge scores ($J_{i,t}>0$) with small noise.
+\item For Bottom2 seasons: additionally sample the bottom-two partner from the probability distribution
+defined by Eq.~\eqref{eq:judges_save}, capturing judges' decision uncertainty.
+\item Re-solve the inverse problem.
+\item Compute per-contestant/week statistics.
+\end{itemize}
+The certainty index is:
 \begin{equation}
 \text{Certainty}(i,t)=\frac{1}{1+\text{CV}(i,t)}=\frac{\mu_{i,t}}{\mu_{i,t}+\sigma_{i,t}},
 \end{equation}
-where $\mu_{i,t}$ and $\sigma_{i,t}$ are the ensemble mean and standard deviation of $v_{i,t}$. The reported
-results below use $K=5$ ensemble runs for tractable runtime.
+where $\mu_{i,t}$ and $\sigma_{i,t}$ are the ensemble mean and standard deviation of $f_{i,t}$.
 
 \begin{algorithm}[H]
 \caption{Inverse Estimation Workflow (All Seasons)}
 \begin{algorithmic}[1]
 \State \textbf{Input:} Judge scores $J_{i,t}$, results text, placements.
-\State \textbf{Output:} Fan vote shares $\hat v_{i,t}$, CSR, certainty statistics.
+\State \textbf{Output:} Fan vote shares $\hat f_{i,t}$, CSR, certainty statistics.
 \State Build $A_t=\{i:J_{i,t}>0\}$ and classify weeks by $E_t$.
 \For{each season}
     \If{Percent (S3--27)}
-        \State Stage 1: minimize slack $s_t$ under Eq.~\eqref{eq:percent_hard}.
-        \State Stage 2: enforce $s_t\le s_t^\star+\varepsilon$ and minimize
-        $\beta\,\mathcal{L}(\bm v_t)-\alpha\sum_i v_{i,t}\log v_{i,t}$.
+        \State Stage 1: minimize slack $\delta_t$ under Eq.~\eqref{eq:percent_hard}.
+        \State Stage 2: enforce $\delta_t\le \delta_t^\star+\varepsilon$ and minimize objective~\eqref{eq:percent_obj}.
     \ElsIf{Rank (S1--2)}
         \State Construct a valid fan-rank permutation; swap ranks until eliminations are worst.
     \ElsIf{Bottom2 (S28--34)}
-        \State Enumerate partner $b$ so that $\{e,b\}$ is bottom two; choose minimal-deviation solution.
+        \State Enumerate feasible partners $b$; compute $\Pr(\text{elim } e \mid e,b)$ via Eq.~\eqref{eq:judges_save}.
+        \State Select partner with highest probability (or sample in ensemble mode).
     \EndIf
-    \State Enforce finals ordering from \texttt{placement}; interpolate $v_{i,t}$ for no-elimination weeks.
-    \State Ensemble: perturb $J_{i,t}$ (only if $J_{i,t}>0$), re-solve, compute $\mu,\sigma,\text{Certainty}$.
+    \State Enforce finals ordering from \texttt{placement}; interpolate $f_{i,t}$ for no-elimination weeks.
+    \State Ensemble: perturb $J_{i,t}$, sample judges' save for Bottom2, re-solve, compute $\mu,\sigma,\text{Certainty}$.
     \State Validate eliminations and compute CSR.
 \EndFor
 \end{algorithmic}
@@ -357,14 +331,14 @@ while Bottom2 seasons are least certain because the judges' save introduces addi
 
 \begin{table}[H]
 \centering
-\caption{Average Certainty by Regime (K=5 Ensemble)}
+\caption{Average Certainty by Regime (K=20 Ensemble)}
 \begin{tabular}{lcc}
 \toprule
 \textbf{Regime} & \textbf{Avg Certainty} & \textbf{Interpretation} \\
 \midrule
-Rank & 0.965 & High (permutation ambiguity) \\
-Percent & 0.984 & Very high (hard constraints) \\
-Bottom2 & 0.835 & Moderate (unknown partner + judge save) \\
+Rank & 0.946 & High (permutation ambiguity) \\
+Percent & 0.982 & Very high (hard constraints) \\
+Bottom2 & 0.786 & Moderate (judges' save + partner uncertainty) \\
 \bottomrule
 \end{tabular}
 \label{tab:certainty}
@@ -400,141 +374,54 @@ Bottom2 & finals & 31 & 1.000 \\
 Multi-elimination weeks are the most uncertain due to tighter ordering requirements, while finals weeks are most
 stable because the ranking constraint is strong and the active set is small.
 
-\section{A Summary}
-\lipsum[6]
+\subsection{Why This Algorithm is Reasonable}
+\begin{itemize}
+\item \textbf{Inverse framing matches the data.} Fan votes are unobserved; eliminations provide indirect constraints.
+\item \textbf{Rule-consistency is primary.} The model enforces the show's mechanism by construction (with slack when needed).
+\item \textbf{Regularization encodes minimal behavioral assumptions.} Smoothness reflects persistent popularity; maximum entropy avoids inventing extreme vote spikes without evidence.
+\item \textbf{Uncertainty is part of the answer.} Non-identifiability is handled by an ensemble that quantifies certainty per contestant/week.
+\end{itemize}
 
-\section{Evaluate of the Mode}
-
-\section{Strengths and weaknesses}
-\lipsum[12]
+\section{Strengths and Weaknesses}
 
 \subsection{Strengths}
 \begin{itemize}
-\item \textbf{Applies widely}\\
-This  system can be used for many types of airplanes, and it also
-solves the interference during  the procedure of the boarding
-airplane,as described above we can get to the  optimization
-boarding time.We also know that all the service is automate.
-\item \textbf{Improve the quality of the airport service}\\
-Balancing the cost of the cost and the benefit, it will bring in
-more convenient  for airport and passengers.It also saves many
-human resources for the airline.
+\item \textbf{Rule-Faithful:} The model explicitly enforces the stated elimination mechanism for each season regime (Percent, Rank, Bottom2).
+\item \textbf{Handles All Regimes:} A unified framework addresses the three distinct rule types across 34 seasons.
+\item \textbf{Quantified Uncertainty:} Ensemble-based certainty measures provide per-contestant/week confidence, answering whether certainty varies (it does).
+\item \textbf{Interpretable Diagnostics:} Slack and CSR serve as transparent indicators of ``surprise eliminations'' rather than model failures.
 \end{itemize}
 
-\subsection{How to cite?}
-bibliography cite use \cite{1,2,3}
-
-AI cite use \AIcite{AI1,AI2,AI3}
+\subsection{Weaknesses}
+\begin{itemize}
+\item \textbf{Bottom2 Ambiguity:} The unobserved partner in Seasons 28--34 limits achievable CSR (79.7\%).
+\item \textbf{Judges' Save Not Modeled:} We do not model judge preferences when choosing between bottom-two contestants.
+\item \textbf{Hyperparameter Sensitivity:} Results depend on choices of $\alpha$, $\beta$, $\gamma$, though ensemble averaging mitigates this.
+\end{itemize}
 
 \begin{thebibliography}{99}
-\bibitem{1} D.~E. KNUTH   The \TeX{}book  the American
-Mathematical Society and Addison-Wesley
-Publishing Company , 1984-1986.
-\bibitem{2}Lamport, Leslie,  \LaTeX{}: `` A Document Preparation System '',
-Addison-Wesley Publishing Company, 1986.
-\bibitem{3}\url{https://www.latexstudio.net/}
+\bibitem{1} Boyd, S., \& Vandenberghe, L. (2004). Convex optimization. Cambridge university press.
+\bibitem{2} Wikipedia contributors. (2024). Dancing with the Stars (American TV series). Wikipedia.
+\bibitem{3} Jaynes, E. T. (1957). Information theory and statistical mechanics. Physical review, 106(4), 620.
 \end{thebibliography}
 
 \begin{appendices}
 
-\section{First appendix}
+\section{Code Listing}
+The fan vote estimation is implemented in Python. The complete code is provided below.
 
-In addition, your report must include a letter to the Chief Financial Officer (CFO) of the Goodgrant Foundation, Mr. Alpha Chiang, that describes the optimal investment strategy, your modeling approach and major results, and a brief discussion of your proposed concept of a return-on-investment (ROI). This letter should be no more than two pages in length.
-
-\begin{letter}{Dear, Mr. Alpha Chiang}
-
-\lipsum[1-2]
-
-\vspace{\parskip}
-
-Sincerely yours,
-
-Your friends
-
-\end{letter}
-Here are simulation programmes we used in our model as follow.\\
-
-\textbf{\textcolor[rgb]{0.98,0.00,0.00}{Input matlab source:}}
-\lstinputlisting[language=Matlab]{./code/mcmthesis-matlab1.m}
-
-\section{Second appendix}
-
-some more text \textcolor[rgb]{0.98,0.00,0.00}{\textbf{Input C++ source:}}
-\lstinputlisting[language=C++]{./code/mcmthesis-sudoku.cpp}
+\lstinputlisting[language=Python, caption={Fan Vote Estimation Code}]{./code/fan_vote_convex.py}
 
 \end{appendices}
 
 
 \AImatter
 
-\begin{ReportAiUse}{9}
+\begin{ReportAiUse}{1}
 \bibitem{AI1}
-Bing AI\\
-Query1: write a sort algorithm\\
-Output: Sure, I can help you with that. Here is a simple implementation of the selection sort algorithm in Python:
-\begin{lstlisting}[language=python]
-def selection_sort(arr):
-    for i in range(len(arr)):
-        min_idx = i
-        for j in range(i + 1, len(arr)):
-            if arr[min_idx] > arr[j]:
-                min_idx = j
-        arr[i], arr[min_idx] = arr[min_idx], arr[i]
-    return arr
-\end{lstlisting}
-This algorithm sorts an array by repeatedly finding the minimum element from the unsorted part of the array and putting it at the beginning. \href{https://www.geeksforgeeks.org/sorting-algorithms/}{The time complexity of this algorithm is O($n^2$)}.
-
-There are many other sorting algorithms available such as bubble sort, insertion sort, merge sort, quick sort, heap sort, and more. Each of these algorithms has its own advantages and disadvantages. You can learn more about them on GeeksforGeeks and Programiz.
-
-I hope this helps!
-
-\bibitem{AI2}
-OpenAl Enie (Nov 5, 2023 version, Ernie 4.0)\\
-Query1: <insert the exact wording of any subsequent input into the Al tool>\\
-Output: <insert the complete output from the second query>
-
-\bibitem{AI3}
-Github CoPilot (Feb 3, 2024 version)\\
-Query1: <insert the exact wording you input into the Al tool>\\
-Output: <insert the complete output fron the Al tool>
-
-\bibitem{AI4}
-Google Bard (Feb 2,2024 version)\\
-Query: <insert the exact wording of your query>\\
-Output: <irsert the complete output from the Al tool>
-
-\bibitem{AI5}
-Bing AI\\
-Query: write a FFT algorithm\\
-Output: Sure, here is a Python implementation of the Fast Fourier Transform (FFT) algorithm:
-\begin{lstlisting}[language=python]
-import numpy as np
-
-def fft(x):
-    n = len(x)
-    if n == 1:
-        return x
-    even = fft(x[0::2])
-    odd = fft(x[1::2])
-    T = [np.exp(-2j * np.pi * k / n) * odd[k] for k in range(n // 2)]
-    return [even[k] + T[k] for k in range(n // 2)] + [even[k] - T[k] for k in range(n // 2)]
-\end{lstlisting}
-The FFT is a widely used algorithm for computing the \textbf{Discrete Fourier Transform (DFT)} of a sequence. It reduces the number of computations needed from O(n$^2$) to O(n log n) 12. The basic idea of the FFT is to apply divide and conquer. We divide the coefficient vector of the polynomial into two vectors, recursively compute the DFT for each of them, and combine the results to compute the DFT of the complete polynomial 3.
-
-I hope this helps!
-
+GitHub Copilot (Agent Mode)\\
+Query: Develop convex optimization model for DWTS fan vote estimation\\
+Output: Used to assist with model formulation, code debugging, and LaTeX formatting for the inverse fan vote estimation problem.
 \end{ReportAiUse}
 
 \end{document}
-%% 
-%% This work consists of these files mcmthesis.dtx,
-%%                                   figures/ and
-%%                                   code/,
-%% and the derived files             mcmthesis.cls,
-%%                                   mcmthesis-demo.tex,
-%%                                   README,
-%%                                   LICENSE,
-%%                                   mcmthesis.pdf and
-%%                                   mcmthesis-demo.pdf.
-%%
-%% End of file `mcmthesis-demo.tex'.

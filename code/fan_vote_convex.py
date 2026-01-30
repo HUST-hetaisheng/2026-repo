@@ -21,15 +21,23 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_PATH = BASE_DIR / 'data' / '2026_MCM_Problem_C_Data.csv'
 OUTPUT_PATH = BASE_DIR / 'data' / 'fan_vote_results.csv'
 METRICS_PATH = BASE_DIR / 'data' / 'consistency_metrics.csv'
+CERTAINTY_PATH = BASE_DIR / 'data' / 'certainty_metrics.csv'
+WEEKLY_METRICS_PATH = BASE_DIR / 'data' / 'weekly_consistency_metrics.csv'
 
 # Hyperparameters
 TAU = 15.0       # softmax temperature (kept for optional tie-breaks)
 ALPHA = 0.05     # entropy regularization weight
 BETA_LIKE = 1.0  # likelihood weight in stage-2
 LAMBDA_RANK = 0.5
+KAPPA = 2.0      # judges' save sensitivity: Pr(elim e | e,b) = sigmoid(kappa * (J_b - J_e))
 N_ENSEMBLE = int(os.getenv('N_ENSEMBLE', '20'))
 FLOAT_TOL = 1e-6
 np.random.seed(42)
+
+
+def sigmoid(x):
+    """Numerically stable sigmoid."""
+    return np.where(x >= 0, 1 / (1 + np.exp(-x)), np.exp(x) / (1 + np.exp(x)))
 
 
 def load_data():
@@ -466,7 +474,7 @@ def solve_rank_season(sdf, weeks):
 
 
 # =============================================================================
-# Bottom2 Regime (S28-34): enumerate partner
+# Bottom2 Regime (S28-34): Probabilistic Judges' Save
 # =============================================================================
 
 def assign_bottom2_fan_ranks(j_ranks, elim_idx, partner_idx):
@@ -489,10 +497,33 @@ def assign_bottom2_fan_ranks(j_ranks, elim_idx, partner_idx):
     return f_ranks
 
 
-def solve_bottom2_season(sdf, weeks):
+def compute_judges_save_prob(J_elim, J_partner, kappa=KAPPA):
+    """
+    Compute probability that judges eliminate contestant e given bottom2 = {e, b}.
+    
+    Pr(elim e | e, b) = sigmoid(kappa * (J_b - J_e))
+    
+    Higher J_b means partner has higher score, so judges more likely to save partner
+    and eliminate e.
+    """
+    return sigmoid(kappa * (J_partner - J_elim))
+
+
+def solve_bottom2_season(sdf, weeks, sample_judges_save=False):
+    """
+    Bottom2 regime with probabilistic judges' save model.
+    
+    For each single-elimination week:
+    1. Enumerate all possible partners b
+    2. Check if (e, b) can form valid bottom2
+    3. Compute Pr(elim e | e, b) = sigmoid(kappa * (J_b - J_e))
+    4. Weight feasible partners by this probability
+    5. Select most likely partner OR sample from distribution (if sample_judges_save=True)
+    """
     results = {}
     week_info = {}
     week_data = {}
+    partner_probs = {}  # store partner probabilities for analysis
 
     for w in weeks:
         col = f'J{w}'
@@ -533,32 +564,73 @@ def solve_bottom2_season(sdf, weeks):
             v = v / v.sum()
             week_info[w] = f'multi_elim_{len(elim_idxs)}'
         else:
+            # Single elimination with probabilistic judges' save
             elim_idx = elim_idxs[0]
             non_elim = [i for i in range(n) if i != elim_idx]
-
-            best = None
-            feasible_found = False
+            
+            # Collect feasible partners with their probabilities
+            candidates = []
             for b in non_elim:
-                f_ranks = assign_bottom2_fan_ranks(j_ranks, elim_idx, b)
-                c = j_ranks + f_ranks
+                f_ranks_cand = assign_bottom2_fan_ranks(j_ranks, elim_idx, b)
+                c = j_ranks + f_ranks_cand
                 bottom2 = set(np.argsort(-c)[:2])
                 feasible = elim_idx in bottom2 and b in bottom2
-                cost = np.sum(np.abs(f_ranks - j_ranks))
-                score = (1 if feasible else 0, -cost)
-                if best is None or score > best[0]:
-                    best = (score, f_ranks, feasible)
+                
                 if feasible:
-                    feasible_found = True
-
-            f_ranks = best[1]
+                    # Pr(elim e | e, b) = sigmoid(kappa * (J_b - J_e))
+                    prob_elim = compute_judges_save_prob(J[elim_idx], J[b])
+                    candidates.append({
+                        'partner_idx': b,
+                        'partner_name': names[b],
+                        'f_ranks': f_ranks_cand,
+                        'prob_elim': prob_elim,
+                        'J_partner': J[b],
+                        'J_elim': J[elim_idx]
+                    })
+            
+            if not candidates:
+                # No feasible partner found - relax constraint
+                best = None
+                for b in non_elim:
+                    f_ranks_cand = assign_bottom2_fan_ranks(j_ranks, elim_idx, b)
+                    cost = np.sum(np.abs(f_ranks_cand - j_ranks))
+                    prob_elim = compute_judges_save_prob(J[elim_idx], J[b])
+                    score = -cost + prob_elim  # prefer higher elimination probability
+                    if best is None or score > best[0]:
+                        best = (score, f_ranks_cand, b, prob_elim)
+                
+                f_ranks = best[1]
+                week_info[w] = 'bottom2_relaxed'
+                partner_probs[w] = {'selected': names[best[2]], 'prob': best[3], 'feasible': False}
+            else:
+                # Normalize probabilities across feasible candidates
+                total_prob = sum(c['prob_elim'] for c in candidates)
+                for c in candidates:
+                    c['normalized_prob'] = c['prob_elim'] / total_prob if total_prob > 0 else 1/len(candidates)
+                
+                if sample_judges_save:
+                    # Sample partner from probability distribution
+                    probs = [c['normalized_prob'] for c in candidates]
+                    chosen_idx = np.random.choice(len(candidates), p=probs)
+                    chosen = candidates[chosen_idx]
+                else:
+                    # Select most likely partner (highest prob_elim)
+                    chosen = max(candidates, key=lambda c: c['prob_elim'])
+                
+                f_ranks = chosen['f_ranks']
+                week_info[w] = 'single_elim'
+                partner_probs[w] = {
+                    'selected': chosen['partner_name'],
+                    'prob': chosen['prob_elim'],
+                    'feasible': True,
+                    'n_candidates': len(candidates),
+                    'all_probs': [(c['partner_name'], c['prob_elim']) for c in candidates]
+                }
+            
             v = np.exp(-LAMBDA_RANK * (f_ranks - 1))
             v = v / v.sum()
-            if feasible_found and best[2]:
-                week_info[w] = 'single_elim'
-            else:
-                week_info[w] = 'bottom2_relaxed'
 
-        week_data[w] = {'names': names, 'v': v, 'week_type': week_info[w]}
+        week_data[w] = {'names': names, 'v': v, 'week_type': week_info.get(w, 'unknown')}
 
     week_data = fill_no_elim_weeks(week_data, weeks)
 
@@ -575,11 +647,17 @@ def solve_bottom2_season(sdf, weeks):
 
 
 # =============================================================================
-# Ensemble
+# Ensemble with Probabilistic Judges' Save Sampling
 # =============================================================================
 
-def ensemble_solve(solve_func, sdf, weeks, n_ens=N_ENSEMBLE):
-    """Perturb scores without reviving eliminated contestants."""
+def ensemble_solve(solve_func, sdf, weeks, n_ens=N_ENSEMBLE, sample_judges_save=False):
+    """
+    Perturb scores and optionally sample judges' save decisions.
+    
+    For Bottom2 regime with sample_judges_save=True:
+    - Each ensemble run samples the bottom2 partner from the probability distribution
+    - This captures uncertainty from both score perturbation AND judges' decision
+    """
     all_results = []
 
     for _ in range(n_ens):
@@ -591,7 +669,11 @@ def ensemble_solve(solve_func, sdf, weeks, n_ens=N_ENSEMBLE):
                 noise = np.random.normal(0, 0.5, len(sdf_p))
                 sdf_p.loc[mask, col] = (sdf_p.loc[mask, col] + noise[mask]).clip(lower=1)
 
-        res, _ = solve_func(sdf_p, weeks)
+        # For Bottom2 with sampling, pass the flag
+        if sample_judges_save and solve_func == solve_bottom2_season:
+            res, _ = solve_func(sdf_p, weeks, sample_judges_save=True)
+        else:
+            res, _ = solve_func(sdf_p, weeks)
         all_results.append(res)
 
     stats = {}
@@ -618,9 +700,10 @@ def ensemble_solve(solve_func, sdf, weeks, n_ens=N_ENSEMBLE):
 # =============================================================================
 
 def validate_percent(results, sdf, weeks):
-    """Percent regime: all eliminated in bottom-k combined scores."""
+    """Percent regime: all eliminated in bottom-k combined scores. Returns detailed metrics."""
     correct = 0
     total = 0
+    weekly_metrics = []
 
     for w in weeks:
         col = f'J{w}'
@@ -641,20 +724,49 @@ def validate_percent(results, sdf, weeks):
         k = len(elim_names)
         sorted_idx = np.argsort(c)
         bottom_k = set(sorted_idx[:k])
-        all_in_bottom = all(
-            names.index(e) in bottom_k
-            for e in elim_names if e in names
-        )
+        elim_idxs = [names.index(e) for e in elim_names if e in names]
+        
+        all_in_bottom = all(i in bottom_k for i in elim_idxs)
         if all_in_bottom:
             correct += 1
+        
+        # Jaccard similarity
+        pred_set = set(sorted_idx[:k])
+        true_set = set(elim_idxs)
+        jaccard = len(pred_set & true_set) / len(pred_set | true_set) if len(pred_set | true_set) > 0 else 1.0
+        
+        # Decisiveness margin: gap between k-th and (k+1)-th combined scores
+        sorted_c = np.sort(c)
+        margin = sorted_c[k] - sorted_c[k-1] if k < len(c) else 0.0
+        
+        # Slack: max(c_elim - c_survivor) for each elim
+        non_elim_idxs = [i for i in range(len(c)) if i not in elim_idxs]
+        if elim_idxs and non_elim_idxs:
+            slack = max(0.0, max(c[e] - min(c[p] for p in non_elim_idxs) for e in elim_idxs))
+        else:
+            slack = 0.0
+        
+        weekly_metrics.append({
+            'season': sdf['season'].iloc[0],
+            'week': w,
+            'regime': 'percent',
+            'exact_match': all_in_bottom,
+            'jaccard': jaccard,
+            'margin': margin,
+            'slack': slack,
+            'n_eliminated': k,
+            'n_active': len(names)
+        })
 
-    return correct / total if total > 0 else 1.0
+    csr = correct / total if total > 0 else 1.0
+    return csr, weekly_metrics
 
 
 def validate_rank(results, sdf, weeks):
-    """Rank regime: eliminated are in top-k (worst) combined ranks."""
+    """Rank regime: eliminated are in top-k (worst) combined ranks. Returns detailed metrics."""
     correct = 0
     total = 0
+    weekly_metrics = []
 
     for w in weeks:
         col = f'J{w}'
@@ -686,16 +798,41 @@ def validate_rank(results, sdf, weeks):
         elim_idxs = [names.index(e) for e in elim_names if e in names]
         k = len(elim_idxs)
         top_k = set(np.argsort(-c)[:k])
-        if all(i in top_k for i in elim_idxs):
+        
+        all_in_top = all(i in top_k for i in elim_idxs)
+        if all_in_top:
             correct += 1
+        
+        # Jaccard similarity
+        pred_set = set(np.argsort(-c)[:k])
+        true_set = set(elim_idxs)
+        jaccard = len(pred_set & true_set) / len(pred_set | true_set) if len(pred_set | true_set) > 0 else 1.0
+        
+        # Decisiveness margin in rank space
+        sorted_c = np.sort(c)[::-1]  # descending
+        margin = sorted_c[k-1] - sorted_c[k] if k < len(c) else 0.0
+        
+        weekly_metrics.append({
+            'season': sdf['season'].iloc[0],
+            'week': w,
+            'regime': 'rank',
+            'exact_match': all_in_top,
+            'jaccard': jaccard,
+            'margin': margin,
+            'slack': 0.0,  # rank regime doesn't use slack
+            'n_eliminated': k,
+            'n_active': n
+        })
 
-    return correct / total if total > 0 else 1.0
+    csr = correct / total if total > 0 else 1.0
+    return csr, weekly_metrics
 
 
 def validate_bottom2(results, sdf, weeks):
-    """Bottom2 regime: eliminated must be in bottom2 (single elim)."""
+    """Bottom2 regime: eliminated must be in bottom2 (single elim). Returns detailed metrics."""
     correct = 0
     total = 0
+    weekly_metrics = []
 
     for w in weeks:
         col = f'J{w}'
@@ -728,19 +865,45 @@ def validate_bottom2(results, sdf, weeks):
         elim_idxs = [names.index(e) for e in elim_names if e in names]
         k = len(elim_idxs)
 
+        exact_match = False
         if k == 1:
             total += 1
             if elim_idxs[0] in bottom2:
                 correct += 1
+                exact_match = True
         elif k == 2:
             total += 1
             if all(i in bottom2 for i in elim_idxs):
                 correct += 1
+                exact_match = True
         else:
             # skip if more than 2 eliminations in bottom2 regime
             continue
+        
+        # Jaccard similarity for bottom2
+        pred_set = bottom2
+        true_set = set(elim_idxs)
+        # For bottom2, we compare elim against bottom2
+        jaccard = len(pred_set & true_set) / len(true_set) if len(true_set) > 0 else 1.0
+        
+        # Margin: gap between 2nd and 3rd worst
+        sorted_c = np.sort(c)[::-1]  # descending
+        margin = sorted_c[1] - sorted_c[2] if len(c) > 2 else 0.0
+        
+        weekly_metrics.append({
+            'season': sdf['season'].iloc[0],
+            'week': w,
+            'regime': 'bottom2',
+            'exact_match': exact_match,
+            'jaccard': jaccard,
+            'margin': margin,
+            'slack': 0.0,  # bottom2 regime doesn't use slack
+            'n_eliminated': k,
+            'n_active': n
+        })
 
-    return correct / total if total > 0 else 1.0
+    csr = correct / total if total > 0 else 1.0
+    return csr, weekly_metrics
 
 
 # =============================================================================
@@ -758,9 +921,11 @@ def main():
 
     all_rows = []
     metrics = []
+    all_weekly_metrics = []
+    certainty_rows = []
 
-    print(f"{'Season':>6} | {'Regime':>7} | {'CSR':>6} | {'Certainty':>9}")
-    print("-" * 40)
+    print(f"{'Season':>6} | {'Regime':>7} | {'CSR':>6} | {'Certainty':>9} | {'Jaccard':>7}")
+    print("-" * 55)
 
     for season in sorted(df['season'].unique()):
         sdf = df[df['season'] == season].copy()
@@ -772,19 +937,29 @@ def main():
             regime = 'rank'
             solve_func = solve_rank_season
             validate_func = validate_rank
+            sample_judges = False
         elif season <= 27:
             regime = 'percent'
             solve_func = solve_percent_season_convex
             validate_func = validate_percent
+            sample_judges = False
         else:
             regime = 'bottom2'
             solve_func = solve_bottom2_season
             validate_func = validate_bottom2
+            sample_judges = True  # Enable probabilistic judges' save sampling
 
         results, week_info = solve_func(sdf, weeks)
-        csr = validate_func(results, sdf, weeks)
-        stats = ensemble_solve(solve_func, sdf, weeks)
-
+        csr, weekly_metrics = validate_func(results, sdf, weeks)
+        all_weekly_metrics.extend(weekly_metrics)
+        
+        # Compute average Jaccard for the season
+        avg_jaccard = np.mean([m['jaccard'] for m in weekly_metrics]) if weekly_metrics else 1.0
+        avg_margin = np.mean([m['margin'] for m in weekly_metrics]) if weekly_metrics else 0.0
+        avg_slack = np.mean([m['slack'] for m in weekly_metrics]) if weekly_metrics else 0.0
+        
+        # Ensemble with judges' save sampling for Bottom2
+        stats = ensemble_solve(solve_func, sdf, weeks, sample_judges_save=sample_judges)
         avg_cert = np.mean([s['certainty'] for s in stats.values()])
 
         for w in weeks:
@@ -811,26 +986,71 @@ def main():
                     'week_type': week_info.get(w, 'unknown'),
                     'regime': regime
                 })
+                
+                # Certainty per contestant/week
+                certainty_rows.append({
+                    'season': season,
+                    'week': w,
+                    'celebrity_name': name,
+                    'mean': s.get('mean', results.get(key, np.nan)),
+                    'std': s.get('std', 0),
+                    'cv': s.get('cv', 0),
+                    'certainty': s.get('certainty', 1),
+                    'ci_low': s.get('ci_low', results.get(key, np.nan)),
+                    'ci_high': s.get('ci_high', results.get(key, np.nan)),
+                    'regime': regime
+                })
 
         metrics.append({
             'season': season, 'regime': regime,
-            'csr': csr, 'avg_certainty': avg_cert
+            'csr': csr, 
+            'avg_certainty': avg_cert,
+            'avg_jaccard': avg_jaccard,
+            'avg_margin': avg_margin,
+            'avg_slack': avg_slack
         })
 
-        print(f"{season:>6} | {regime:>7} | {csr:>5.1%} | {avg_cert:>8.3f}")
+        print(f"{season:>6} | {regime:>7} | {csr:>5.1%} | {avg_cert:>8.3f} | {avg_jaccard:>6.3f}")
 
-    print("-" * 40)
+    print("-" * 55)
 
+    # Save all outputs
     pd.DataFrame(all_rows).to_csv(OUTPUT_PATH, index=False)
     pd.DataFrame(metrics).to_csv(METRICS_PATH, index=False)
-    print(f"\nSaved to {OUTPUT_PATH}")
+    pd.DataFrame(all_weekly_metrics).to_csv(WEEKLY_METRICS_PATH, index=False)
+    pd.DataFrame(certainty_rows).to_csv(CERTAINTY_PATH, index=False)
+    
+    print(f"\nSaved to:")
+    print(f"  - {OUTPUT_PATH}")
+    print(f"  - {METRICS_PATH}")
+    print(f"  - {WEEKLY_METRICS_PATH}")
+    print(f"  - {CERTAINTY_PATH}")
 
     mdf = pd.DataFrame(metrics)
     print("\nSummary by Regime:")
     for regime in ['rank', 'percent', 'bottom2']:
         rm = mdf[mdf['regime'] == regime]
         if len(rm) > 0:
-            print(f"  {regime.upper()}: CSR={rm['csr'].mean():.1%}, Certainty={rm['avg_certainty'].mean():.3f}")
+            print(f"  {regime.upper()}: CSR={rm['csr'].mean():.1%}, Certainty={rm['avg_certainty'].mean():.3f}, Jaccard={rm['avg_jaccard'].mean():.3f}")
+    
+    # Print overall statistics
+    print("\n" + "=" * 60)
+    print("OVERALL STATISTICS (as reported in paper)")
+    print("=" * 60)
+    wmdf = pd.DataFrame(all_weekly_metrics)
+    for regime in ['rank', 'percent', 'bottom2']:
+        rm = wmdf[wmdf['regime'] == regime]
+        if len(rm) > 0:
+            exact_acc = rm['exact_match'].mean()
+            avg_jacc = rm['jaccard'].mean()
+            avg_margin = rm['margin'].mean()
+            avg_slack = rm['slack'].mean()
+            print(f"\n{regime.upper()} Regime:")
+            print(f"  Exact-Set Accuracy: {exact_acc:.1%}")
+            print(f"  Average Jaccard:    {avg_jacc:.3f}")
+            print(f"  Average Margin:     {avg_margin:.4f}")
+            if regime == 'percent':
+                print(f"  Average Slack:      {avg_slack:.4f}")
 
 
 if __name__ == '__main__':
