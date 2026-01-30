@@ -32,6 +32,8 @@
 
 \usepackage{indentfirst}  %首行缩进，注释掉，首行就不再缩进。
 \usepackage{lipsum}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \title{The \LaTeX{} Template for MCM Version \MCMversion}
 \author{\small \href{https://www.latexstudio.net/}
   {\includegraphics[width=7cm]{mcmthesis-logo}}}
@@ -158,6 +160,229 @@ a^2 \label{aa}
   {\mathop {\lim }\limits_{x \to \infty } \frac{{n!}}{{r!\left( {n - r}
   \right)!}}} \eqno (1)
 \]
+% ============================================
+% Full modeling for Question 1 (all seasons)
+% ============================================
+
+\section{Model 1: Inverse Estimation of Fan Votes with Season-Dependent Rules}
+
+\subsection{Season Rules (Three Regimes)}
+The show combines judges' scores and fan votes using different rules across seasons:
+\begin{itemize}
+\item \textbf{Seasons 1--2 (Rank)}: combine by ranks (judge rank + fan rank); the worst sum is eliminated.
+\item \textbf{Seasons 3--27 (Percent)}: combine by shares (judge score share + fan vote share); the lowest sum is eliminated.
+\item \textbf{Seasons 28--34 (Rank + Bottom2 + Judges' Save)}: identify bottom two by combined ranks, then judges choose one of them to eliminate.
+\end{itemize}
+Our goal is not to predict eliminations directly, but to \emph{infer fan votes} that make the observed eliminations consistent with the rule in that season.
+
+\subsection{Weekly Data Construction}
+Let $J_{i,t}$ be contestant $i$'s total judges score in week $t$ (sum over available judges; missing values ignored).
+We define the active set in week $t$:
+\begin{equation}
+A_t=\{i: J_{i,t}>0\},
+\end{equation}
+since the dataset records $0$ after a contestant exits. Let $T$ be the last week of the season:
+\begin{equation}
+T=\max\{t:\exists i,\ J_{i,t}>0\}.
+\end{equation}
+We determine each contestant's last active week
+\begin{equation}
+\mathrm{exit}(i)=\max\{t\le T: J_{i,t}>0\}.
+\end{equation}
+We treat \texttt{Withdrew} as exogenous attrition (not vote-determined): it contributes to $A_t$ before exit,
+but is excluded from vote-based elimination constraints.
+
+For each week $t$, let $E_t\subseteq A_t$ be the observed \emph{vote-determined} eliminated set (possibly multiple),
+and $S_t=A_t\setminus E_t$ be the survivors.
+
+\subsection{Unknown Fan Votes: Use Vote Shares (Identifiable)}
+We estimate fan \textbf{vote shares} rather than absolute votes:
+\begin{equation}
+v_{i,t}\ge 0,\qquad \sum_{i\in A_t} v_{i,t}=1.
+\end{equation}
+Absolute votes can be reported as $V_{i,t}=V_t\,v_{i,t}$ for a chosen scale $V_t$ (scale does not affect eliminations).
+
+% ------------------------------------------------
+\subsection{Regime A: Percent Seasons (3--27) --- Convex Inverse Voting}
+\paragraph{Known: judge shares.}
+\begin{equation}
+j_{i,t}=\frac{J_{i,t}}{\sum_{k\in A_t} J_{k,t}}.
+\end{equation}
+
+\paragraph{Rule: combined score and elimination.}
+\begin{equation}
+c_{i,t}=j_{i,t}+v_{i,t},
+\end{equation}
+and eliminated contestants should have the smallest combined scores.
+
+\paragraph{Elimination constraints with weekly slack.}
+To handle ties/special episodes/unknown details, we use a weekly slack $\delta_t\ge 0$:
+\begin{equation}
+c_{e,t}\le c_{p,t}+\delta_t,\qquad \forall e\in E_t,\ \forall p\in S_t.
+\label{eq:percent_elim}
+\end{equation}
+If $E_t=\emptyset$ (no elimination), we enforce $\delta_t=0$.
+
+\paragraph{Unique solution via ``minimum-assumption'' regularization (convex).}
+We choose vote shares that (i) minimize slack, (ii) change smoothly week to week, and (iii) maximize entropy:
+\begin{equation}
+\min_{\{v_{i,t}\},\{\delta_t\}}
+\quad
+M\sum_{t=1}^{T}\delta_t
++\beta\sum_{t=2}^{T}\lVert \bm v_t-\bm v_{t-1}\rVert_{1}
+-\alpha\sum_{t=1}^{T}\sum_{i\in A_t}\mathrm{entr}(v_{i,t}),
+\label{eq:percent_obj}
+\end{equation}
+subject to simplex constraints and Eq.~\eqref{eq:percent_elim}.
+Here $\bm v_t=(v_{i,t})_{i\in A_t}$ and $\mathrm{entr}(x)=-x\log x$.
+This is a convex optimization problem (linear constraints + convex objective).
+
+% ------------------------------------------------
+\subsection{Regime B: Rank Seasons (1--2) --- Integer Inference of Fan Ranks}
+Rank seasons use fan \emph{ranks} rather than vote shares. We infer weekly fan ranks and then map to vote shares.
+
+\paragraph{Known: judge ranks.}
+Let $r^J_{i,t}$ be the rank of $J_{i,t}$ among $A_t$ (higher score = better rank; ties use average-rank).
+
+\paragraph{Unknown: fan ranks as a permutation.}
+Let $r^F_{i,t}\in\{1,\dots,|A_t|\}$ be the fan rank (1 is best). To enforce a permutation, introduce binary assignment:
+\begin{equation}
+x_{i,k,t}\in\{0,1\}\quad (i\in A_t,\ k=1,\dots,|A_t|),
+\end{equation}
+with
+\begin{equation}
+\sum_{k}x_{i,k,t}=1,\quad \sum_{i\in A_t}x_{i,k,t}=1,\quad
+r^F_{i,t}=\sum_{k}k\,x_{i,k,t}.
+\label{eq:perm}
+\end{equation}
+
+\paragraph{Rule: combined rank and elimination.}
+Combined rank-sum:
+\begin{equation}
+c_{i,t}=r^J_{i,t}+r^F_{i,t}.
+\end{equation}
+Eliminated contestants should have the \emph{worst} (largest) $c_{i,t}$.
+We again allow weekly slack $\delta_t\ge 0$:
+\begin{equation}
+c_{e,t}\ge c_{p,t}-\delta_t,\qquad \forall e\in E_t,\ \forall p\in S_t.
+\label{eq:rank_elim}
+\end{equation}
+
+\paragraph{Regularization for unique, realistic ranks.}
+We prefer fan ranks that do not jump wildly:
+\begin{equation}
+\min\ 
+M\sum_t \delta_t\ +\ \beta\sum_{t=2}^T \sum_{i\in A_t\cap A_{t-1}} |r^F_{i,t}-r^F_{i,t-1}|.
+\label{eq:rank_obj}
+\end{equation}
+This is an ILP due to binary $x_{i,k,t}$.
+
+\paragraph{Map inferred fan ranks to vote shares.}
+To report \emph{fan votes} (shares) consistently across regimes, we map rank to share by a monotone model:
+\begin{equation}
+v_{i,t}=\frac{\exp(-\lambda(r^F_{i,t}-1))}{\sum_{p\in A_t}\exp(-\lambda(r^F_{p,t}-1))}.
+\label{eq:rank_to_share}
+\end{equation}
+We calibrate $\lambda$ using the distributional shape of vote shares learned from Percent seasons (Regime A),
+so that rank-based seasons produce comparable concentration levels.
+
+% ------------------------------------------------
+\subsection{Regime C: Seasons 28--34 --- Rank + Bottom2 + Judges' Save}
+In this regime, the eliminated contestant must be among the bottom two by combined ranks,
+and judges then choose which of the bottom two leaves.
+
+\paragraph{Step 1 (Bottom2 by combined ranks).}
+Using the same combined rank $c_{i,t}=r^J_{i,t}+r^F_{i,t}$, define bottom-two set $B_t$:
+\begin{equation}
+|B_t|=2,\quad c_{b,t}\ge c_{p,t}-\delta_t,\ \ \forall b\in B_t,\ \forall p\in A_t\setminus B_t.
+\label{eq:bottom2}
+\end{equation}
+Observed elimination $e\in E_t$ must satisfy $e\in B_t$.
+
+\paragraph{Step 2 (Judges choose within Bottom2).}
+Let the other bottom-two contestant be $b$ (saved).
+A simple, explainable modeling assumption is that judges are more likely to eliminate the one with lower judges score.
+We implement this either as a hard preference
+\begin{equation}
+J_{e,t}\le J_{b,t},
+\label{eq:judge_hard}
+\end{equation}
+or as a soft penalty (recommended for robustness):
+\begin{equation}
+\text{penalty}_t=\max\{0,\,J_{e,t}-J_{b,t}\}.
+\label{eq:judge_soft}
+\end{equation}
+
+\paragraph{Optimization strategy.}
+We solve an ILP similar to Regime B with additional constraints Eq.~\eqref{eq:bottom2},
+and add the judges-save term (hard or soft). If $b$ is unknown, we enumerate $b\in A_t\setminus\{e\}$,
+solve the ILP for each candidate, and pick the solution with minimum objective value.
+Finally, map ranks to vote shares by Eq.~\eqref{eq:rank_to_share}.
+
+% ------------------------------------------------
+\subsection{Consistency Evaluation (Back-Substitution)}
+Given estimated $\hat v_{i,t}$, we re-compute eliminations under the regime rule and compare with observed $E_t$.
+We report:
+\begin{align}
+\text{Exact-set accuracy} &= \frac{1}{N_{\text{elim}}}\sum_{t:E_t\neq\emptyset}\mathbf{1}(\hat E_t=E_t),\\
+\text{Jaccard}(t) &= \frac{|\hat E_t\cap E_t|}{|\hat E_t\cup E_t|},\qquad
+\overline{\text{Jaccard}}=\text{mean}_t\,\text{Jaccard}(t),\\
+\text{Margin}(t) &=
+\begin{cases}
+\hat c_{(m+1),t}-\hat c_{(m),t}, & \text{Percent (smallest eliminated)}\\
+\hat c_{(n),t}-\hat c_{(n-1),t}, & \text{Rank (largest eliminated)}
+\end{cases}
+\end{align}
+where $m=|E_t|$ and order statistics are computed among active contestants.
+
+% ------------------------------------------------
+\subsection{Uncertainty: Perturb-and-Resolve Ensemble (Chosen Scheme)}
+The inverse problem may be non-identifiable; thus we quantify uncertainty using an ensemble of solutions.
+
+\paragraph{Ensemble generation.}
+For $k=1,\dots,K$:
+\begin{itemize}
+\item Perturb hyperparameters (e.g., $\alpha,\beta$) slightly:
+$\alpha^{(k)}=\alpha(1+\epsilon_\alpha)$, $\beta^{(k)}=\beta(1+\epsilon_\beta)$,
+with $\epsilon_\alpha,\epsilon_\beta$ small (e.g., uniform in $[-0.1,0.1]$).
+\item Add tiny noise to judges totals (robustness to scoring subjectivity/recording):
+$J^{(k)}_{i,t}=J_{i,t}+\eta_{i,t}$ with $\eta_{i,t}$ very small.
+\item Re-solve the corresponding regime optimization to obtain $\hat v^{(k)}_{i,t}$.
+\end{itemize}
+
+\paragraph{Uncertainty summaries.}
+For each contestant-week $(i,t)$:
+\begin{align}
+\mu_{i,t} &= \frac{1}{K}\sum_{k=1}^{K}\hat v^{(k)}_{i,t},\qquad
+\sigma_{i,t} = \sqrt{\frac{1}{K-1}\sum_{k=1}^{K}(\hat v^{(k)}_{i,t}-\mu_{i,t})^2},\\
+\text{CI}_{95\%}(i,t) &= \left[Q_{2.5\%}\big(\hat v^{(1:K)}_{i,t}\big),\
+Q_{97.5\%}\big(\hat v^{(1:K)}_{i,t}\big)\right],\\
+\text{Width}(i,t) &= U_{i,t}-L_{i,t},\qquad
+\text{CV}(i,t)=\sigma_{i,t}/\mu_{i,t}.
+\end{align}
+We expect wider intervals in weeks with weaker constraints (e.g., no elimination episodes or very close contests).
+
+% ------------------------------------------------
+\subsection{Workflow Summary (Algorithm)}
+\begin{algorithm}[H]
+\caption{Season-dependent inverse voting (Question 1)}
+\begin{algorithmic}[1]
+\State Build $J_{i,t}$, $A_t$, $E_t$ (exclude \texttt{Withdrew} from $E_t$).
+\For{each season}
+    \If{Season in 3--27 (Percent)}
+        \State Solve convex program \eqref{eq:percent_obj} to estimate $\hat{v}_{i,t}$.
+    \ElsIf{Season in 1--2 (Rank)}
+        \State Solve ILP \eqref{eq:perm}+\eqref{eq:rank_elim}+\eqref{eq:rank_obj} for fan ranks $\hat{r}^F$.
+        \State Map $\hat{r}^F \rightarrow \hat{v}$ by \eqref{eq:rank_to_share}.
+    \ElsIf{Season in 28--34 (Rank + Bottom2 + Judges' Save)}
+        \State Enumerate bottom2 partner candidate $b$; solve ILP with \eqref{eq:bottom2} and judges-save term.
+        \State Map ranks to $\hat{v}$ by \eqref{eq:rank_to_share}.
+    \EndIf
+    \State Back-substitute to compute $\hat{E}_t$, accuracy/Jaccard/margins.
+    \State Run perturb-and-resolve ensemble ($K$ times) to compute CI widths and CV.
+\EndFor
+\end{algorithmic}
+\end{algorithm}
 
 \section{Calculating and Simplifying the Model  }
 \lipsum[11]
