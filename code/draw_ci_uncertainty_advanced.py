@@ -65,7 +65,7 @@ def plot_ci_width_by_season():
     ax.scatter(
         x,
         y,
-        s=32,
+        s=28,
         color=df["regime"].map(COLORS),
         edgecolor="white",
         linewidth=0.4,
@@ -80,13 +80,33 @@ def plot_ci_width_by_season():
     ax.set_xticks(list(range(1, 35, 2)))
 
     y_max = max(upper.max(), 0.012)
-    ax.set_ylim(0, y_max * 1.2)
-    ax.grid(axis="y", linestyle="--", alpha=0.2)
+    ax.set_ylim(0, y_max * 1.28)
+    ax.grid(axis="y", linestyle="--", alpha=0.18)
 
-    y_top = ax.get_ylim()[1]
-    ax.text(1.1, y_top * 0.93, "Rank Era (High Uncertainty)", fontsize=10, color="#4b6a8a")
-    ax.text(8.0, y_top * 0.93, "Percent Era (High Precision)", fontsize=10, color="#2f6b43")
-    ax.text(28.0, y_top * 0.93, "Judge Save Era (Structural Ambiguity)", fontsize=10, color="#8a5a2a")
+    ax.text(
+        0.02,
+        0.94,
+        "Rank Era (High Uncertainty)",
+        transform=ax.transAxes,
+        fontsize=9.6,
+        color="#4b6a8a",
+    )
+    ax.text(
+        0.38,
+        0.94,
+        "Percent Era (High Precision)",
+        transform=ax.transAxes,
+        fontsize=9.6,
+        color="#2f6b43",
+    )
+    ax.text(
+        0.74,
+        0.94,
+        "Judge Save Era (Structural Ambiguity)",
+        transform=ax.transAxes,
+        fontsize=9.6,
+        color="#8a5a2a",
+    )
 
     legend_handles = [
         Line2D([0], [0], color="#222222", lw=2.2, label="Avg CI Width"),
@@ -95,7 +115,7 @@ def plot_ci_width_by_season():
         Patch(facecolor=COLORS["bottom2"], label=REGIME_LABELS["bottom2"]),
         Line2D([0], [0], color="#666666", lw=1, linestyle="--", label="1% Margin Threshold"),
     ]
-    ax.legend(handles=legend_handles, frameon=False, loc="upper right", ncol=2)
+    ax.legend(handles=legend_handles, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.18), ncol=3)
 
     fig.tight_layout()
     fig.savefig(FIG_DIR / "ci_width_by_season.png", dpi=600)
@@ -121,7 +141,8 @@ def plot_ci_width_by_week():
     ax.set_ylabel("Relative Volatility (CV)")
     ax.set_xlim(0.5, 11.5)
     ax.set_xticks(range(1, 12))
-    ax.grid(axis="y", linestyle="--", alpha=0.2)
+    ax.set_ylim(0, max(y_cv) * 1.35)
+    ax.grid(axis="y", linestyle="--", alpha=0.18)
 
     ax2 = ax.twinx()
     std = y_cv * y_width
@@ -130,28 +151,22 @@ def plot_ci_width_by_week():
     ax2.fill_between(x, lower, upper, color="#222222", alpha=0.15, zorder=1)
     ax2.plot(x, y_width, color="#222222", linewidth=2.4, zorder=3)
     ax2.scatter(x, y_width, s=26, color=colors, edgecolor="white", linewidth=0.3, zorder=4)
+    ax2.set_ylim(0, max(y_width) * 1.35)
     ax2.set_ylabel("Uncertainty Magnitude (CI Width)")
 
     ax.set_title("The Clarity Horizon: Temporal Evolution of Inference Confidence")
 
-    if y_cv[-1] < y_cv[0]:
-        ax.annotate(
-            "Uncertainty Convergence",
-            xy=(x[-1], y_cv[-1]),
-            xytext=(x[3], y_cv[3] + 0.035),
-            arrowprops=dict(arrowstyle="->", color="#444444", linewidth=1),
-            fontsize=10,
-            color="#444444",
-        )
-    else:
-        ax.annotate(
-            "Persistent Ambiguity",
-            xy=(x[-1], y_cv[-1]),
-            xytext=(x[3], y_cv[3] + 0.035),
-            arrowprops=dict(arrowstyle="->", color="#444444", linewidth=1),
-            fontsize=10,
-            color="#444444",
-        )
+    label = "Uncertainty Convergence" if y_cv[-1] < y_cv[0] else "Persistent Ambiguity"
+    ax.annotate(
+        label,
+        xy=(x[-1], y_cv[-1]),
+        xycoords="data",
+        xytext=(0.18, 0.86),
+        textcoords="axes fraction",
+        arrowprops=dict(arrowstyle="->", color="#444444", linewidth=1),
+        fontsize=10,
+        color="#444444",
+    )
 
     fig.tight_layout()
     fig.savefig(FIG_DIR / "ci_width_by_week.png", dpi=600)

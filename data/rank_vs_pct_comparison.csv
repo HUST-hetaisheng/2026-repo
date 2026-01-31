@@ -1,0 +1,336 @@
+season,week,num_contestants,rank_eliminated,pct_eliminated,actual_eliminated,methods_agree,fan_favored_by,rank_elim_fan_vote,pct_elim_fan_vote
+1,1,6,Kelly Monaco,Kelly Monaco,,True,,,
+1,2,6,Trista Sutter,Trista Sutter,Trista Sutter,True,,,
+1,3,5,Evander Holyfield,Evander Holyfield,Evander Holyfield,True,,,
+1,4,4,Joey McIntyre,Rachel Hunter,Rachel Hunter,False,Percentage,0.2747638726821303,0.1507936105062107
+1,5,3,Joey McIntyre,Kelly Monaco,,False,Percentage,0.3235537038833594,0.2396944792058498
+1,6,2,Kelly Monaco,Kelly Monaco,,True,,,
+2,1,10,Kenny Mayne,Kenny Mayne,Kenny Mayne,True,,,
+2,2,9,Master P,Tatum O'Neal,Tatum O'Neal,False,Percentage,0.0340251528037969,0.0252064531585323
+2,3,8,Master P,Master P,Giselle Fernandez,True,,,
+2,4,7,Master P,Master P,Master P,True,,,
+2,5,6,Tia Carrere,Tia Carrere,Tia Carrere,True,,,
+2,6,5,George Hamilton,George Hamilton,George Hamilton,True,,,
+2,7,4,Jerry Rice,Jerry Rice,Lisa Rinna,True,,,
+2,8,3,Jerry Rice,Jerry Rice,,True,,,
+3,1,11,Tucker Carlson,Tucker Carlson,Tucker Carlson,True,,,
+3,2,10,Sara Evans,Shanna Moakler,Shanna Moakler,False,Percentage,0.0829464890886603,0.0785986630017037
+3,3,9,Jerry Springer,Jerry Springer,Harry Hamlin,True,,,
+3,4,8,Jerry Springer,Jerry Springer,Vivica A. Fox,True,,,
+3,5,7,Willa Ford,Sara Evans,Willa Ford,False,Rank,0.127944855385021,0.1445194410203801
+3,6,5,Jerry Springer,Jerry Springer,,True,,,
+3,7,5,Jerry Springer,Jerry Springer,Jerry Springer,True,,,
+3,8,4,Monique Coleman,Monique Coleman,Monique Coleman,True,,,
+3,9,3,Emmitt Smith,Joey Lawrence,,False,Percentage,0.3297044678368162,0.3290939812266008
+3,10,2,Emmitt Smith,Emmitt Smith,,True,,,
+4,1,11,Billy Ray Cyrus,Billy Ray Cyrus,,True,,,
+4,2,11,Billy Ray Cyrus,Billy Ray Cyrus,Paulina Porizkova,True,,,
+4,3,10,Billy Ray Cyrus,Clyde Drexler,Shandi Finnessey,False,Rank,0.086093258158806,0.103120600761562
+4,4,9,Leeza Gibbons,Leeza Gibbons,Leeza Gibbons,True,,,
+4,5,8,Clyde Drexler,Clyde Drexler,Clyde Drexler,True,,,
+4,6,7,Billy Ray Cyrus,Billy Ray Cyrus,Heather Mills,True,,,
+4,7,6,Billy Ray Cyrus,Billy Ray Cyrus,John Ratzenberger,True,,,
+4,8,5,Billy Ray Cyrus,Billy Ray Cyrus,Billy Ray Cyrus,True,,,
+4,9,4,Ian Ziering,Ian Ziering,Ian Ziering,True,,,
+4,10,3,Laila Ali,Laila Ali,,True,,,
+5,1,12,Josie Maran,Josie Maran,Josie Maran,True,,,
+5,2,11,Albert Reed,Wayne Newton,Albert Reed,False,Rank,0.0679306098463948,0.0931406938800082
+5,3,10,Mark Cuban,Wayne Newton,Wayne Newton,False,Rank,0.0874758387239686,0.0917239883436544
+5,4,9,Mark Cuban,Floyd Mayweather Jr. ,Floyd Mayweather Jr. ,False,Percentage,0.0978290385325473,0.093555534259043
+5,5,8,Mark Cuban,Mark Cuban,Mark Cuban,True,,,
+5,6,7,Sabrina Bryan,Jane Seymour,Sabrina Bryan,False,Rank,0.1300179466144926,0.1466846132811592
+5,7,6,Cameron Mathison,Cameron Mathison,Jane Seymour,True,,,
+5,8,5,Marie Osmond,Marie Osmond,Cameron Mathison,True,,,
+5,9,4,Marie Osmond,Jennie Garth,Jennie Garth,False,Percentage,0.2468496781554541,0.2383026696084455
+5,10,3,Marie Osmond,Marie Osmond,,True,,,
+6,1,12,Adam Carolla,Adam Carolla,,True,,,
+6,2,12,Monica Seles,Penn Jillette,Monica Seles,False,Percentage,0.0640778157670824,0.0562957133776075
+6,3,10,Adam Carolla,Adam Carolla,Steve Guttenberg,True,,,
+6,4,9,Adam Carolla,Adam Carolla,Adam Carolla,True,,,
+6,5,8,Priscilla Presley,Priscilla Presley,Priscilla Presley,True,,,
+6,6,7,Marlee Matlin,Marlee Matlin,Marlee Matlin,True,,,
+6,7,6,Shannon Elizabeth,Cristian de la Fuente,Shannon Elizabeth,False,Rank,0.1503788493120951,0.1665600790855578
+6,8,5,Marissa Jaret Winokur,Mario,Mario,False,Percentage,0.1985726602702175,0.1873367052140377
+6,9,4,Marissa Jaret Winokur,Marissa Jaret Winokur,Marissa Jaret Winokur,True,,,
+6,10,3,Cristian de la Fuente,Cristian de la Fuente,,True,,,
+7,1,13,Jeffrey Ross,Jeffrey Ross,Ted McGinley,True,,,
+7,2,11,Rocco DiSpirito,Rocco DiSpirito,Misty May-Treanor,True,,,
+7,3,9,Cloris Leachman,Cloris Leachman,,True,,,
+7,4,9,Rocco DiSpirito,Rocco DiSpirito,Rocco DiSpirito,True,,,
+7,5,8,Toni Braxton,Cloris Leachman,Toni Braxton,False,Rank,0.1125848106561812,0.1177130157843863
+7,6,7,Cloris Leachman,Cloris Leachman,Cloris Leachman,True,,,
+7,7,6,Susan Lucci,Warren Sapp,Susan Lucci,False,Rank,0.1480271112894019,0.168435274554708
+7,8,5,Maurice Greene,Maurice Greene,Maurice Greene,True,,,
+7,9,4,Cody Linley,Cody Linley,Cody Linley,True,,,
+7,10,3,Lance Bass,Warren Sapp,,False,Percentage,0.3306291352641565,0.322582470683852
+8,1,13,Steve Wozniak,Steve Wozniak,Ty Murray,True,,,
+8,2,13,Steve Wozniak,Steve-O,Belinda Carlisle,False,Rank,0.0610123619991173,0.0723331167160984
+8,3,12,Steve-O,Denise Richards,Denise Richards,False,Percentage,0.0708349336171179,0.0536213384973499
+8,4,11,Holly Madison,Holly Madison,Steve Wozniak,True,,,
+8,5,9,Lawrence Taylor,David Alan Grier,David Alan Grier,False,Percentage,0.0947350938930217,0.0852112843692121
+8,6,8,Steve-O,Steve-O,Steve-O,True,,,
+8,7,7,Lawrence Taylor,Lawrence Taylor,Lawrence Taylor,True,,,
+8,8,6,Melissa Rycroft,Melissa Rycroft,Chuck Wicks,True,,,
+8,9,5,Lil' Kim,Lil' Kim,Lil' Kim,True,,,
+8,10,4,Ty Murray,Ty Murray,Ty Murray,True,,,
+8,11,3,Melissa Rycroft,Melissa Rycroft,,True,,,
+9,1,16,Macy Gray,Macy Gray,Ashley Hamiliton,True,,,
+9,2,14,Tom DeLay,Tom DeLay,Kathy Ireland,True,,,
+9,3,13,Tom DeLay,Tom DeLay,Debi Mazar,True,,,
+9,4,11,Michael Irvin,Chuck Liddell,Chuck Liddell,False,Percentage,0.0749637944117585,0.0708315630067998
+9,5,10,Louie Vito,Louie Vito,Natalie Coughlin,True,,,
+9,6,9,Michael Irvin,Michael Irvin,Melissa Joan Hart,True,,,
+9,7,7,Michael Irvin,Michael Irvin,Mark Dacascos,True,,,
+9,8,5,Kelly Osbourne,Aaron Carter,Aaron Carter,False,Rank,0.1894919098232838,0.1933087037164135
+9,9,4,Kelly Osbourne,Kelly Osbourne,Joanna Krupa,True,,,
+9,10,3,Kelly Osbourne,Kelly Osbourne,,True,,,
+10,1,11,Buzz Aldrin,Buzz Aldrin,,True,,,
+10,2,11,Kate Gosselin,Buzz Aldrin,Shannen Doherty,False,Rank,0.0778017699616371,0.0914381335980007
+10,3,10,Kate Gosselin,Buzz Aldrin,Buzz Aldrin,False,Rank,0.079520527481626,0.0858579534376054
+10,4,9,Kate Gosselin,Kate Gosselin,Aiden Turner,True,,,
+10,5,8,Kate Gosselin,Kate Gosselin,Kate Gosselin,True,,,
+10,6,7,Jake Pavelka,Niecy Nash,Jake Pavelka,False,Percentage,0.1290945845626707,0.1243103580126295
+10,7,6,Pamela Anderson,Niecy Nash,Pamela Anderson,False,Rank,0.1522404737278391,0.1586713418950416
+10,8,5,Niecy Nash,Niecy Nash,Niecy Nash,True,,,
+10,9,4,Chad Ochocinco,Chad Ochocinco,Chad Ochocinco,True,,,
+10,10,3,Erin Andrews,Erin Andrews,,True,,,
+11,1,12,The Situation,The Situation,David Hasselhoff,True,,,
+11,2,11,Michael Bolton,Michael Bolton,Michael Bolton,True,,,
+11,3,10,Margaret Cho,Margaret Cho,Margaret Cho,True,,,
+11,4,9,The Situation,The Situation,The Situation,True,,,
+11,5,8,Bristol Palin,Bristol Palin,Florence Henderson,True,,,
+11,6,7,Bristol Palin,Audrina Patridge,Audrina Patridge,False,Percentage,0.1308860723995398,0.1115623355559852
+11,7,6,Bristol Palin,Bristol Palin,Rick Fox,True,,,
+11,8,5,Bristol Palin,Bristol Palin,Kurt Warner,True,,,
+11,9,4,Brandy,Bristol Palin,Brandy,False,Rank,0.2392029902850427,0.2567468499341655
+11,10,3,Bristol Palin,Bristol Palin,,True,,,
+12,1,11,Mike Catherwood,Mike Catherwood,,True,,,
+12,2,11,Wendy Williams,Mike Catherwood,Mike Catherwood,False,Percentage,0.0713242028589721,0.0681035582508085
+12,3,10,Wendy Williams,Wendy Williams,Wendy Williams,True,,,
+12,4,9,Kendra Wilkinson,Kendra Wilkinson,Sugar Ray Leonard,True,,,
+12,5,8,Kendra Wilkinson,Kendra Wilkinson,Petra Nemcova,True,,,
+12,6,7,Chris Jericho,Chris Jericho,Chris Jericho,True,,,
+12,7,6,Kendra Wilkinson,Kendra Wilkinson,Kendra Wilkinson,True,,,
+12,8,5,Romeo,Romeo,Romeo,True,,,
+12,9,4,Ralph Macchio,Ralph Macchio,Ralph Macchio,True,,,
+12,10,3,Kirstie Alley,Kirstie Alley,,True,,,
+13,1,12,Metta World Peace (Ron),Metta World Peace (Ron),Metta World Peace (Ron),True,,,
+13,2,11,Carson Kressley,Chaz Bono,Elisabetta Canalis,False,Rank,0.0845338419682628,0.0890181469009982
+13,3,10,Nancy Grace,Chaz Bono,Kristin Cavallari,False,Rank,0.0937026006600406,0.1063608285081418
+13,4,9,Nancy Grace,Nancy Grace,Chynna Phillips,True,,,
+13,5,8,Carson Kressley,Carson Kressley,Carson Kressley,True,,,
+13,6,7,Chaz Bono,Chaz Bono,Chaz Bono,True,,,
+13,7,6,David Arquette,Nancy Grace,David Arquette,False,Rank,0.1514657578539986,0.1617046657038279
+13,8,5,Nancy Grace,Nancy Grace,Nancy Grace,True,,,
+13,9,4,Hope Solo,Hope Solo,Hope Solo,True,,,
+13,10,3,Rob Kardashian,Rob Kardashian,,True,,,
+14,1,12,Gavin DeGraw,Gavin DeGraw,,True,,,
+14,2,12,Martina Navratilova,Martina Navratilova,Martina Navratilova,True,,,
+14,3,11,Gavin DeGraw,Gavin DeGraw,Jack Wagner,True,,,
+14,4,10,Sherri Sheperd,Gladys Knight,Sherri Sheperd,False,Rank,0.0912102130031576,0.0955020584967198
+14,5,9,Gavin DeGraw,Gavin DeGraw,Gavin DeGraw,True,,,
+14,6,8,Gladys Knight,Gladys Knight,Gladys Knight,True,,,
+14,7,7,Jaleel White,Melissa Gilbert,Jaleel White,False,Rank,0.1289711927918874,0.1398703753531953
+14,8,6,Melissa Gilbert,Roshon Fegan,Roshon Fegan,False,Percentage,0.1676499206087626,0.1523593141926371
+14,9,4,Donald Driver,Maria Menounos,Maria Menounos,False,Percentage,0.2507747567791519,0.2420791046052388
+14,10,3,Donald Driver,Donald Driver,,True,,,
+15,1,13,Pamela Anderson,Pamela Anderson,Pamela Anderson,True,,,
+15,2,12,Kirstie Alley,Joey Fatone,Joey Fatone,False,Percentage,0.0741779041217323,0.0676877904021418
+15,3,11,Drew Lachey,Drew Lachey,Helio Castroneves,True,,,
+15,4,9,Bristol Palin,Kirstie Alley,Bristol Palin,False,Rank,0.101101715210237,0.1073225550236118
+15,5,8,Kelly Monaco,Kirstie Alley,,False,Percentage,0.1213845414380567,0.1189657028797918
+15,6,8,Kelly Monaco,Sabrina Bryan,Sabrina Bryan,False,Percentage,0.1264262096223986,0.1131518733392127
+15,7,7,Kirstie Alley,Kirstie Alley,,True,,,
+15,8,7,Kirstie Alley,Kirstie Alley,Gilles Marini,True,,,
+15,9,5,Emmitt Smith,Apolo Anton Ohno,Apolo Anton Ohno,False,Percentage,0.1992186302097999,0.1877930612819126
+15,10,3,Shawn Johnson,Shawn Johnson,,True,,,
+16,1,12,D. L. Hughley,D. L. Hughley,Alexandra Raisman,True,,,
+16,2,12,D. L. Hughley,D. L. Hughley,Dorothy Hamill,True,,,
+16,3,11,Wynonna Judd,Wynonna Judd,Wynonna Judd,True,,,
+16,4,10,Lisa Vanderpump,Lisa Vanderpump,Lisa Vanderpump,True,,,
+16,5,9,Andy Dick,D. L. Hughley,D. L. Hughley,False,Percentage,0.094301593522139,0.0875235789319371
+16,6,8,Andy Dick,Victor Ortiz,Victor Ortiz,False,Rank,0.1069176910058974,0.1081349658280174
+16,7,7,Andy Dick,Andy Dick,Andy Dick,True,,,
+16,8,6,Sean Lowe,Sean Lowe,Sean Lowe,True,,,
+16,9,5,Ingo Rademacher,Ingo Rademacher,Ingo Rademacher,True,,,
+16,10,4,Jacoby Jones,Jacoby Jones,Alexandra Raisman,True,,,
+17,1,12,Bill Nye,Bill Nye,Leah Remini,True,,,
+17,2,12,Bill Nye,Bill Nye,Keyshawn Johnson,True,,,
+17,3,11,Bill Nye,Bill Nye,Bill Nye,True,,,
+17,4,10,Valerie Harper,Valerie Harper,Valerie Harper,True,,,
+17,5,9,Bill Engvall,Christina Milian,Christina Milian,False,Percentage,0.1081343986975296,0.0911131221017849
+17,6,8,Bill Engvall,Bill Engvall,,True,,,
+17,7,8,"Nicole ""Snooki"" Polizzi","Nicole ""Snooki"" Polizzi","Nicole ""Snooki"" Polizzi",True,,,
+17,8,7,Elizabeth Berkley Lauren,Elizabeth Berkley Lauren,Brant Daugherty,True,,,
+17,9,6,Amber Riley,Bill Engvall,Elizabeth Berkley Lauren,False,Rank,0.1676980587368737,0.1836656162002109
+17,10,5,Leah Remini,Bill Engvall,Leah Remini,False,Rank,0.187714836390666,0.2020005506763802
+17,11,4,Bill Engvall,Bill Engvall,Bill Engvall,True,,,
+18,1,12,Billy Dee Williams,Billy Dee Williams,James Maslow,True,,,
+18,2,11,Billy Dee Williams,Sean Avery,Billy Dee Williams,False,Percentage,0.0846969953954494,0.0601068314610232
+18,3,9,Drew Carey,Drew Carey,,True,,,
+18,4,9,NeNe Leakes,Candace Cameron Bure,,False,Rank,0.1027944899304878,0.1046994329496113
+18,5,9,Cody Simpson,Cody Simpson,Cody Simpson,True,,,
+18,6,8,Drew Carey,Drew Carey,Drew Carey,True,,,
+18,7,7,NeNe Leakes,NeNe Leakes,NeNe Leakes,True,,,
+18,8,6,Candace Cameron Bure,Candace Cameron Bure,Danica McKellar,True,,,
+18,9,5,Charlie White,Charlie White,Charlie White,True,,,
+18,10,4,James Maslow,Candace Cameron Bure,James Maslow,False,Rank,0.2315376263729795,0.2577022221045975
+19,1,13,Betsey Johnson,Betsey Johnson,Lolo Jones,True,,,
+19,2,12,Tavis Smiley,Tavis Smiley,Tavis Smiley,True,,,
+19,3,11,Betsey Johnson,Randy Couture,Randy Couture,False,Rank,0.0766806896944904,0.0850465058878373
+19,4,10,Michael Waltrip,Betsey Johnson,Betsey Johnson,False,Percentage,0.0911706005111391,0.078670600511139
+19,5,9,Michael Waltrip,Michael Waltrip,,True,,,
+19,6,9,Michael Waltrip,Jonathan Bennett,Jonathan Bennett,False,Percentage,0.0962180448745349,0.0893921063079819
+19,7,8,Michael Waltrip,Antonio Sabato Jr.,Antonio Sabato Jr.,False,Percentage,0.1129151500515671,0.1071124421211996
+19,8,7,Michael Waltrip,Michael Waltrip,Michael Waltrip,True,,,
+19,9,6,Tommy Chong,Tommy Chong,Lea Thompson,True,,,
+19,10,5,Tommy Chong,Tommy Chong,Tommy Chong,True,,,
+19,11,4,Bethany Mota,Bethany Mota,Bethany Mota,True,,,
+20,1,12,Redfoo,Redfoo,,True,,,
+20,2,12,Charlotte McKinney,Charlotte McKinney,Redfoo,True,,,
+20,3,11,Patti LaBelle,Charlotte McKinney,Charlotte McKinney,False,Percentage,0.0796443601774421,0.0758015055543124
+20,4,10,Chris Soules,Suzanne Somers,Michael Sam,False,Percentage,0.0953221684300342,0.0922452453531111
+20,5,9,Chris Soules,Patti LaBelle,Suzanne Somers,False,Percentage,0.1013359182490405,0.0970804182036531
+20,6,8,Patti LaBelle,Patti LaBelle,Patti LaBelle,True,,,
+20,7,7,Chris Soules,Willow Shields,Willow Shields,False,Percentage,0.1457951409138486,0.1142990779217226
+20,8,6,Chris Soules,Robert Herjavec,Robert Herjavec,False,Rank,0.1560265771946153,0.1607547095823221
+20,9,4,Noah Galloway,Nastia Liukin,Nastia Liukin,False,Percentage,0.252390442581866,0.2396515890786812
+20,10,3,Noah Galloway,Noah Galloway,,True,,,
+21,1,13,Kim Zolciak-Biermann,Kim Zolciak-Biermann,Carlos PenaVega,True,,,
+21,2,13,Chaka Khan,Chaka Khan,Victor Espinoza,True,,,
+21,3,10,Paula Deen,Paula Deen,,True,,,
+21,4,10,Paula Deen,Gary Busey,Gary Busey,False,Rank,0.073494903342877,0.0750813879574421
+21,5,9,Paula Deen,Paula Deen,,True,,,
+21,6,9,Paula Deen,Paula Deen,Paula Deen,True,,,
+21,7,8,Alek Skarlatos,Hayes Grier,Hayes Grier,False,Percentage,0.1205418110555918,0.1137544807388497
+21,8,7,Andy Grammer,Andy Grammer,Andy Grammer,True,,,
+21,9,6,Alek Skarlatos,Alexa PenaVega,Alexa PenaVega,False,Percentage,0.1677198632816913,0.1403642401813873
+21,10,4,Nick Carter,Nick Carter,,True,,,
+21,11,4,Alek Skarlatos,Alek Skarlatos,Carlos PenaVega,True,,,
+22,1,12,Geraldo Rivera,Geraldo Rivera,,True,,,
+22,2,12,Geraldo Rivera,Geraldo Rivera,Geraldo Rivera,True,,,
+22,3,11,Mischa Barton,Mischa Barton,Mischa Barton,True,,,
+22,4,10,Doug Flutie,Doug Flutie,Marla Maples,True,,,
+22,5,9,Antonio Brown,Antonio Brown,,True,,,
+22,6,9,Doug Flutie,Doug Flutie,Doug Flutie,True,,,
+22,7,8,Antonio Brown,Kim Fields,Kim Fields,False,Percentage,0.1211917793483393,0.118507818932114
+22,8,6,Antonio Brown,Wanya Morris,Jodie Sweetin,False,Rank,0.1650801227526808,0.176914442279308
+22,9,5,Antonio Brown,Antonio Brown,Antonio Brown,True,,,
+22,10,3,Ginger Zee,Ginger Zee,,True,,,
+23,1,13,Rick Perry,Rick Perry,Jana Kramer,True,,,
+23,2,13,Rick Perry,Rick Perry,Jake T. Austin,True,,,
+23,3,12,Rick Perry,Rick Perry,Rick Perry,True,,,
+23,4,11,Babyface,Babyface,Babyface,True,,,
+23,5,9,Amber Rose,Ryan Lochte,,False,Percentage,0.1028552171793414,0.1027535476279073
+23,6,9,Amber Rose,Amber Rose,Amber Rose,True,,,
+23,7,8,Ryan Lochte,Ryan Lochte,Maureen McCormick,True,,,
+23,8,7,Terra Jole,Ryan Lochte,Ryan Lochte,False,Percentage,0.1322088602137427,0.122139631180823
+23,9,6,Marilu Henner,Marilu Henner,Marilu Henner,True,,,
+23,10,5,Calvin Johnson Jr.,Calvin Johnson Jr.,Terra Jole,True,,,
+23,11,4,Jana Kramer,Jana Kramer,Jana Kramer,True,,,
+24,1,12,Chris Kattan,Chris Kattan,,True,,,
+24,2,12,Chris Kattan,Chris Kattan,Chris Kattan,True,,,
+24,3,11,Mr. T,Mr. T,Charo,True,,,
+24,4,10,Mr. T,Mr. T,Mr. T,True,,,
+24,5,9,Erika Jayne,David Ross,Erika Jayne,False,Rank,0.0963860223203599,0.1062544433729914
+24,6,8,Nick Viall,Nick Viall,Heather Morris,True,,,
+24,7,7,Nick Viall,David Ross,Nancy Kerrigan,False,Rank,0.1329734204999519,0.1408785588398728
+24,8,5,Bonner Bolton,Bonner Bolton,Bonner Bolton,True,,,
+24,9,4,Normani,David Ross,Simone Biles,False,Rank,0.2595574206104908,0.2602654396187084
+24,10,3,David Ross,David Ross,,True,,,
+25,1,13,Barbara Corcoran,Barbara Corcoran,Drew Scott,True,,,
+25,2,13,Barbara Corcoran,Barbara Corcoran,Barbara Corcoran,True,,,
+25,3,11,Terrell Owens,Sasha Pieterse,,False,Rank,0.0827776308154768,0.0852353624317357
+25,4,11,Derek Fisher,Derek Fisher,Derek Fisher,True,,,
+25,5,10,Sasha Pieterse,Sasha Pieterse,Sasha Pieterse,True,,,
+25,6,9,Nick Lachey,Nick Lachey,Nick Lachey,True,,,
+25,7,8,Nikki Bella,Nikki Bella,Nikki Bella,True,,,
+25,8,6,Drew Scott,Victoria Arlen,Terrell Owens,False,Percentage,0.1650917091326426,0.1618968209537288
+25,9,5,Victoria Arlen,Victoria Arlen,Victoria Arlen,True,,,
+25,10,4,Drew Scott,Drew Scott,Drew Scott,True,,,
+26,1,10,Kareem Abdul-Jabbar,Jamie Anderson,Jamie Anderson,False,Percentage,0.0889563875863395,0.0794325723778223
+26,2,8,Kareem Abdul-Jabbar,Kareem Abdul-Jabbar,Kareem Abdul-Jabbar,True,,,
+26,3,6,Jennie Finch Daigle,Jennie Finch Daigle,Jennie Finch Daigle,True,,,
+26,4,3,Tonya Harding,Tonya Harding,,True,,,
+27,1,13,Joe Amabile,Nikki Glaser,Nikki Glaser,False,Percentage,0.0686323068864062,0.0549068166903277
+27,2,12,Joe Amabile,Joe Amabile,Danelle Umstead,True,,,
+27,3,11,John Schneider,Nancy McKeon,Nancy McKeon,False,Percentage,0.080493938688978,0.0717979483829007
+27,4,10,Bobby Bones,Tinashe,Tinashe,False,Percentage,0.0951551661955136,0.0692930972299964
+27,5,9,Bobby Bones,Joe Amabile,,False,Rank,0.0996913112367794,0.1091228356177611
+27,6,9,Joe Amabile,Bobby Bones,Mary Lou Retton,False,Percentage,0.1047720647680045,0.09922138852178
+27,7,8,Bobby Bones,Bobby Bones,John Schneider,True,,,
+27,8,6,Joe Amabile,Joe Amabile,Juan Pablo Di Pace,True,,,
+27,9,4,Alexis Ren,Bobby Bones,,False,Rank,0.2452248856653877,0.2548899106658963
+28,1,12,Lamar Odom,Lamar Odom,James Van Der Beek,True,,,
+28,2,12,Mary Wilson,Lamar Odom,Ray Lewis,False,Rank,0.0098279820065103,0.017907750783962
+28,3,10,Lamar Odom,Lamar Odom,,True,,,
+28,4,10,Lamar Odom,Lamar Odom,Lamar Odom,True,,,
+28,5,9,Sean Spicer,Sean Spicer,,True,,,
+28,6,9,Hannah Brown,Sailor Brinkley-Cook,Sailor Brinkley-Cook,False,Percentage,0.0619978706099581,0.0252064531585323
+28,7,8,Karamo Brown,Karamo Brown,Karamo Brown,True,,,
+28,8,7,Kate Flannery,Kate Flannery,Kate Flannery,True,,,
+28,9,6,Sean Spicer,Sean Spicer,Sean Spicer,True,,,
+28,10,5,James Van Der Beek,James Van Der Beek,James Van Der Beek,True,,,
+28,11,4,Hannah Brown,Ally Brooke,,False,Percentage,0.2747638726821303,0.1507936105062107
+29,1,15,Carole Baskin,Carole Baskin,Skai Jackson,True,,,
+29,2,15,Charles Oakley,Charles Oakley,Charles Oakley,True,,,
+29,3,14,Carole Baskin,Carole Baskin,Carole Baskin,True,,,
+29,4,13,Anne Heche,Anne Heche,Anne Heche,True,,,
+29,5,12,Jesse Metcalfe,Jesse Metcalfe,Jesse Metcalfe,True,,,
+29,6,11,Veron Davis,Veron Davis,Veron Davis,True,,,
+29,7,10,Monica Aldama,Monica Aldama,Monica Aldama,True,,,
+29,8,8,Chrishell Stause,Chrishell Stause,Chrishell Stause,True,,,
+29,9,7,AJ McLean,AJ McLean,AJ McLean,True,,,
+29,10,6,Skai Jackson,Skai Jackson,Skai Jackson,True,,,
+29,11,4,Nev Schulman,Nev Schulman,,True,,,
+30,1,15,Martin Kove,Martin Kove,,True,,,
+30,2,15,Martin Kove,Martin Kove,Martin Kove,True,,,
+30,3,14,Iman Shumpert,Christine Chiu,Christine Chiu,False,Percentage,0.0131003482451084,0.0053262041284971
+30,4,13,Brian Austin Green,Brian Austin Green,Brian Austin Green,True,,,
+30,5,11,Melanie C,Melanie C,Melanie C,True,,,
+30,6,10,Kenya Moore,Kenya Moore,Kenya Moore,True,,,
+30,7,9,"Mike ""The Miz"" Mizanin","Mike ""The Miz"" Mizanin","Mike ""The Miz"" Mizanin",True,,,
+30,8,8,Jimmie Allen,Jimmie Allen,Jimmie Allen,True,,,
+30,9,6,Melora Hardin,Melora Hardin,Melora Hardin,True,,,
+30,10,4,Amanda Kloots,JoJo Siwa,,False,Percentage,0.2035500832679938,0.1507936105062107
+31,1,16,Jason Lewis,Vinny Guadagnino,Jason Lewis,False,Rank,0.0029031416103227,0.005289868908365
+31,2,15,Teresa Giudice,Teresa Giudice,Teresa Giudice,True,,,
+31,3,14,Cheryl Ladd,Cheryl Ladd,Cheryl Ladd,True,,,
+31,4,13,Sam Champion,Sam Champion,Sam Champion,True,,,
+31,5,12,Joseph Baena,Joseph Baena,Selma Blair,True,,,
+31,6,10,Jessie James Decker,Jessie James Decker,Jessie James Decker,True,,,
+31,7,9,Jordin Sparks,Jordin Sparks,Jordin Sparks,True,,,
+31,8,8,Heidi D'Amelio,Heidi D'Amelio,Heidi D'Amelio,True,,,
+31,9,6,Trevor Donovan,Trevor Donovan,Trevor Donovan,True,,,
+31,10,4,Shangela,Charli D'Amelio,,False,Percentage,0.2747638726821303,0.1507936105062107
+32,1,14,Harry Jowsey,Matt Walsh,Matt Walsh,False,Percentage,0.0097049766772521,0.0053262041284971
+32,2,13,Harry Jowsey,Jamie Lynn Spears,Jamie Lynn Spears,False,Percentage,0.0177783113764233,0.0072281220070748
+32,3,12,Tyson Beckford,Tyson Beckford,Tyson Beckford,True,,,
+32,4,11,Adrian Peterson,Adrian Peterson,Adrian Peterson,True,,,
+32,5,10,Mira Sorvino,Mira Sorvino,Mira Sorvino,True,,,
+32,6,9,Mauricio Umansky,Mauricio Umansky,Mauricio Umansky,True,,,
+32,7,8,Harry Jowsey,Lele Pons,Lele Pons,False,Percentage,0.1158886268673208,0.0349049836388899
+32,8,7,Barry Williams,Barry Williams,Barry Williams,True,,,
+32,9,6,Harry Jowsey,Harry Jowsey,Harry Jowsey,True,,,
+32,10,5,Jason Mraz,Jason Mraz,,True,,,
+32,11,5,Ariana Madix,Jason Mraz,,False,Percentage,0.1356410590589154,0.1004853680234095
+33,1,13,Eric Roberts,Eric Roberts,,True,,,
+33,2,13,Reginald VelJohnson,Reginald VelJohnson,Tori Spelling,True,,,
+33,3,11,Eric Roberts,Eric Roberts,Eric Roberts,True,,,
+33,4,9,Brooks Nader,Brooks Nader,Brooks Nader,True,,,
+33,5,8,Phaedra Parks,Phaedra Parks,Phaedra Parks,True,,,
+33,6,7,Jenn Tran,Jenn Tran,Jenn Tran,True,,,
+33,7,6,Dwight Howard ,Dwight Howard ,Dwight Howard ,True,,,
+33,8,5,Danny Amendola,Chandler Kinney,,False,Percentage,0.1356410590589154,0.1004853680234095
+33,9,5,Danny Amendola,Chandler Kinney,,False,Percentage,0.1356410590589154,0.1004853680234095
+34,1,14,Andy Richter,Corey Feldman,Whitney Leavitt,False,Percentage,0.0071896235537994,0.0053262041284971
+34,2,14,Corey Feldman,Corey Feldman,Corey Feldman,True,,,
+34,3,12,Lauren Jauregui,Lauren Jauregui,Lauren Jauregui,True,,,
+34,4,11,Andy Richter,Andy Richter,Hilaria Baldwin,True,,,
+34,5,10,Andy Richter,Andy Richter,,True,,,
+34,6,10,Scott Hoying,Scott Hoying,Scott Hoying,True,,,
+34,7,9,Jen Affleck,Jen Affleck,Jen Affleck,True,,,
+34,8,8,Danielle Fishel,Danielle Fishel,Danielle Fishel,True,,,
+34,9,7,Andy Richter,Andy Richter,Andy Richter,True,,,
+34,10,6,Whitney Leavitt,Whitney Leavitt,Whitney Leavitt,True,,,
+34,11,5,Robert Irwin,Robert Irwin,,True,,,
