@@ -1,0 +1,86 @@
+# 数据可视化指南：一致性与不确定性分析
+# 该文档包含针对四个生成表格的画图提示词 (Prompt) 和 分析描述 (Description)。
+
+================================================================
+图表 1：按赛季的一致性 (Consistency by Season)
+================================================================
+【数据来源】
+data/table_consistency_by_season.csv
+
+【画图提示词 (Python/Matplotlib)】
+Create a bar chart showing the Consistency Probability (CSR) for each season from 1 to 34.
+- X-axis: "Season" (integers 1-34).
+- Y-axis: "Consistency Probability" (0.0 to 1.0).
+- Color coding: Use distinct colors for different Voting Regimes:
+  - Season 1-2 (Rank Regime): Blue
+  - Season 3-27 (Percent Regime): Green
+  - Season 28-34 (Bottom-2 Regime): Orange
+- Add a legend indicating the three regimes.
+- Add grid lines for the Y-axis.
+- Title: "Consistency of Fan Vote Inference Across Seasons".
+
+【图表描述/论文配文】
+该图展示了模型在不同赛季推断大众投票结果的一致性（Consistency Success Rate, CSR）。
+- **Rank Regime (S1-S2)** 和 **Percent Regime (S3-S27)** 表现出极高的一致性，多数赛季 CSR 接近或达到 100%。这意味着在纯排位和纯比例投票规则下，模型能找到几乎完全符合淘汰结果的投票分布。
+- **Bottom-2 Regime (S28-S34)** 的一致性有所下降且波动较大。这是由于该规则引入了评委 "救人" (Judges' Save) 环节，使得淘汰结果不再仅由大众投票决定，增加了逆推的不确定性。模型正确识别了这种结构性变化带来的模糊性。
+
+================================================================
+图表 2：按周次的一致性趋势 (Consistency by Week)
+================================================================
+【数据来源】
+data/table_consistency_by_week.csv
+
+【画图提示词 (Python/Matplotlib)】
+Create a multi-line chart comparing the Average Consistency Probability over weeks for different regimes.
+- X-axis: "Week Number" (1 to 11).
+- Y-axis: "Average Consistency Probability".
+- Lines: Plot three separate lines for columns: 'rank', 'percent', 'bottom2'.
+- Style: Use markers (e.g., circles or squares) on the lines.
+- Colors: Align with Figure 1 (Blue for Rank, Green for Percent, Orange for Bottom2).
+- Handle missing data gracefully (lines may end early for shorter seasons).
+- Title: "Weekly Consistency Trends by Regime".
+
+【图表描述/论文配文】
+该图揭示了赛季进程对推断一致性的影响。
+- **前期 (Week 1-4)**：所有赛制的一致性通常较高，随着参赛者数量众多，约束条件相对宽松。
+- **后期 (Week 8+)**：Rank 和 Percent 赛制依然保持高一致性，但在 Bottom-2 赛制下，随着人数减少，具体的对阵组合 (Bottom 2 couples) 对推断的约束变得更加敏感，导致一致性概率在特定周次出现下降。这反映了在只有少数选手时，由于 Judges' Save 的存在，我们要精准还原大众投票排名的难度显著增加。
+
+================================================================
+图表 3：按赛季的不确定性 (Uncertainty by Season)
+================================================================
+【数据来源】
+data/table_uncertainty_by_season.csv
+
+【画图提示词 (Python/Matplotlib)】
+Create a bar chart showing the Average Uncertainty (CV - Coefficient of Variation) for each season.
+- X-axis: "Season" (1-34).
+- Y-axis: "Average Coefficient of Variation (CV)".
+- Color coding: Same as Figure 1 (Blue/Green/Orange by Regime).
+- Annotate any significant peaks if possible.
+- Title: "Model Uncertainty (CV) Across Seasons".
+
+【图表描述/论文配文】
+该图量化了模型推断结果的不确定性（以变异系数 CV 衡量）。
+- **Rank Regime** 显示出最高的不确定性（高 CV）。这是因为仅依据排名积分，无法确定具体的得票差距，可行解空间非常广阔（例如，第一名可以是 51% 也可以是 30%），导致推断结果方差大。
+- **Percent Regime** 的不确定性极低。精确的得分转换规则极大地压缩了可行解空间，使得模型能以高置信度锁定投票比例。
+- **Bottom-2 Regime** 的不确定性介于两者之间。虽然仍基于得分，但淘汰逻辑的二元化（Bottom 2 选择）并没有提供像 Percent 规则那样严格的线性约束，导致解的范围变宽。
+
+================================================================
+图表 4：按周次的不确定性趋势 (Uncertainty by Week)
+================================================================
+【数据来源】
+data/table_uncertainty_by_week.csv
+
+【画图提示词 (Python/Matplotlib)】
+Create a multi-line chart showing Average Uncertainty (CV) evolution over weeks.
+- X-axis: "Week Number".
+- Y-axis: "Average Coefficient of Variation (CV)".
+- Lines: 'rank', 'percent', 'bottom2' (ignore 'overall' to avoid clutter, or scale appropriately).
+- Observation: Expect 'rank' line to be significantly higher than others.
+- Title: "Evolution of Inference Uncertainty Over Weeks".
+
+【图表描述/论文配文】
+该图展示了不确定性随比赛进程的演变。
+- **Rank 赛制** 下，随着选手减少（Week 增加），不确定性呈现下降趋势。这是因为随着总票数份额被更少的人瓜分，每个人的份额范围相对收窄，但整体仍维持在高位。
+- **Percent 赛制** 全程维持在极低的 CV 水平，表明其数学规则提供了最强的信息量。
+- **Bottom-2 赛制** 表现出温和的波动，表明即便到了赛季末期，仅凭谁进入 Bottom 2 并不足以像具体得分那样精确地反推具体票数。
