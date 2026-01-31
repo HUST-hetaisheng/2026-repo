@@ -200,60 +200,15 @@ $K$ & Number of ensemble runs for uncertainty quantification \\
 \subsection{Data Processing}
 \label{sec:data_processing}
 
-The dataset contains 34 seasons of DWTS with contestant information, weekly judges' scores, and elimination outcomes. We perform the following preprocessing steps:
+The raw dataset spans 34 seasons (2005--2024) and contains 421 celebrity--partner pairs with weekly judges' scores and elimination outcomes. We perform several preprocessing steps to prepare the data for inverse modeling.
 
-\paragraph{1. Missing Data Handling}
-\begin{itemize}
-    \item \textbf{Judges' scores:} Missing values (e.g., due to judge absences) are represented as 0 in the raw data. We compute total judges' score $J_{i,t}$ by summing all available (non-zero) judge scores. Weeks with all-zero scores indicate elimination or withdrawal; such observations are excluded from $A_t$.
-    \item \textbf{Elimination results:} The \texttt{results} column contains text descriptions (\texttt{Eliminated}, \texttt{Withdrew}, \texttt{Winner}, etc.). We parse this field to identify elimination type and week. Withdrew cases are flagged and excluded from vote-determined eliminations.
-    \item \textbf{Finals ranking:} The \texttt{placement} column provides final ranking (1--4 or 1--3). We use this to verify finals consistency and to impute final-week vote shares when needed.
-\end{itemize}
+First, we address missing and placeholder values. In the original data, zeros serve dual purposes: indicating judge absences (rare) and marking post-elimination weeks (common). We distinguish these cases by treating a row as ``active'' only when at least one judge score is positive. For each active contestant-week, we sum all non-zero individual judge scores to obtain the total judges' score $J_{i,t}$. The \texttt{results} column is parsed to extract elimination outcomes; contestants marked as ``Withdrew'' are flagged separately since their exits are not vote-determined and should not impose constraints on fan vote estimation.
 
-% \paragraph{2. Active Set Construction}
-% For each week $t$ in each season $s$, we define the active contestant set:
-% \begin{equation}
-% A_t = \{i \in \text{contestants}_s : J_{i,t} > 0\}.
-% \end{equation}
-% This automatically excludes eliminated and withdrawn contestants from subsequent weeks.
+Second, we classify each season into one of three regimes based on the show's historical rules \cite{WikiDWTS}: \emph{Rank} (Seasons 1--2), where elimination is determined by summing judges' and fans' ordinal ranks; \emph{Percent} (Seasons 3--27), where normalized score shares are added; and \emph{Bottom2} (Seasons 28--34), where the bottom two contestants by combined rank face a judges' save decision. This regime classification is essential because different rules require different constraint formulations in the inverse problem.
 
-\paragraph{3. Regime Classification}
-Based on historical DWTS rules \cite{WikiDWTS}, we classify seasons into three regimes:
-\begin{itemize}
-    \item \textbf{Rank (Seasons 1--2):} Combined rank = judges' rank + fan rank. Elimination determined by highest combined rank.
-    \item \textbf{Percent (Seasons 3--27):} Combined score = judges' share + fan share. Elimination determined by lowest combined score.
-    \item \textbf{Bottom2 (Seasons 28--34):} Bottom two contestants by combined rank are identified; judges choose one to eliminate.
-\end{itemize}
+Third, we annotate each week by its elimination pattern---single elimination, double elimination, no elimination (results shows), or finals---since the number and type of constraints vary accordingly. Finals weeks use the \texttt{placement} column to establish the final ranking among survivors.
 
-\paragraph{4. Judge Share Normalization}
-To ensure fair comparison with fan vote shares, we normalize judges' scores to shares.This matches the fan vote simplex constraint.
-% \begin{equation}
-% j_{i,t} = \frac{J_{i,t}}{\sum_{k\in A_t} J_{k,t}}.
-% \end{equation}
-% This ensures $\sum_{i\in A_t} j_{i,t} = 1$, matching the fan vote simplex constraint.
-
-
-
-\paragraph{5. Week Type Annotation}
-We categorize weeks into types based on elimination patterns:
-\begin{itemize}
-    \item \texttt{single\_elim}: One contestant eliminated (standard week)
-    \item \texttt{multi\_elim\_2}: Two contestants eliminated in one week
-    \item \texttt{multi\_elim\_3}: Three contestants eliminated in one week
-    \item \texttt{no\_elim\_interp}: No elimination (interpolated/results week)
-    \item \texttt{finals}: Final week with ranking outcome
-    \item \texttt{bottom2\_relaxed}: Bottom2 regime with relaxed constraints
-\end{itemize}
-This annotation is used for uncertainty analysis (Section~\ref{sec:task1_uncertainty}).
-
-\paragraph{6. Data Quality Validation}
-We perform the following validation checks:
-\begin{itemize}
-    \item \textbf{Monotonicity:} Verify that elimination weeks are monotonically increasing (no contestant reappears after elimination).
-    \item \textbf{Finals consistency:} Check that finals ranking matches the last active week's contestant set.
-    \item \textbf{Judge score validity:} Confirm that judge scores fall within expected ranges (typically 1--10 per judge).
-\end{itemize}
-
-After preprocessing, the clean dataset contains approximately 2,100 contestant-week observations across 34 seasons, with no missing values in critical fields ($J_{i,t}$, elimination status).
+Finally, we validate data quality by checking that elimination weeks are monotonically increasing (no contestant reappears after elimination), that finals rankings are consistent with the last active set, and that judge scores fall within the expected 1--10 range per judge. After cleaning, the dataset contains 2,699 valid contestant-week observations with complete judge scores and unambiguous elimination status.
 \section{Model Development}
 
 \subsection{Rationale and Overall Structure}
