@@ -362,19 +362,75 @@ R_{i,w}\le R_{j,w} & \text{(Rank)}
 \end{cases}
 \]
 
-\subsection{Consistency and Uncertainty (Model Outputs)}
-Consistency is evaluated without using placement information, \emph{except}
-(i) finals-week ordering and 
-(ii) within-week ordering inside a multi-elimination set.
-Specifically:
+\subsection{Consistency Metrics: Principle and Computation}
+\textbf{Principle.} Consistency measures whether the inferred fan votes reproduce the weekly
+elimination outcomes under the correct voting regime, without using future information.
+We only use \texttt{placement} for (i) finals-week ordering, and (ii) internal ordering
+within the \emph{same} multi-elimination set.
+
+\textbf{Weekly indicator.} For each week $w$ we define a binary indicator $C_w$:
 \begin{itemize}
-  \item Percent/Rank: predicted elimination set matches $E_w$.
-  \item Bottom-two: eliminated contestant belongs to Bottom2.
-  \item If placements differ within $E_w$, internal order must match.
-  \item Finals: ordering matches placement.
+  \item \textbf{Percent/Rank regimes:} $C_w=1$ if the predicted elimination set matches the observed
+  elimination set $E_w$; otherwise $C_w=0$.
+  \item \textbf{Bottom-2 regime:} $C_w=1$ if the observed eliminated contestant lies in the model’s
+  bottom-two set; for multi-elimination, $C_w=1$ if the observed elimination set is contained in the
+  worst-$|E_w|$ positions.
+  \item \textbf{Finals week:} $C_w=1$ if the final ordering implied by $S_{i,w}$ (Percent) or
+  $R_{i,w}$ (Rank) matches \texttt{placement}.
+  \item \textbf{No-elimination / Withdrew weeks:} we set $C_w=1$ (no elimination is consistent by definition).
 \end{itemize}
-Uncertainty is reported \emph{by week} and \emph{by contestant} using confidence-interval width
-and coefficient of variation, reflecting whether certainty is uniform across weeks or contestants.
+
+\textbf{Internal ordering for multi-elimination.}
+If $a,b\in E_w$ and $p_a>p_b$ (worse placement), we require
+$S_{a,w}\le S_{b,w}$ (Percent) or $R_{a,w}\ge R_{b,w}$ (Rank) within the elimination set.
+This does \emph{not} constrain survivors and therefore does not leak future information.
+
+\textbf{Season and week aggregates.}
+\[
+\text{CSR}_s=\frac{1}{|W_s|}\sum_{w\in W_s}C_w,\qquad
+\text{CSR}_{\text{week}}(t)=\frac{1}{|S_t|}\sum_{s\in S_t}C_{s,t}.
+\]
+These form the inputs for Table~\ref{tab:consistency_by_season} and
+Table~\ref{tab:consistency_by_week} (and their corresponding figures).
+
+\subsection{Uncertainty Metrics: Principle and Computation}
+\textbf{Principle.} Because elimination outcomes do not uniquely identify fan votes,
+we quantify uncertainty by perturbing model hyperparameters and judges’ scores to
+generate an ensemble of feasible solutions.
+
+\textbf{Ensemble statistics (per contestant-week).}
+For each $(i,w)$, let $\{f^{(m)}_{i,w}\}$ be the ensemble samples. We compute:
+\[
+\hat{\mu}_{i,w}=\frac{1}{M}\sum_m f^{(m)}_{i,w},\quad
+\hat{\sigma}_{i,w}=\sqrt{\frac{1}{M-1}\sum_m(f^{(m)}_{i,w}-\hat{\mu}_{i,w})^2},
+\]
+\[
+\text{CV}_{i,w}=\frac{\hat{\sigma}_{i,w}}{\hat{\mu}_{i,w}},\quad
+CI_{i,w}=[Q_{2.5\%},Q_{97.5\%}].
+\]
+
+\textbf{Aggregations.}
+We summarize uncertainty by week and by season:
+\[
+\overline{\text{CV}}_s=\frac{1}{N_s}\sum_{(i,w)\in s}\text{CV}_{i,w},\qquad
+\overline{\text{CV}}_t=\frac{1}{N_t}\sum_{(i,w)\in t}\text{CV}_{i,w},
+\]
+with analogous averages for CI width. These are reported in
+Table~\ref{tab:uncertainty_by_season} and Table~\ref{tab:uncertainty_by_week}.
+
+\subsection{Interpretation of Consistency and Uncertainty}
+\textbf{Consistency.} As shown in Figure~\ref{fig:consistency_by_season} and
+Figure~\ref{fig:consistency_by_week}, the model achieves very high consistency in
+Percent seasons, because numeric score constraints sharply restrict feasible vote distributions.
+Bottom-2 seasons exhibit lower consistency and larger variability, reflecting the
+judges’ save mechanism that weakens direct inference from public votes.
+
+\textbf{Uncertainty.} Figure~\ref{fig:uncertainty_by_season} and
+Figure~\ref{fig:uncertainty_by_week} show that Rank seasons have the highest CV,
+Percent seasons the lowest, and Bottom-2 seasons are intermediate. This aligns with
+information content: Rank rules provide only ordering constraints, while Percent rules
+impose numeric inequalities that significantly shrink the feasible solution space.
+
 
 \subsection{Why This Modeling Choice is Advantageous}
 This framework is \emph{rule-consistent} (mirrors official voting mechanics), \emph{robust} 
