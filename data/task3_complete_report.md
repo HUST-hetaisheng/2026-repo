@@ -237,6 +237,39 @@ $$\rho_{Judge, Fan} = 0.5248 \quad (p < 0.001, n = 421)$$
 | `task3_coefficient_comparison.png` | 系数比较柱状图 |
 | `task3_icc_comparison.png` | ICC比较图 |
 | `task3_partner_experience.png` | 舞伴经验效应箱线图 |
+| `task3_industry_effect.png` | 行业效应柱状图（描述性分析） |
+| `task3_industry_boxplot.png` | 行业分布箱线图 |
+
+---
+
+## Part 6b: Industry Descriptive Analysis (Supplementary)
+
+> **Note**: Industry未纳入主回归模型，以保持模型简洁性。以下为描述性分析。
+> 
+> 详细分析见：[task3_industry_analysis.md](task3_industry_analysis.md)
+
+### Industry Performance Summary
+
+| Industry | N | Avg Placement | Winners | Win Rate |
+|----------|---|---------------|---------|----------|
+| Athlete | 99 | 6.21 | 12 | 12.1% |
+| Actor/Actress | 128 | 6.75 | 8 | 6.2% |
+| Singer/Musician | 62 | 6.81 | 4 | 6.5% |
+| TV/Media | 76 | 6.82 | 7 | 9.2% |
+| Other | 26 | 7.08 | 2 | 7.7% |
+| Comedian | 12 | 8.75 | 0 | 0.0% |
+| Model | 18 | 8.94 | 1 | 5.6% |
+
+### Key Observations:
+- **Athletes** show the best average placement (6.21) and highest win rate (12.1%)
+- **Comedians** and **Models** perform relatively poorly on average
+- Industry effects are likely **confounded** with other factors (age, popularity) and should not be interpreted causally
+
+### Why Not Include Industry in Regression?
+1. **Parsimony**: 6+ dummy variables would reduce interpretability
+2. **Collinearity**: Industry correlates with age and popularity
+3. **Sample Size**: Some categories have limited observations
+4. **Focus**: Main model emphasizes universal factors
 
 ---
 
@@ -244,15 +277,15 @@ $$\rho_{Judge, Fan} = 0.5248 \quad (p < 0.001, n = 421)$$
 
 ### Limitations:
 1. **人气数据缺失**：部分选手社交媒体人气为0（数据未采集或不存在）
-2. **行业分类缺失**：未包含选手职业类别（Actor, Athlete等）
-3. **临时舞伴未处理**：某些周的临时替换舞伴未单独建模
-4. **时间趋势未控制**：未考虑不同赛季的评分标准变化
+2. **临时舞伴未处理**：某些周的临时替换舞伴未单独建模
+3. **时间趋势未控制**：未考虑不同赛季的评分标准变化
+4. **行业效应混淆**：行业变量与年龄、人气存在相关性，难以分离因果效应
 
 ### Future Work:
-1. 添加选手职业类别作为控制变量
-2. 使用面板数据模型（周层面）进行更细粒度分析
-3. 引入交互效应（如：人气 × 年龄）
-4. 使用机器学习方法进行特征重要性排序
+1. 使用面板数据模型（周层面）进行更细粒度分析
+2. 引入交互效应（如：人气 × 年龄）
+3. 使用机器学习方法进行特征重要性排序
+4. 探索行业与其他变量的交互效应
 
 ---
 
