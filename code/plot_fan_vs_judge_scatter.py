@@ -76,29 +76,29 @@ def main():
         # keep survived points, drop eliminated ones that overlap in rank space
         elim_rank = elim_rank[~pd.Series(elim_coords).isin(overlap).values]
 
-    # jitter points near diagonal to reduce overplotting (visual only)
-    def jitter_near_diag(df_in, col_x, col_y, eps=0.5, jitter=0.15):
+    # Add random jitter to ALL points to reduce overplotting
+    np.random.seed(42)  # for reproducibility
+    def add_jitter(df_in, col_x, col_y, jitter_amount=0.25):
         df_out = df_in.copy()
-        near = (df_out[col_y] - df_out[col_x]).abs() <= eps
-        # alternate jitter directions to avoid systematic shift
-        signs = np.where((df_out.index % 2) == 0, 1.0, -1.0)
-        df_out.loc[near, col_y] = df_out.loc[near, col_y] + signs[near] * jitter
+        n = len(df_out)
+        df_out[col_x] = df_out[col_x] + np.random.uniform(-jitter_amount, jitter_amount, n)
+        df_out[col_y] = df_out[col_y] + np.random.uniform(-jitter_amount, jitter_amount, n)
         return df_out
 
-    alive_plot = jitter_near_diag(alive_rank, "judge_rank", "fan_rank")
-    elim_plot = jitter_near_diag(elim_rank, "judge_rank", "fan_rank")
+    alive_plot = add_jitter(alive_rank, "judge_rank", "fan_rank", jitter_amount=0.3)
+    elim_plot = add_jitter(elim_rank, "judge_rank", "fan_rank", jitter_amount=0.3)
 
     # Figure 1: rank vs rank
     fig, ax = plt.subplots(figsize=(8.6, 5.8), dpi=800)
     ax.scatter(
         alive_plot["judge_rank"], alive_plot["fan_rank"],
-        s=16, facecolors="none", edgecolors="#2b6cb0",
-        alpha=0.35, linewidths=0.8, marker="o", label="Survived"
+        s=12, facecolors="none", edgecolors="#2b6cb0",
+        alpha=0.4, linewidths=0.6, marker="o", label="Survived"
     )
     ax.scatter(
         elim_plot["judge_rank"], elim_plot["fan_rank"],
-        s=36, c="#d62728", alpha=0.9, marker="X",
-        linewidths=0.8, label="Eliminated", zorder=3
+        s=30, c="#d62728", alpha=0.85, marker="X",
+        linewidths=0.6, label="Eliminated", zorder=3
     )
     # diagonal y=x reference
     max_rank = int(max(df["judge_rank"].max(), df["fan_rank"].max()))
@@ -148,13 +148,13 @@ def main():
     ax1 = axes[0]
     ax1.scatter(
         alive_plot["judge_rank"], alive_plot["fan_rank"],
-        s=16, facecolors="none", edgecolors="#2b6cb0",
-        alpha=0.35, linewidths=0.8, marker="o", label="Survived"
+        s=12, facecolors="none", edgecolors="#2b6cb0",
+        alpha=0.4, linewidths=0.6, marker="o", label="Survived"
     )
     ax1.scatter(
         elim_plot["judge_rank"], elim_plot["fan_rank"],
-        s=36, c="#d62728", alpha=0.9, marker="X",
-        linewidths=0.8, label="Eliminated", zorder=3
+        s=30, c="#d62728", alpha=0.85, marker="X",
+        linewidths=0.6, label="Eliminated", zorder=3
     )
     ax1.plot([1, max_rank], [1, max_rank], color="#888888", linewidth=1.0, linestyle="--", alpha=0.6)
     ax1.set_xlabel("Judge Mean Score Rank (1 = Best)")
