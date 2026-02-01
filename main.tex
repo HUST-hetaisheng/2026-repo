@@ -328,25 +328,18 @@ In conclusion, our model demonstrates strong empirical validity: it correctly re
 
 \section{Impact of Contestant and Partner Characteristics}
 
-% 开篇：问题定义 + 方法预览
-\textbf{Research Question}: What pre-competition characteristics of celebrities 
-and professional dancers influence their performance on DWTS?
+% 开篇：Research Question + 数据/方法综述
+\textbf{Research Question}: What pre-competition characteristics of celebrities and professional dancers most significantly influence their performance trajectories and final outcomes on DWTS?
 
-% 数据说明（简洁）
-To address this question, we supplemented the original dataset with:
+To rigorously address this question, we have augmented the original competition dataset with four complementary dimensions of external data:
 \begin{itemize}
-    \item \textbf{Physical attributes}: BMI (Body Mass Index)
-    \item \textbf{Prior experience}: Dance experience score (0-10)
-    \item \textbf{Social media metrics}: Weekly Twitter, Instagram, Facebook, 
-          YouTube engagement (standardized and aggregated)
-    \item \textbf{Search interest}: Weekly Google search volume
+    \setlength\itemsep{0em}
+    \item \textbf{Physical Attributes:} Body Mass Index for each contestant.
+    \item \textbf{Prior Experience:} A quantified Dance Experience Score.
+    \item \textbf{Social Media Metrics:} Aggregated weekly engagement across Twitter, Instagram, Facebook, and YouTube (standardized and aggregated).
+    \item \textbf{Public Attention:} Weekly Google Search Volume trends.
 \end{itemize}
-
-% 方法预览
-We employ a \textbf{multi-level regression framework} with three dependent 
-variables (judge scores, fan votes, final placement) at two temporal scales 
-(contestant-level and weekly-level), complemented by a \textbf{mixed-effects model} 
-to isolate the professional dancer effect.
+Leveraging this enriched dataset, we construct a comprehensive \textbf{multi-level regression framework}. Our approach analyzes performance at two distinct temporal scales---season-level outcomes and weekly fluctuations---across three key dependent variables: judges' scores, fan votes, and final placement. Furthermore, we employ a \textbf{mixed-effects model} to isolate and quantify the specific impact of professional dancer partners, separating their influence from the celebrity's own merit.
 
 %------------------------------------------------------------------
 \subsection{Model Specification}
@@ -368,12 +361,15 @@ $Y_3$ & \texttt{placement} & Overall success (1 = winner) \\
 \end{table}
 
 \textit{Note}: We use final \texttt{placement} rather than a weighted composite 
-score ($j + f$) because: (1) it avoids subjective weighting choices, 
+score because of the following reasons: (1) it avoids subjective weighting choices, 
 (2) different scoring regimes across seasons make composite scores 
 non-comparable, and (3) placement directly answers ``who wins.''
 
 % 3.1.2 模型表达式
 \subsubsection{Contestant-Level Model (Static Characteristics)}
+To systematically disentangle the drivers of success, we adopt a stratified modeling approach. The first stratum focuses on static characteristics---attributes such as age, industry background, and prior dance experience that remain constant throughout a season. Since these factors define a contestant's baseline potential, we aggregate weekly performance metrics into season-level averages (or final placement) to filter out week-to-week noise.
+
+Furthermore, we construct three parallel regression models for different dependent variables ($Y_1, Y_2, Y_3$). This triangulation allows us to isolate specific mechanisms, which is crucial for identifying the distinct criteria used by the two decision-making bodies.
 
 For contestant $i$:
 \begin{equation}
@@ -386,6 +382,9 @@ Y_i = \beta_0 + \beta_1 \cdot \text{Age}_i + \beta_2 \cdot \text{isUS}_i
 \textit{Sample}: $N = 421$ contestants across 34 seasons.
 
 \subsubsection{Weekly-Level Model (Dynamic Characteristics)}
+The second stratum addresses dynamic variability. While static traits set a contestant's baseline, their trajectory is often shaped by real-time public sentiment. We construct a panel data model with contestant-week observations ($N=2,777$) to capture the immediate impact of time-varying predictors: Social Media Popularity and Google Search Volume.
+
+By controlling for static contestant characteristics (which act as quasi-fixed effects), this model specifically isolates the marginal effect of weekly buzz.
 
 For contestant $i$ in week $t$:
 \begin{equation}
@@ -395,10 +394,6 @@ Y_{it} = \alpha_0 + \alpha_1 \cdot \text{SocialMediaPop}_{it}
 \end{equation}
 
 \textit{Sample}: $N = 2{,}777$ contestant-weeks.
-
-\textit{Key distinction}: Static variables (Age, Industry) capture 
-\textbf{between-person} differences; dynamic variables (SocialMediaPop) 
-capture \textbf{within-season} fluctuations.
 
 %------------------------------------------------------------------
 \subsection{Results: Celebrity Characteristics}
@@ -429,7 +424,8 @@ explain a meaningful but limited portion of variance---leaving room for actual
 dance performance to determine outcomes.
 
 % 3.2.2 关键发现
-\subsubsection{Key Findings}
+\subsubsection{Significant Determinants of Performance}
+Table \ref{tab:coefficients} summarizes the regression results for the static characteristics. The analysis reveals three distinct mechanisms driving competition outcomes:
 
 \begin{table}[H]
 \centering
@@ -447,26 +443,21 @@ Industry: Social Media & $+5.30$** & $-0.020$ & $+0.31$ & SM stars excel \\
 \caption{Selected regression coefficients. *: $p<0.05$, **: $p<0.01$, ***: $p<0.001$}
 \end{table}
 
-\textbf{Finding 1: Age Effect.} Younger contestants receive higher judge scores 
-($\beta = -0.28$, $p = 0.002$). A 10-year age difference corresponds to 
-approximately 2.8 points lower in average judge score.
+\textbf{The Age Advantage in Professional Assessment.} 
+There is a robust negative correlation between age and professional evaluation. The coefficient ($\beta = -0.28, p = 0.002$) suggests that for every additional decade of age, a contestant's average judge score decreases by approximately 2.8 points. This reflects the physical demands of ballroom dancing, where agility and stamina—traits often correlated with youth—are prerequisites for high technical marks.
 
-\textbf{Finding 2: Popularity Drives Fan Votes, Not Judge Scores.} 
-Celebrity popularity significantly predicts fan vote share ($p = 0.001$) 
-but has no effect on judge scores ($p = 0.46$). This confirms that 
-professional evaluation is independent of pre-existing fame.
+\textbf{The Divergence of Fame and Skill.} 
+A critical insight is the independence of professional judgment from celebrity status. Pre-existing popularity is a highly significant predictor of fan vote share ($p = 0.001$) but has no statistically discernible effect on judge scores ($p = 0.46$). This confirms that while fan voting acts as a popularity contest, the judges effectively maintain a "blindness" to fame, focusing solely on performance quality.
 
-\textbf{Finding 3: Social Media Stars Outperform.} Contestants from the 
-``Social Media Personality'' industry score 5.3 points higher than baseline 
-($p = 0.005$), likely due to highly engaged online fanbases.
+\textbf{The "Social Media" Industry Effect.}
+Contestants categorized as "Social Media Personalities" demonstrate a massive outlier effect in judge scores ($\beta = +5.30, p = 0.005$). This likely stems from a selection bias: social media stars cast on the show are often younger and possess dance-adjacent skills (e.g., TikTok choreography trends), giving them a baseline technical advantage over traditional actors or musicians.
 
 %------------------------------------------------------------------
 \subsection{Professional Dancer Effect}
 
-A unique feature of DWTS is that celebrity contestants are paired with 
-professional dancers whose skill, teaching ability, and choreography 
-may significantly influence outcomes. We quantify this effect using a 
-\textbf{mixed-effects model} with dancers as random effects.
+Celebrity contestants are paired with professional dancers whose skill, teaching ability, and choreography may significantly influence outcomes. 
+
+We quantify this effect using a \textbf{Linear Mixed-Effects Model (LMM)} rather than including dancers as fixed covariates in the previous regression. This separate modeling approach is necessary for two reasons. There are over 50 unique professional dancers across 34 seasons. Including them as separate dummy variables in the OLS model would consume excessive degrees of freedom, making the estimates for static characteristics unstable. Also, by modeling dancers as \textit{random effects}, we can estimate the global variance ($\sigma^2_u$) attributable to the "partner factor" itself, rather than testing individual coefficients. This allows us to calculate how much of the total success is driven by the partner assignment via the Intraclass Correlation Coefficient (ICC).
 
 \subsubsection{Mixed-Effects Model Specification}
 
@@ -478,7 +469,7 @@ Y_{ij} = \mathbf{X}_{ij}'\boldsymbol{\beta} + u_j + \epsilon_{ij},
 
 where $u_j$ is the random effect for dancer $j$, capturing the dancer's 
 ``added value'' beyond contestant characteristics. The key metric is the 
-\textbf{Intraclass Correlation Coefficient (ICC)}:
+\textbf{ICC}:
 \begin{equation}
 \text{ICC} = \frac{\sigma^2_u}{\sigma^2_u + \sigma^2_\epsilon}
 \end{equation}
@@ -574,15 +565,8 @@ is\_US & $-0.44$ & $-0.85$ & Similar \\
 \caption{Comparison of $t$-statistics across Judge and Fan models}
 \end{table}
 
-\textbf{Conclusion}: 
-\begin{itemize}
-    \item \textbf{Judges prioritize}: Age (physical capability), 
-          dance experience (technical foundation)
-    \item \textbf{Fans prioritize}: Pre-existing popularity, 
-          real-time social media engagement
-    \item \textbf{Both reward}: Industry background (athletes perform well 
-          in both evaluations)
-\end{itemize}
+\textbf{Conclusion}: Our comparative analysis reveals a clear dichotomy in decision criteria. \textbf{Judges} prioritize physical capability and technical foundation, as evidenced by the significant negative impact of age and the relevance of prior dance experience on their scoring. In contrast, \textbf{Fans} are primarily driven by engagement and fame; pre-existing celebrity popularity and real-time social media buzz are strong predictors of vote share but have negligible effect on professional scores. Interestingly, \textbf{Both} groups consistently reward specific industry backgrounds, particularly athletes, suggesting that physical discipline and competitiveness translate well into both technical merit and audience appeal.
+
 
 This divergence justifies the show's hybrid scoring system: judges ensure 
 technical quality is rewarded, while fan votes maintain audience engagement 
@@ -617,10 +601,8 @@ and emotional investment.
 
 
 
-\subsection{}
-\subsection{}
-\subsection{}
-% \section{Model Development}
+
+
 
 \begin{thebibliography}{99}
 \bibitem{Boyd2004} Boyd, S., \& Vandenberghe, L. (2004). \emph{Convex optimization}. Cambridge University Press.
