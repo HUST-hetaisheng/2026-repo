@@ -1,9 +1,9 @@
 """
-Model 2 可视化：争议选手检测
-X轴：裁判Rank - 粉丝Rank（正值=裁判评价差于粉丝=争议）
-Y轴：最终名次（归一化，0=冠军，1=首轮淘汰）
+Model 2 可视化：争议选手检�?
+X轴：裁判Rank - 粉丝Rank（正�?裁判评价差于粉丝=争议�?
+Y轴：最终名次（归一化，0=冠军�?=首轮淘汰�?
 
-争议选手特征：X值大（裁判差、粉丝好），但Y值小（最终名次好）
+争议选手特征：X值大（裁判差、粉丝好），但Y值小（最终名次好�?
 """
 
 import pandas as pd
@@ -35,7 +35,7 @@ def compute_weekly_rank_diff(fan_df):
         if n < 2:
             continue
         
-        # Rank：1=最好，n=最差
+        # Rank�?=最好，n=最�?
         judge_rank = rankdata(-group['judge_total'].values, method='average')
         fan_rank = rankdata(-group['fan_vote_share'].values, method='average')
         
@@ -50,10 +50,10 @@ def compute_weekly_rank_diff(fan_df):
                 'celebrity_name': row['celebrity_name'],
                 'judge_rank': judge_rank[i],
                 'fan_rank': fan_rank[i],
-                'rank_diff': judge_rank[i] - fan_rank[i],  # 正=裁判差于粉丝
+                'rank_diff': judge_rank[i] - fan_rank[i],  # �?裁判差于粉丝
                 'judge_share': judge_share[i],
                 'fan_share': fan_share[i],
-                'share_diff': fan_share[i] - judge_share[i],  # 正=粉丝高于裁判
+                'share_diff': fan_share[i] - judge_share[i],  # �?粉丝高于裁判
                 'n_contestants': n
             })
     
@@ -61,7 +61,7 @@ def compute_weekly_rank_diff(fan_df):
 
 weekly_df = compute_weekly_rank_diff(fan_df)
 
-# 计算每个选手的赛季平均
+# 计算每个选手的赛季平�?
 contestant_stats = weekly_df.groupby(['season', 'celebrity_name']).agg({
     'rank_diff': 'mean',      # 平均Rank差异
     'share_diff': 'mean',     # 平均Share差异
@@ -70,18 +70,18 @@ contestant_stats = weekly_df.groupby(['season', 'celebrity_name']).agg({
 contestant_stats.columns = ['season', 'celebrity_name', 'avg_rank_diff', 'avg_share_diff', 'weeks']
 
 # ============================================================
-# 获取最终名次并归一化
+# 获取最终名次并归一�?
 # ============================================================
-# 计算每赛季总人数
+# 计算每赛季总人�?
 season_size = orig_df.groupby('season')['celebrity_name'].count().reset_index()
 season_size.columns = ['season', 'n_total']
 
-# 合并最终名次
+# 合并最终名�?
 placement_df = orig_df[['celebrity_name', 'season', 'placement']].copy()
 contestant_stats = contestant_stats.merge(placement_df, on=['season', 'celebrity_name'], how='left')
 contestant_stats = contestant_stats.merge(season_size, on='season', how='left')
 
-# 归一化名次：0=冠军，1=最后一名
+# 归一化名次：0=冠军�?=最后一�?
 contestant_stats['placement_norm'] = (contestant_stats['placement'] - 1) / (contestant_stats['n_total'] - 1)
 
 print("=" * 70)
@@ -92,18 +92,18 @@ for name, info in CONTROVERSIAL.items():
     subset = contestant_stats[(contestant_stats['celebrity_name'] == name) & 
                               (contestant_stats['season'] == info['season'])]
     if len(subset) == 0:
-        print(f"\n{name}: 未找到数据")
+        print(f"\n{name}: 未找到数�?)
         continue
     
     row = subset.iloc[0]
     print(f"\n{name} (Season {info['season']}):")
-    print(f"  最终名次: {int(row['placement'])}/{int(row['n_total'])} (归一化: {row['placement_norm']:.2f})")
-    print(f"  平均Rank差(裁判-粉丝): {row['avg_rank_diff']:+.2f}")
-    print(f"  平均Share差(粉丝-裁判): {row['avg_share_diff']:+.2%}")
+    print(f"  最终名�? {int(row['placement'])}/{int(row['n_total'])} (归一�? {row['placement_norm']:.2f})")
+    print(f"  平均Rank�?裁判-粉丝): {row['avg_rank_diff']:+.2f}")
+    print(f"  平均Share�?粉丝-裁判): {row['avg_share_diff']:+.2%}")
     print(f"  参赛周数: {int(row['weeks'])}")
 
 # ============================================================
-# 图1: Rank差异 vs 最终名次
+# �?: Rank差异 vs 最终名�?
 # ============================================================
 fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 
@@ -129,21 +129,21 @@ for name, info in CONTROVERSIAL.items():
                     xytext=(8, -5), textcoords='offset points',
                     fontsize=9, fontweight='bold', color=info['color'])
 
-# 分界线
+# 分界�?
 ax1.axvline(0, color='gray', linestyle='--', alpha=0.5)
 ax1.axhline(0.5, color='gray', linestyle=':', alpha=0.3)
 
 # 标注区域
 ax1.fill_betweenx([0, 0.3], [1, 1], [ax1.get_xlim()[1] if ax1.get_xlim()[1] > 1 else 4, 4], 
                   alpha=0.15, color='red')
-ax1.text(2.5, 0.15, '⚡ CONTROVERSIAL\nBad Judge Rank\nGood Final Place', 
+ax1.text(2.5, 0.15, '�?CONTROVERSIAL\nBad Judge Rank\nGood Final Place', 
          ha='center', fontsize=10, color='darkred', fontweight='bold')
 
-ax1.set_xlabel('Average (Judge Rank - Fan Rank)\n← Fan Favored | Judge Favored →', fontsize=11)
+ax1.set_xlabel('Average (Judge Rank - Fan Rank)\n�?Fan Favored | Judge Favored �?, fontsize=11)
 ax1.set_ylabel('Final Placement (Normalized)\n0 = Winner, 1 = First Eliminated', fontsize=11)
 ax1.set_title('RANK Method: Rank Difference vs Final Placement', fontsize=13, fontweight='bold')
 ax1.legend(loc='lower right', fontsize=9)
-ax1.invert_yaxis()  # 名次好的在上面
+ax1.invert_yaxis()  # 名次好的在上�?
 
 # ----- 右图：Share差异 -----
 ax2 = axes[1]
@@ -166,7 +166,7 @@ for name, info in CONTROVERSIAL.items():
                     xytext=(8, -5), textcoords='offset points',
                     fontsize=9, fontweight='bold', color=info['color'])
 
-# 分界线
+# 分界�?
 ax2.axvline(0, color='gray', linestyle='--', alpha=0.5)
 ax2.axhline(0.5, color='gray', linestyle=':', alpha=0.3)
 
@@ -174,17 +174,17 @@ ax2.axhline(0.5, color='gray', linestyle=':', alpha=0.3)
 xlim = ax2.get_xlim()
 ax2.fill_betweenx([0, 0.3], [0.05, 0.05], [xlim[1] if xlim[1] > 0.1 else 0.2, 0.2],
                   alpha=0.15, color='red')
-ax2.text(0.1, 0.15, '⚡ CONTROVERSIAL\nHigh Fan Share\nGood Final Place',
+ax2.text(0.1, 0.15, '�?CONTROVERSIAL\nHigh Fan Share\nGood Final Place',
          ha='center', fontsize=10, color='darkred', fontweight='bold')
 
-ax2.set_xlabel('Average (Fan Share - Judge Share)\n← Judge Favored | Fan Favored →', fontsize=11)
+ax2.set_xlabel('Average (Fan Share - Judge Share)\n�?Judge Favored | Fan Favored �?, fontsize=11)
 ax2.set_ylabel('Final Placement (Normalized)\n0 = Winner, 1 = First Eliminated', fontsize=11)
 ax2.set_title('PERCENTAGE Method: Share Difference vs Final Placement', fontsize=13, fontweight='bold')
 ax2.legend(loc='lower right', fontsize=9)
 ax2.invert_yaxis()
 
 plt.tight_layout()
-plt.savefig('d:/2026-repo/figures/controversial_rank_vs_placement.png', dpi=300, bbox_inches='tight')
+plt.savefig('d:/2026-repo/figures/controversial_rank_vs_placement.png', dpi=800, bbox_inches='tight')
 plt.show()
 
 print("\n" + "=" * 70)
@@ -195,10 +195,10 @@ print("=" * 70)
 # 自动检测争议选手
 # ============================================================
 print("\n" + "=" * 70)
-print("自动检测的争议选手（Rank差>1 且 名次前50%）")
+print("自动检测的争议选手（Rank�?1 �?名次�?0%�?)
 print("=" * 70)
 
-# 条件：裁判Rank明显差于粉丝（差>1），但最终名次好（前50%）
+# 条件：裁判Rank明显差于粉丝（差>1），但最终名次好（前50%�?
 detected = contestant_stats[
     (contestant_stats['avg_rank_diff'] > 1) & 
     (contestant_stats['placement_norm'] < 0.5)
@@ -206,7 +206,7 @@ detected = contestant_stats[
 
 for _, row in detected.iterrows():
     print(f"{row['celebrity_name']} (S{int(row['season'])}): "
-          f"Rank差={row['avg_rank_diff']:+.2f}, "
+          f"Rank�?{row['avg_rank_diff']:+.2f}, "
           f"名次={int(row['placement'])}/{int(row['n_total'])}")
 
 print(f"\n共检测到 {len(detected)} 位争议选手")

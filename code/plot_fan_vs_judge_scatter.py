@@ -89,7 +89,7 @@ def main():
     elim_plot = jitter_near_diag(elim_rank, "judge_rank", "fan_rank")
 
     # Figure 1: rank vs rank
-    fig, ax = plt.subplots(figsize=(8.6, 5.8), dpi=200)
+    fig, ax = plt.subplots(figsize=(8.6, 5.8), dpi=800)
     ax.scatter(
         alive_plot["judge_rank"], alive_plot["fan_rank"],
         s=16, facecolors="none", edgecolors="#2b6cb0",
@@ -116,7 +116,7 @@ def main():
     plt.close(fig)
 
     # Figure 2: share vs share (full scatter, no filtering)
-    fig, ax = plt.subplots(figsize=(8.2, 5.4), dpi=200)
+    fig, ax = plt.subplots(figsize=(8.2, 5.4), dpi=800)
     # Use full (unfiltered) sets for share plot to avoid dropping any eliminated points
     ax.scatter(
         alive["judge_share"], alive["fan_share"],
@@ -141,9 +141,60 @@ def main():
     fig.savefig(OUT_DIR / "fan_vs_judge_share_scatter.pdf", bbox_inches="tight")
     plt.close(fig)
 
+    # Figure 3: Combined side-by-side comparison
+    fig, axes = plt.subplots(1, 2, figsize=(16, 6), dpi=800)
+    
+    # Left: Rank vs Rank
+    ax1 = axes[0]
+    ax1.scatter(
+        alive_plot["judge_rank"], alive_plot["fan_rank"],
+        s=16, facecolors="none", edgecolors="#2b6cb0",
+        alpha=0.35, linewidths=0.8, marker="o", label="Survived"
+    )
+    ax1.scatter(
+        elim_plot["judge_rank"], elim_plot["fan_rank"],
+        s=36, c="#d62728", alpha=0.9, marker="X",
+        linewidths=0.8, label="Eliminated", zorder=3
+    )
+    ax1.plot([1, max_rank], [1, max_rank], color="#888888", linewidth=1.0, linestyle="--", alpha=0.6)
+    ax1.set_xlabel("Judge Mean Score Rank (1 = Best)")
+    ax1.set_ylabel("Fan Vote Rank (1 = Best)")
+    ax1.set_title("Fan Rank vs. Judge Mean Rank")
+    ax1.grid(True, axis="both", linestyle="--", linewidth=0.5, alpha=0.3)
+    ax1.legend(frameon=False, loc="lower right")
+    ax1.set_xlim(0.5, max_rank + 0.5)
+    ax1.set_ylim(0.5, max_rank + 0.5)
+    
+    # Right: Share vs Share
+    ax2 = axes[1]
+    ax2.scatter(
+        alive["judge_share"], alive["fan_share"],
+        s=16, facecolors="none", edgecolors="#2b6cb0",
+        alpha=0.30, linewidths=0.8, marker="o", label="Survived"
+    )
+    ax2.scatter(
+        elim["judge_share"], elim["fan_share"],
+        s=36, c="#d62728", alpha=0.9, marker="X",
+        linewidths=0.8, label="Eliminated", zorder=3
+    )
+    ax2.plot([0, 0.5], [0, 0.5], color="#999999", linewidth=1, linestyle="--", alpha=0.5)
+    ax2.set_xlabel("Judge Score Share")
+    ax2.set_ylabel("Fan Vote Share")
+    ax2.set_title("Fan Share vs. Judge Share")
+    ax2.grid(True, axis="both", linestyle="--", linewidth=0.5, alpha=0.3)
+    ax2.legend(frameon=False, loc="lower right")
+    ax2.set_xlim(0, 0.5)
+    ax2.set_ylim(0, 0.5)
+    
+    fig.tight_layout()
+    fig.savefig(OUT_DIR / "fan_vs_judge_comparison.png", bbox_inches="tight")
+    fig.savefig(OUT_DIR / "fan_vs_judge_comparison.pdf", bbox_inches="tight")
+    plt.close(fig)
+
     print("Saved:")
     print(OUT_DIR / "fan_vs_judge_rank_scatter.png")
     print(OUT_DIR / "fan_vs_judge_share_scatter.png")
+    print(OUT_DIR / "fan_vs_judge_comparison.png")
 
 
 if __name__ == "__main__":
