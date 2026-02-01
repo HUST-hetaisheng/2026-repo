@@ -124,8 +124,6 @@ def create_contestant_summary(pop_df, fan_df):
     summary_df['is_us'] = (summary_df['country'] == 'United States').astype(int)
     summary_df['region_group'] = summary_df['country'].apply(categorize_region)
     summary_df['age_squared'] = summary_df['age'] ** 2
-    summary_df['celeb_pop_log'] = np.log(summary_df['celeb_popularity'] + 1)
-    summary_df['partner_pop_log'] = np.log(summary_df['partner_popularity'] + 1)
     
     # Merge fan vote summary
     fan_summary = fan_df.groupby(['season', 'celebrity_name']).agg({
@@ -205,11 +203,11 @@ def run_celebrity_ols_analysis(df, output_lines):
     output_lines.append("\n## Module A: Celebrity Characteristics Analysis (OLS)")
     output_lines.append("\n### Model Specification")
     output_lines.append("""
-$$Y_i = \\beta_0 + \\beta_1 \\cdot Age_i + \\beta_2 \\cdot Age_i^2 + \\beta_3 \\cdot isUS_i + \\beta_4 \\cdot \\log(Popularity_i + 1) + \\epsilon_i$$
+$$Y_i = \\beta_0 + \\beta_1 \\cdot Age_i + \\beta_2 \\cdot Age_i^2 + \\beta_3 \\cdot isUS_i + \\beta_4 \\cdot Popularity_i + \\epsilon_i$$
 """)
     
     # Prepare data - remove rows with missing values
-    analysis_df = df.dropna(subset=['age', 'celeb_pop_log', 'avg_judge_score', 'avg_fan_vote_share', 'placement'])
+    analysis_df = df.dropna(subset=['age', 'celeb_popularity', 'avg_judge_score', 'avg_fan_vote_share', 'placement'])
     analysis_df = analysis_df[analysis_df['avg_judge_score'] > 0]
     
     print(f"\n[MODULE A] Analyzing {len(analysis_df)} contestants with complete data")
@@ -222,7 +220,7 @@ $$Y_i = \\beta_0 + \\beta_1 \\cdot Age_i + \\beta_2 \\cdot Age_i^2 + \\beta_3 \\
     
     try:
         model_judge = smf.ols(
-            'avg_judge_score ~ age + age_squared + is_us + celeb_pop_log + partner_pop_log',
+            'avg_judge_score ~ age + age_squared + is_us + celeb_popularity + partner_popularity',
             data=analysis_df
         ).fit()
         
@@ -254,7 +252,7 @@ $$Y_i = \\beta_0 + \\beta_1 \\cdot Age_i + \\beta_2 \\cdot Age_i^2 + \\beta_3 \\
     
     try:
         model_fan = smf.ols(
-            'avg_fan_vote_share ~ age + age_squared + is_us + celeb_pop_log + partner_pop_log',
+            'avg_fan_vote_share ~ age + age_squared + is_us + celeb_popularity + partner_popularity',
             data=analysis_df
         ).fit()
         
@@ -286,7 +284,7 @@ $$Y_i = \\beta_0 + \\beta_1 \\cdot Age_i + \\beta_2 \\cdot Age_i^2 + \\beta_3 \\
     
     try:
         model_place = smf.ols(
-            'placement ~ age + age_squared + is_us + celeb_pop_log + partner_pop_log',
+            'placement ~ age + age_squared + is_us + celeb_popularity + partner_popularity',
             data=analysis_df
         ).fit()
         
@@ -345,7 +343,7 @@ def run_partner_analysis(df, history_df, output_lines):
     
     output_lines.append("\n### Model Specification")
     output_lines.append("""
-$$Y_{ij} = \\beta_0 + \\beta_1 \\cdot Age_{ij} + \\beta_2 \\cdot isUS_{ij} + \\beta_3 \\cdot \\log(Pop_{ij}+1) + \\beta_4 \\cdot PartnerExp_j + u_j + \\epsilon_{ij}$$
+$$Y_{ij} = \\beta_0 + \\beta_1 \\cdot Age_{ij} + \\beta_2 \\cdot isUS_{ij} + \\beta_3 \\cdot Pop_{ij} + \\beta_4 \\cdot PartnerExp_j + u_j + \\epsilon_{ij}$$
 
 Where:
 - $i$ indexes contestants, $j$ indexes professional dancers
@@ -358,7 +356,7 @@ Where:
     analysis_df['partner_seasons_before'] = analysis_df['partner_seasons_before'].fillna(0)
     
     # Remove missing values
-    analysis_df = analysis_df.dropna(subset=['age', 'celeb_pop_log', 'avg_judge_score', 'avg_fan_vote_share', 'placement'])
+    analysis_df = analysis_df.dropna(subset=['age', 'celeb_popularity', 'avg_judge_score', 'avg_fan_vote_share', 'placement'])
     analysis_df = analysis_df[analysis_df['avg_judge_score'] > 0]
     
     # Count partners with multiple appearances
@@ -380,7 +378,7 @@ Where:
     try:
         # Use statsmodels MixedLM
         model_judge_me = smf.mixedlm(
-            'avg_judge_score ~ age + is_us + celeb_pop_log + partner_seasons_before',
+            'avg_judge_score ~ age + is_us + celeb_popularity + partner_seasons_before',
             data=analysis_df,
             groups=analysis_df['ballroom_partner']
         ).fit()
@@ -423,7 +421,7 @@ Where:
     
     try:
         model_fan_me = smf.mixedlm(
-            'avg_fan_vote_share ~ age + is_us + celeb_pop_log + partner_seasons_before',
+            'avg_fan_vote_share ~ age + is_us + celeb_popularity + partner_seasons_before',
             data=analysis_df,
             groups=analysis_df['ballroom_partner']
         ).fit()
@@ -511,7 +509,7 @@ def compare_judge_vs_fan_effects(ols_results, me_results, df, output_lines):
         
         common_vars = set(judge_model.params.index) & set(fan_model.params.index)
         
-        for var in ['age', 'is_us', 'celeb_pop_log', 'partner_pop_log']:
+        for var in ['age', 'is_us', 'celeb_popularity', 'partner_popularity']:
             if var in common_vars:
                 judge_coef = judge_model.params[var]
                 fan_coef = fan_model.params[var]
@@ -522,7 +520,7 @@ def compare_judge_vs_fan_effects(ols_results, me_results, df, output_lines):
                 
                 diff = abs(judge_t) - abs(fan_t)
                 
-                if var == 'celeb_pop_log':
+                if var == 'celeb_popularity':
                     interp = "Popularity: " + ("Higher fan impact" if fan_t > judge_t else "Higher judge impact")
                 elif var == 'is_us':
                     interp = "US Origin: " + ("Higher fan impact" if fan_t > judge_t else "Higher judge impact")
@@ -618,8 +616,8 @@ def generate_key_findings(ols_results, me_results, df, output_lines):
     
     output_lines.append("\n### Finding 2: Popularity Effect")
     if 'judge' in ols_results and 'fan' in ols_results:
-        judge_pop_t = ols_results['judge'].tvalues.get('celeb_pop_log', 0)
-        fan_pop_t = ols_results['fan'].tvalues.get('celeb_pop_log', 0)
+        judge_pop_t = ols_results['judge'].tvalues.get('celeb_popularity', 0)
+        fan_pop_t = ols_results['fan'].tvalues.get('celeb_popularity', 0)
         
         output_lines.append(f"- Celebrity popularity effect on judge scores: t = {judge_pop_t:.2f}")
         output_lines.append(f"- Celebrity popularity effect on fan votes: t = {fan_pop_t:.2f}")
