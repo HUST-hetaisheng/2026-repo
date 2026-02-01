@@ -321,6 +321,53 @@ where $\gamma > 0$ controls the steepness of the decay. To quantify uncertainty,
 In conclusion, our model demonstrates strong empirical validity: it correctly recovers elimination outcomes with high probability (overall $\bar{P}_{\text{cons}} = 0.93$), while uncertainty quantification reveals interpretable regime-dependent patterns that align with the theoretical information content of each voting mechanism. The Percent regime provides the most reliable inference, while the judges' save mechanism in recent seasons introduces irreducible ambiguity that is faithfully captured by our probabilistic framework.
 \section{Rank VS Percent Method with predicted data} 
 \subsection{Two methods' influence on final results}
+We combine the estimated fan vote shares with the original judge scores and simulate weekly eliminations under two counterfactual rules: the Rank method (rank-sum) and the Percentage method (score-share sum). Table~\ref{tab:rank_pct_metrics} reports both the overall metrics and the regime-level breakdown. The methods agree in 72.2\% of weeks, but still diverge in 93 weeks. Against historical eliminations, the Percentage method shows higher match accuracy (0.695 vs. 0.611). When the two methods disagree, a positive $\Delta_{fan}$ indicates that the Rank method eliminates a contestant with a higher fan share, implying the Percentage method is more fan-friendly in those weeks. Figure~\ref{fig:fan_vs_judge_scatter} visualizes the agreement structure between fan votes and judge scores; deviations from the diagonal highlight weeks where rule choice is most likely to change the elimination outcome.
+
+\begin{table}[H]
+\centering
+\caption{Rank vs. Percentage simulation metrics (overall and by regime).}
+\label{tab:rank_pct_metrics}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular}{@{}l r r r r r r r@{}}
+\toprule
+\multicolumn{8}{l}{\textbf{Overall (All Seasons)}}\\
+\midrule
+\textbf{Metric} & \textbf{Value} & \multicolumn{6}{c}{} \\
+\midrule
+Total weeks analyzed & 335 & \multicolumn{6}{c}{} \\
+Method agreement rate & 0.722 & \multicolumn{6}{c}{} \\
+Rank accuracy vs actual & 0.611 & \multicolumn{6}{c}{} \\
+Percentage accuracy vs actual & 0.695 & \multicolumn{6}{c}{} \\
+Disagree weeks & 93 & \multicolumn{6}{c}{} \\
+Fan-favored by Rank (count) & 37 & \multicolumn{6}{c}{} \\
+Fan-favored by Percentage (count) & 56 & \multicolumn{6}{c}{} \\
+Avg $\Delta_{fan}$ (disagree weeks) & 0.0086 & \multicolumn{6}{c}{} \\
+Avg eliminated fan share (Rank) & 0.1170 & \multicolumn{6}{c}{} \\
+Avg eliminated fan share (Pct) & 0.1146 & \multicolumn{6}{c}{} \\
+\midrule
+\multicolumn{8}{l}{\textbf{By Regime}}\\
+\midrule
+\textbf{Regime} & \textbf{Weeks} & \textbf{Agreement} & \textbf{Avg $\Delta_{fan}$ (disagree)} & \textbf{Fan->Rank} & \textbf{Fan->Pct} \\
+\midrule
+Bottom-2 Era (S28--34) & 73  & 0.808 & 0.0384 & 2  & 12 \\
+Percent Era (S3--27)   & 248 & 0.694 & 0.0006 & 35 & 41 \\
+Rank Era (S1--2)       & 14  & 0.786 & 0.0722 & 0  & 3  \\
+\bottomrule
+\end{tabular}
+
+\par\vspace{0.3em}
+{\footnotesize Note: $\Delta_{fan}>0$ means the Rank method eliminates a contestant with higher fan share, hence the Percentage method is more fan-friendly in those weeks. Higher accuracy indicates closer match to historical eliminations.}
+\end{table}
+
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{figures/fan_vs_judge_scatter_side_by_side.png}
+\caption{Fan vs. judge agreement structure (left: rank comparison; right: share comparison).}
+\label{fig:fan_vs_judge_scatter}
+\end{figure}
 
 %==================================================================
 % TASK 3: Impact of Contestant and Partner Characteristics
@@ -441,6 +488,7 @@ Industry: Social Media & $+5.30$** & $-0.020$ & $+0.31$ & SM stars excel \\
 \bottomrule
 \end{tabular}
 \caption{Selected regression coefficients. *: $p<0.05$, **: $p<0.01$, ***: $p<0.001$}
+\label{tab:coefficients}
 \end{table}
 
 \textbf{The Age Advantage in Professional Assessment.} 
@@ -451,6 +499,35 @@ A critical insight is the independence of professional judgment from celebrity s
 
 \textbf{The "Social Media" Industry Effect.}
 Contestants categorized as "Social Media Personalities" demonstrate a massive outlier effect in judge scores ($\beta = +5.30, p = 0.005$). This likely stems from a selection bias: social media stars cast on the show are often younger and possess dance-adjacent skills (e.g., TikTok choreography trends), giving them a baseline technical advantage over traditional actors or musicians.
+
+%------------------------------------------------------------------
+\subsection{Judge vs. Fan: What Do They Value?}
+
+A central question is whether judges and fans evaluate contestants 
+using the same criteria. We compare $t$-statistics across models:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lccc}
+\toprule
+Factor & Judge ($t$-stat) & Fan ($t$-stat) & Who cares more? \\
+\midrule
+Age & $-3.06$** & $-2.27$* & \textbf{Judges} \\
+Celebrity Popularity & $-0.74$ & $+3.29$*** & \textbf{Fans} \\
+Dance Experience & $-1.17$ & $-0.02$ & Judges (weak) \\
+BMI & $+0.38$ & $-0.16$ & Similar \\
+is\_US & $-0.44$ & $-0.85$ & Similar \\
+\bottomrule
+\end{tabular}
+\caption{Comparison of $t$-statistics across Judge and Fan models}
+\end{table}
+
+Our comparative analysis reveals a clear dichotomy in decision criteria. \textbf{Judges} prioritize physical capability and technical foundation, as evidenced by the significant negative impact of age and the relevance of prior dance experience on their scoring. In contrast, \textbf{Fans} are primarily driven by engagement and fame; pre-existing celebrity popularity and real-time social media buzz are strong predictors of vote share but have negligible effect on professional scores. Interestingly, \textbf{Both} groups consistently reward specific industry backgrounds, particularly athletes, suggesting that physical discipline and competitiveness translate well into both technical merit and audience appeal.
+
+
+This divergence justifies the show's hybrid scoring system: judges ensure 
+technical quality is rewarded, while fan votes maintain audience engagement 
+and emotional investment.
 
 %------------------------------------------------------------------
 \subsection{Professional Dancer Effect}
@@ -542,35 +619,6 @@ professional dancers in DWTS history.
           on the show, compared to 6.8 for all dancers, suggesting that 
           accumulated experience improves teaching and choreography skills.
 \end{itemize}
-
-%------------------------------------------------------------------
-\subsection{Judge vs. Fan: What Do They Value?}
-
-A central question is whether judges and fans evaluate contestants 
-using the same criteria. We compare $t$-statistics across models:
-
-\begin{table}[H]
-\centering
-\begin{tabular}{lccc}
-\toprule
-Factor & Judge ($t$-stat) & Fan ($t$-stat) & Who cares more? \\
-\midrule
-Age & $-3.06$** & $-2.27$* & \textbf{Judges} \\
-Celebrity Popularity & $-0.74$ & $+3.29$*** & \textbf{Fans} \\
-Dance Experience & $-1.17$ & $-0.02$ & Judges (weak) \\
-BMI & $+0.38$ & $-0.16$ & Similar \\
-is\_US & $-0.44$ & $-0.85$ & Similar \\
-\bottomrule
-\end{tabular}
-\caption{Comparison of $t$-statistics across Judge and Fan models}
-\end{table}
-
-\textbf{Conclusion}: Our comparative analysis reveals a clear dichotomy in decision criteria. \textbf{Judges} prioritize physical capability and technical foundation, as evidenced by the significant negative impact of age and the relevance of prior dance experience on their scoring. In contrast, \textbf{Fans} are primarily driven by engagement and fame; pre-existing celebrity popularity and real-time social media buzz are strong predictors of vote share but have negligible effect on professional scores. Interestingly, \textbf{Both} groups consistently reward specific industry backgrounds, particularly athletes, suggesting that physical discipline and competitiveness translate well into both technical merit and audience appeal.
-
-
-This divergence justifies the show's hybrid scoring system: judges ensure 
-technical quality is rewarded, while fan votes maintain audience engagement 
-and emotional investment.
 
 %------------------------------------------------------------------
 \subsection{Summary of Task 3}
