@@ -1,0 +1,178 @@
+% =================================================================================
+% MODEL 2: Comparative Analysis of Rank vs. Percentage Methods
+% =================================================================================
+
+\section{Model 2: Rank vs. Percentage Comparison}
+
+% ---------------------------------------------------------------------------------
+\subsection{Problem Decomposition}
+% ---------------------------------------------------------------------------------
+
+We decompose Question 2 into five sub-problems:
+
+\begin{enumerate}
+    \item[\textbf{Part A.}] \textbf{Cross-Season Application}: Apply both Rank and Percentage methods to all 34 seasons.
+    
+    \item[\textbf{Part B.}] \textbf{Method Agreement Analysis}: Quantify agreement/disagreement patterns.
+    
+    \item[\textbf{Part C.}] \textbf{Fan Vote Sensitivity}: Determine which method favors fan votes more.
+    
+    \item[\textbf{Part D.}] \textbf{Controversial Case Studies}: Analyze 4 specific contestants under counterfactual scenarios.
+    
+    \item[\textbf{Part E.}] \textbf{Bottom-2 Forward Validation}: Handle probabilistic elimination via Monte Carlo simulation.
+\end{enumerate}
+
+% ---------------------------------------------------------------------------------
+\subsection{Part A: Cross-Season Method Application}
+% ---------------------------------------------------------------------------------
+
+For each week $w$ with $N$ contestants:
+
+\textbf{Rank Method:}
+\begin{equation}
+    R_{i,w} = r^J_{i,w} + r^F_{i,w}, \quad e^{\text{Rank}}_w = \arg\max_i R_{i,w}
+\end{equation}
+
+\textbf{Percentage Method:}
+\begin{equation}
+    S_{i,w} = j_{i,w} + f_{i,w}, \quad e^{\text{Pct}}_w = \arg\min_i S_{i,w}
+\end{equation}
+
+% ---------------------------------------------------------------------------------
+\subsection{Part B: Agreement Analysis}
+% ---------------------------------------------------------------------------------
+
+\begin{align}
+    \text{Agreement Rate} &= \frac{\#\{w : e^{\text{Rank}}_w = e^{\text{Pct}}_w\}}{\text{Total weeks}}
+\end{align}
+
+% ---------------------------------------------------------------------------------
+\subsection{Part C: Fan Vote Sensitivity Index}
+% ---------------------------------------------------------------------------------
+
+When methods disagree:
+\begin{equation}
+    \Delta_{\text{fan}} = \hat{f}_{e^{\text{Rank}}} - \hat{f}_{e^{\text{Pct}}}
+\end{equation}
+
+If $\Delta_{\text{fan}} > 0$: Rank eliminates more popular $\Rightarrow$ Percentage is fan-friendly.
+
+% ---------------------------------------------------------------------------------
+\subsection{Part D: Controversial Case Studies}
+% ---------------------------------------------------------------------------------
+
+\begin{table}[H]
+\centering
+\begin{tabular}{llcc}
+\toprule
+\textbf{Contestant} & \textbf{Season} & \textbf{Bottom Judge Weeks} & \textbf{Placement} \\
+\midrule
+Jerry Rice & 2 (Rank) & 5 & 2nd \\
+Billy Ray Cyrus & 4 (Pct) & 6 & 5th \\
+Bristol Palin & 11 (Pct) & 12 & 3rd \\
+Bobby Bones & 27 (Pct) & [X] & Winner \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ---------------------------------------------------------------------------------
+\subsection{Part E: Bottom-2 Forward Validation}
+% ---------------------------------------------------------------------------------
+
+For Season 28--34, elimination is \textbf{stochastic}. We cannot deterministically predict who gets eliminated—only compute probabilities. Validation requires Monte Carlo simulation.
+
+\subsubsection{E.1 The Challenge}
+
+Unlike Rank/Percentage methods where $e_w = \arg\min/\max(\cdot)$ gives a deterministic answer, Bottom-2 mechanism has:
+\begin{equation}
+    P(\text{Elim } a \mid \mathcal{B}_w = \{a, b\}) = \sigma(\beta(J_b - J_a))
+\end{equation}
+
+This yields a \textit{probability}, not a deterministic outcome. How do we validate?
+
+\subsubsection{E.2 Step 1: Identify Bottom-2}
+
+From combined ranks:
+\begin{equation}
+    \mathcal{B}_w = \{a, b\} \quad \text{where } R_{a,w}, R_{b,w} \text{ are the two highest (worst)}
+\end{equation}
+
+\subsubsection{E.3 Step 2: Compute Elimination Probability}
+
+For $\{a, b\} \in \mathcal{B}_w$:
+\begin{equation}
+    P_a = P(\text{Elim } a) = \frac{1}{1 + \exp(\beta(J_a - J_b))}
+\end{equation}
+
+\subsubsection{E.4 Step 3: Monte Carlo Season Simulation}
+
+\begin{algorithm}[H]
+\caption{Bottom-2 Forward Simulation}
+\begin{algorithmic}[1]
+\Require Contestants $\mathcal{C}_1$, fan votes $\hat{\mathbf{f}}$, judge scores $\mathbf{J}$, $M = 10000$
+\Ensure Placement distributions
+
+\For{$m = 1$ to $M$}
+    \State $\mathcal{C} \gets \mathcal{C}_1$ \Comment{Reset}
+    \For{$w = 1$ to final week}
+        \State Compute $\mathcal{B}_w = \{a, b\}$
+        \State Sample $u \sim \text{Uniform}(0,1)$
+        \If{$u < P_a$}
+            \State Eliminate $a$
+        \Else
+            \State Eliminate $b$
+        \EndIf
+        \State Update $\mathcal{C}$
+    \EndFor
+    \State Record placements for run $m$
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{E.5 Validation Metrics}
+
+\textbf{Metric 1: Weekly Probability Calibration}
+
+Did the actually eliminated contestant have the higher elimination probability?
+\begin{equation}
+    \text{Calibration} = \frac{1}{|\mathcal{W}|} \sum_w \mathbf{1}\left[P(\text{Elim } e_w^{\text{actual}}) \geq 0.5\right]
+\end{equation}
+
+Expected: $\sim 80\%$ if model is well-calibrated.
+
+\textbf{Metric 2: Placement Distribution Match}
+
+Compare simulated placement distribution to actual:
+\begin{equation}
+    \text{Placement}_i^{\text{sim}} \sim \text{Empirical from } M \text{ runs}
+\end{equation}
+
+Check if actual placement falls within 90\% CI of simulated distribution.
+
+\textbf{Metric 3: Survival Probability for Controversial Contestants}
+
+\begin{equation}
+    P_i^{\text{survive to week } W} = \prod_{w=1}^{W-1} P(\text{not eliminated in week } w)
+\end{equation}
+
+For Bristol Palin (12 bottom-judge weeks), if $P^{\text{survive}} < 0.01$ but she reached 3rd place $\Rightarrow$ extreme fan vote support confirmed.
+
+\subsubsection{E.6 Interpretation}
+
+\begin{itemize}
+    \item \textbf{High $P^{\text{survive}}$, survived}: Model consistent with outcome
+    \item \textbf{Low $P^{\text{survive}}$, survived}: Fan votes exceptionally high (overcame odds)
+    \item \textbf{High $P^{\text{survive}}$, eliminated}: Model overestimated fan support
+    \item \textbf{Low $P^{\text{survive}}$, eliminated}: Expected outcome
+\end{itemize}
+
+\subsubsection{E.7 Counterfactual: What if Bottom-2 used in earlier seasons?}
+
+Apply Bottom-2 + Judges' Save to Seasons 3--27 (originally Percentage):
+\begin{enumerate}
+    \item Compute Bottom-2 each week using fan vote estimates
+    \item Simulate judges' save with probability model
+    \item Compare expected placements to actual
+\end{enumerate}
+
+This reveals whether Bottom-2 would have changed outcomes for controversial contestants.

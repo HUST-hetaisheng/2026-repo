@@ -1,0 +1,2 @@
+total_weeks,methods_agree,methods_disagree,agreement_rate,weeks_with_actual,rank_match_actual,pct_match_actual,rank_accuracy,pct_accuracy,fan_favored_by_rank,fan_favored_by_pct,avg_delta_fan,avg_rank_elim_fan_disagree,avg_pct_elim_fan_disagree,avg_rank_elim_fan_all,avg_pct_elim_fan_all,avg_delta_fan_all
+335,242,93,0.7223880597014926,275,168,191,0.610909090909091,0.6945454545454546,37,56,0.008627836485459096,0.12846906220028587,0.11984122571482679,0.11701362625534037,0.11461843582803383,0.0023951904273065427
