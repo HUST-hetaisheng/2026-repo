@@ -424,9 +424,10 @@ Our simulation highlights eight prominent "divergent" contestants whose trajecto
 \centering
 \caption{Comparative Estimated Placements and Survival Gains}
 \label{tab:placement_shifts}
+\rowcolors{2}{gray!10}{white}
 \begin{tabular}{lcccc}
 \hline
-\rowcolor{green}Contestant (Season) & Actual Rank & Rank Rule Est. & Percent Rule Est. & Survival Advantage \\
+\rowcolor{blue!}Contestant (Season) & Actual Rank & Rank Rule Est. & Percent Rule Est. & Survival Advantage \\
 \midrule
 Bobby Bones (S27) & 1 & 11 & 5 & Percentage \\
 Iman Shumpert (S30) & 1 & 10 & 3 & Percentage \\
@@ -442,7 +443,34 @@ Billy Ray Cyrus (S4) & 5 & 9 & 8 & Percentage \\
 
 The empirical results in Table~\ref{tab:placement_shifts} further validate that the introduction of the Judges' Choice mechanism significantly curtails the advancement of these divergent performers. For instance, while Cody Rigsby and Stephen Nedoroscik maintained high survival under popular vote rules, our model predicts that their probability of victory would drop by over 60\% if they were forced into a Bottom-Two decision against technical front-runners. Ultimately, the transition from the Rank Rule to the Percentage Rule favors popular appeal, but the addition of the Judges' Choice serves as a necessary professional correction that aligns final results more closely with ballroom expertise.
 \subsubsection{Impacts of judge's choice rule}
-                                   
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{Code_Generated_Image (1).png}
+    \caption{Judge's Choice impact}
+    \label{fig:judge}
+\end{figure}
+After introducing judges' intervention in the elimination round, contestants with lower initial judge scores—such as Bobby Bones and Iman Shumpert—faced significantly reduced survival rates. As shown in the Figure~ref{fig:judge}, the survival rate under the percent scoring method dropped substantially (to less than one-third of the original rate) compared to the rank scoring method following the judges' selection. This effectively curbed the “fan frenzy effect.” It is widely acknowledged that judges' scores are more subjective than audience votes and better reflect contestants' true abilities. This reduces the likelihood of upsets driven solely by fan voting, enhances the program's fairness, and makes the entire scoring mechanism more reasonable and balanced.                                  
+\section{Strategic Recommendations for Future Rule Design}
+
+Based on the stochastic survival modeling and counterfactual simulations conducted in this study, we propose a hybrid governance model for future seasons. This model combines the percentage aggregation method with a mandatory two-stage jury selection mechanism. The rationale for this dual-layer architecture stems from the following analytical conclusions:
+
+\subsection{Foundational Aggregation: Adopting the Percentage Aggregation Method}
+We recommend retaining the \textbf{percentage aggregation method} (sum of score shares) as the foundational aggregation rule, rather than adopting a ranking method.
+\begin{itemize}
+    \item \textbf{Mitigating Information Loss}: Ranking methods inherently discretize continuous performance data, leading to “ordinal information loss.” This approach weakens the quantification of fan support, resulting in equal ranking advantages for contestants securing 50% votes versus 20% votes when leading within their respective tiers.
+\item \textbf{Incentivizing Engagement}: The percentage method establishes a linear mapping between fan engagement and survival probability. This “high beta coefficient” characteristic stimulates active audience participation—marginal increases in votes directly translate into survival advantages, fostering “underdog storylines” that drive viewership (e.g., Iman Shumpert in Season 30).
+\end{itemize}
+
+\subsection{Essential Correction Mechanism: Judges' Selection Privilege}
+While the percentage method maximizes engagement, it induces high volatility. Therefore, we strongly advise against using this mechanism alone. The “Judge's Choice (Bottom Two Safe)” must be enforced as a non-negotiable “elite system circuit breaker.”
+\begin{itemize}
+    \item Filtering statistical outliers: Our simulation of the “Bobby Bones anomaly” (S27) shows that a pure fan-voting system could render technical skill nearly irrelevant to final rankings. The judge selection mechanism acts as a high-pass filter, effectively blocking contestants whose technical performance consistently falls below the threshold ($Z_{score} < -1.5$) from exploiting fan voting loopholes to advance to the finals.
+    \item \textbf{Restoring Competitive Fairness}: Quantitative analysis indicates the two-stage mechanism reduces the probability of “low-skill/high-popularity” contestants winning by approximately 85\%. This mechanism ensures fan communities determine the pool of potential qualifiers while professional judges retain veto power to uphold dance standards.
+\end{itemize}
+
+\textbf{Final Conclusion}: The optimal strategy is not to choose between popularity and skill, but to manage them separately. The percentage rule should set an upper limit on contestant potential through popularity effects, while the judge selection mechanism establishes the minimum technical capability required to maintain eligibility.
+
+
 
 %==================================================================
 % TASK 3: Impact of Contestant and Partner Characteristics
@@ -587,9 +615,10 @@ is\_US & $-0.44$ & $-0.85$ & Similar \\
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{figures/task3_2_judge_fan_sensitivity.png}
-    \caption{Sensitivity comparison between judges and fans. The $|t|$-statistic measures the strength of each factor's influence. Judges prioritize age (physical capability), while fans respond strongly to celebrity popularity. The dashed line indicates the $p=0.05$ significance threshold.}
+    \caption{Sensitivity comparison between judges and fans. }
     \label{fig:judge_fan_sensitivity}
 \end{figure}
+
 A clear dichotomy emerges: text{Judges} emphasize physical and technical factors (age, dance experience), while text{Fans} respond strongly to pre-existing popularity and social media presence. Notably, both groups reward athletes, suggesting physical discipline appeals to judges and audiences alike. This divergence supports the hybrid scoring system: judges uphold technical standards, while fan voting sustains viewer engagement.
 
 %------------------------------------------------------------------
@@ -666,22 +695,18 @@ professional dancers in DWTS history.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{figures/task3_2_judge_fan_sensitivity.png}
-    \caption{Sensitivity comparison between judges and fans. The $|t|$-statistic measures the strength of each factor's influence. Judges prioritize age (physical capability), while fans respond strongly to celebrity popularity. The dashed line indicates the $p=0.05$ significance threshold.}
-    \label{fig:judge_fan_sensitivity}
+    \includegraphics[width=0.88\textwidth]{figures/task3_2_partner_ranking_top10.png}
+    \caption{Top 10 professional dancers ranked by average partner placement. The annotation $n$ indicates the number of celebrity partners each dancer has trained.}
+    \label{fig:partner_ranking}
 \end{figure}
-
 \textbf{Key Observations:}
-
 \begin{itemize}
     \item \textbf{Derek Hough dominates}: With an average partner placement of 2.94 
           across 17 partners, Derek Hough is statistically the most successful 
-          professional dancer. His partners finish in the top 3 on average.
-    
+          professional dancer. His partners finish in the top 3 on average.    
     \item \textbf{The Hough siblings}: Julianne Hough (Derek's sister) ranks second 
           despite fewer appearances, suggesting a family advantage in training 
-          methodology or partner chemistry.
-    
+          methodology or partner chemistry.    
     \item \textbf{Experience matters}: Top-10 dancers average 14.5 seasons 
           on the show, compared to 6.8 for all dancers, suggesting that 
           accumulated experience improves teaching and choreography skills.
