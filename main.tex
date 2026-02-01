@@ -29,6 +29,9 @@
   \usepackage{newtxtext,newtxmath} %CTeX 无此字体，可用 txfonts 替代，请使用新版 TeXLive.
   %\usepackage{palatino}
   %\usepackage{txfonts}
+  \usepackage{colortbl}  %彩色表格需要加载的宏包
+\usepackage{xcolor}
+\usepackage{array}
 
 \usepackage{indentfirst}  %首行缩进，注释掉，首行就不再缩进。
 \usepackage{lipsum}
@@ -230,9 +233,9 @@ After preprocessing, the cleaned dataset contains \textbf{2,777 valid contestant
 \section{The Entropy-Inertia Regularized Inverse Optimization Model}
 
 \subsection{Rationale and Overall Architecture}
-The central challenge of this problem is that fan votes ($\mathbf{v}_t$) are unobserved latent variables, while only the weekly elimination results ($E_{obs}$) are known. This constitutes an \textbf{ill-posed inverse problem} with incomplete information: a single elimination event determines the worst-performing contestant but leaves the relative ordering of the survivors underdetermined. 
+The central challenge of this problem is that fan votes ($\mathbf{v}_t$) are unobserved latent variables, while only the weekly elimination results ($E_{obs}$) are known. This constitutes an \textbf{ill-posed inverse problem} with incomplete information: a single elimination event determines the lowest-ranked contestant but leaves the relative ordering of the survivors underdetermined. 
 
-To reconstruct the fan votes robustly, a valid model must: (i) \textbf{Respect Historical Regimes} by adapting to the specific aggregation rules (Rank vs. Percent) that evolved over 34 seasons; (ii) \textbf{Handle Irregularities} such as no-elimination weeks, double eliminations, and withdrawals; and (iii) \textbf{Avoid Bias}. Unlike naive approaches that force fan votes to correlate with judge scores, we adopt an \textbf{unbiased} approach that only assumes fundamental statistical properties: entropy and temporal inertia.
+To reconstruct the fan votes robustly, a valid model must: (i) \textbf{Respect Historical Regimes} by adapting to the specific aggregation rules (Rank vs. Percent) that evolved over 34 seasons; (ii) \textbf{ Account for irregularities} such as weeks with no elimination, double eliminations, and mid-competition withdrawals; and (iii) \textbf{Avoid Bias}. Unlike simplistic approaches that impose a correlation between fan votes and judge scores, we adopt an \textbf{unbiased} approach that only assumes fundamental statistical properties: entropy and temporal inertia.
 
 Therefore, we propose a \textbf{Regime-Specific, Week-Type Aware Inverse Optimization Framework}. We classify the problem into three distinct mathematical sub-models corresponding to the show's eras: \textit{The Rank Regime} (S1--2), \textit{The Percent Regime} (S3--27), and \textit{The Judges' Choice Regime} (S28--34).
 
@@ -380,8 +383,66 @@ Rank Era (S1--2)       & 14  & 0.786 & 0.0722 & 0  & 3  \\
 {\footnotesize 
 \noindent \textbf{Note:} $\Delta_{fan}>0$ implies the Rank method eliminates a contestant with a higher fan share compared to the Percentage method. Columns \textbf{Fan$\to$Rank} and \textbf{Fan$\to$Pct} denote the count of weeks where that specific method was more favorable to the popular vote.}
 \end{table}
-\subsection{Analysis of Controversial Cases}
+\subsection{Mathematical Framework of Counterfactual Voting Rules}
 
+The core of our comparative analysis lies in the mathematical formalization of the two predominant aggregation methods. In the Rank-Sum Method, used in the earliest seasons, the standing of contestant $i$ in week $w$ is determined by the discrete summation of ordinal ranks, expressed as $T^R_{i,w} = R^J_{i,w} + R^F_{i,w}$, where $R^J$ and $R^F$ represent judge and fan rank points respectively. Conversely, the Percentage Method, or Score-Share Sum Method, preserves the magnitude of competitive gaps by summing technical and popular shares:
+\begin{equation}
+    T^P_{i,w} = \frac{Score_{i,w}}{\sum_{k=1}^{n} Score_{k,w}} + FanShare_{i,w}
+\end{equation}
+To allow for a standardized comparison across seasons with varying contestant counts and scoring densities, we transform these raw aggregates into a Standardized Safety Margin (SSM), denoted as $Z_{i,w} = (T_{i,w} - \mu_w) / \sigma_w$, where $\mu_w$ and $\sigma_w$ characterize the weekly distribution of total scores. This transformation ensures that $Z_{i,w}$ captures the relative competitive advantage of a contestant, independent of the underlying rule's scale.
+
+\subsubsection{Probabilistic Survival Dynamics and Mapping}
+
+Recognizing that eliminations in a high-stakes competition are rarely deterministic, we depart from a binary 0/1 outcome by introducing a buffer space modeled through a logistic survival function. The weekly survival probability $p_{i,w}$ is defined as follows:
+\begin{equation}
+    p_{i,w} = \begin{cases} 
+    1.0, & \text{if no elimination occurs in week } w \\ 
+    \frac{1}{1 + e^{-(\alpha + \beta_s Z_{i,w})}}
+, & \text{if elimination occurs} 
+    \end{cases}
+\end{equation}
+We set the threshold offset $\alpha = 2.2$ to reflect a baseline survival expectation of approximately 90\% for an average performer ($Z=0$), while the sensitivity $\beta_s = 1.5$ modulates the penalty for poor technical scores. The cumulative survival function, $P_{cum}(i, W) = \prod_{w=1}^{W} p_{i,w}$, thus serves as a longitudinal measure of a contestant’s resilience against the risk of elimination over the course of a season.
+
+\subsubsection{The Two-Stage Filter: Integration of Judges' Choice}
+
+To investigate the institutional response to popular dominance, we incorporate the two-stage elimination framework introduced in later seasons. In this mechanism, the aggregated votes first determine a Bottom-Two set $\mathcal{B} = \{a, b\}$, after which the judges exercise a final decision. We model the professional intervention probability using the logistic choice model established in earlier sections:
+\begin{equation}
+    P(\text{Save } i \mid i, j \in \mathcal{B}) = \frac{\exp\left(\gamma(J_i - J_j)\right)}{1 + \exp\left(\gamma(J_i - J_j)\right)}
+\end{equation}
+where $J_i$ and $J_j$ are raw technical scores and $\gamma$ quantifies the judges' professional bias. This dual-layer survival structure effectively introduces a "technical barrier" that limits the progression of high-popularity but low-skill contestants, essentially capping their cumulative survival probability regardless of fan support.
+
+\subsubsection{Empirical Analysis of Divergent Contestants}
+
+Our simulation highlights eight prominent "divergent" contestants whose trajectories differ significantly under the two rules. As illustrated in Figure~\ref{fig:survival_curves}, the Percentage Rule acts as a significant "fan-power amplifier." For contestants like Bobby Bones, Iman Shumpert, and Nelly, the Percentage Rule allows massive popular margins to effectively bridge large technical gaps, leading to substantial gains in cumulative survival. Conversely, under the Rank-Sum Rule, the technical disadvantage of performers such as Jerry Rice, Bristol Palin, and Billy Ray Cyrus becomes far more difficult to overcome due to the ceiling on rank points.
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\linewidth]{Code_Generated_Image.png}
+    \caption{Survival Curve:Rank VS Percent}
+    \label{fig:survival_curves}
+\end{figure}
+\begin{table}[htbp]
+\centering
+\caption{Comparative Estimated Placements and Survival Gains}
+\label{tab:placement_shifts}
+\begin{tabular}{lcccc}
+\hline
+\rowcolor{green}Contestant (Season) & Actual Rank & Rank Rule Est. & Percent Rule Est. & Survival Advantage \\
+\midrule
+Bobby Bones (S27) & 1 & 11 & 5 & Percentage \\
+Iman Shumpert (S30) & 1 & 10 & 3 & Percentage \\
+Nelly (S29) & 3 & 12 & 9 & Percentage \\
+Alyson Hannigan (S32) & 5 & 6 & 4 & Percentage \\
+Lauren Alaina (S28) & 4 & 5 & 4 & Percentage \\
+Jerry Rice (S2) & 2 & 7 & 7 & Rank \\
+Bristol Palin (S11) & 3 & 8 & 7 & Percentage \\
+Billy Ray Cyrus (S4) & 5 & 9 & 8 & Percentage \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The empirical results in Table~\ref{tab:placement_shifts} further validate that the introduction of the Judges' Choice mechanism significantly curtails the advancement of these divergent performers. For instance, while Cody Rigsby and Stephen Nedoroscik maintained high survival under popular vote rules, our model predicts that their probability of victory would drop by over 60\% if they were forced into a Bottom-Two decision against technical front-runners. Ultimately, the transition from the Rank Rule to the Percentage Rule favors popular appeal, but the addition of the Judges' Choice serves as a necessary professional correction that aligns final results more closely with ballroom expertise.
+\subsubsection{Impacts of judge's choice rule}
+                                   
 
 %==================================================================
 % TASK 3: Impact of Contestant and Partner Characteristics
@@ -389,18 +450,9 @@ Rank Era (S1--2)       & 14  & 0.786 & 0.0722 & 0  & 3  \\
 
 \section{Impact of Contestant and Partner Characteristics}
 
-% 开篇：Research Question + 数据/方法综述
-\textbf{Research Question}: What pre-competition characteristics of celebrities and professional dancers most significantly influence their performance trajectories and final outcomes on DWTS?
+To identify the most influential pre-competition traits of celebrities and professional dancers on Dancing with the Stars outcomes, we supplement the original dataset with four external data dimensions:\textbf{physical attributes} (specifically Body Mass Index), aggregated and standardized weekly \textbf{social media engagement} across platforms including Twitter, Instagram, Facebook, and YouTube, weekly trends in \textbf{public attention} measured via Google Search Volume, and a quantified assessment of \textbf{prior dance experience}.
 
-To rigorously address this question, we have augmented the original competition dataset with four complementary dimensions of external data:
-\begin{itemize}
-    \setlength\itemsep{0em}
-    \item \textbf{Physical Attributes:} Body Mass Index for each contestant.
-    \item \textbf{Social Media Metrics:} Aggregated weekly engagement across Twitter, Instagram, Facebook, and YouTube (standardized and aggregated).
-    \item \textbf{Public Attention:} Weekly Google Search Volume trends.
-    \item \textbf{Prior Experience:} A quantified Dance Experience Score.
-\end{itemize}
-Leveraging this enriched dataset, we construct a comprehensive \textbf{multi-level regression framework}. Our approach analyzes performance at two distinct temporal scales---season-level outcomes and weekly fluctuations---across three key dependent variables: judges' scores, fan votes, and final placement. Furthermore, we employ a \textbf{mixed-effects model} to isolate and quantify the specific impact of professional dancer partners, separating their influence from the celebrity's own merit.
+Based on the enhanced dataset, we build a \textbf{multi-level regression framework} to examine performance across two temporal scales (season-level and weekly) in three dependent variables: judges' scores, fan votes, and final placement. A \textbf{mixed-effects model} is further used to isolate the specific impact of professional dancers from that of the celebrities themselves.
 
 %------------------------------------------------------------------
 \subsection{Model Specification}
@@ -421,16 +473,14 @@ $Y_3$ & \texttt{placement} & Overall success (1 = winner) \\
 \caption{Three dimensions of ``success'' on DWTS}
 \end{table}
 
-\textit{Note}: We use final \texttt{placement} rather than a weighted composite 
+\textit{Note}: We use final \text{placement} rather than a weighted composite 
 score because of the following reasons: (1) it avoids subjective weighting choices, 
 (2) different scoring regimes across seasons make composite scores 
 non-comparable, and (3) placement directly answers ``who wins.''
 
 % 3.1.2 模型表达式
 \subsubsection{Contestant-Level Model (Static Characteristics)}
-To systematically disentangle the drivers of success, we adopt a stratified modeling approach. The first stratum focuses on static characteristics---attributes such as age, industry background, and prior dance experience that remain constant throughout a season. Since these factors define a contestant's baseline potential, we aggregate weekly performance metrics into season-level averages (or final placement) to filter out week-to-week noise.
-
-Furthermore, we construct three parallel regression models for different dependent variables ($Y_1, Y_2, Y_3$). This triangulation allows us to isolate specific mechanisms, which is crucial for identifying the distinct criteria used by the two decision-making bodies.
+We use a stratified modeling approach, beginning with static attributes (e.g., age, industry background, prior dance experience) that remain constant during a season. Performance metrics are aggregated to season-level averages to reduce weekly noise. Three separate regressions are estimated for $Y_1, Y_2 and Y_3$ to distinguish judge, audience, and overall success mechanisms.
 
 For contestant $i$:
 \begin{equation}
@@ -439,7 +489,6 @@ Y_i = \beta_0 + \beta_1 \cdot \text{Age}_i + \beta_2 \cdot \text{isUS}_i
     + \beta_5 \cdot \text{DanceExp}_i + \sum_{k} \gamma_k \cdot \mathbf{1}[\text{Industry}_i = k] 
     + \epsilon_i
 \end{equation}
-
 \textit{Sample}: $N = 421$ contestants across 34 seasons.
 
 \subsubsection{Weekly-Level Model (Dynamic Characteristics)}
@@ -453,7 +502,6 @@ Y_{it} = \alpha_0 + \alpha_1 \cdot \text{SocialMediaPop}_{it}
        + \alpha_2 \cdot \text{GoogleSearch}_{it} + \mathbf{X}_i'\boldsymbol{\beta} 
        + \epsilon_{it}
 \end{equation}
-
 \textit{Sample}: $N = 2{,}777$ contestant-weeks.
 
 %------------------------------------------------------------------
@@ -506,10 +554,10 @@ Industry: Social Media & $+5.30$** & $-0.020$ & $+0.31$ & SM stars excel \\
 \end{table}
 
 \textbf{The Age Advantage in Professional Assessment.} 
-There is a robust negative correlation between age and professional evaluation. The coefficient ($\beta = -0.28, p = 0.002$) suggests that for every additional decade of age, a contestant's average judge score decreases by approximately 2.8 points. This reflects the physical demands of ballroom dancing, where agility and stamina—traits often correlated with youth—are prerequisites for high technical marks.
+A strong negative correlation exists between contestant age and judge scores($\beta = -0.28, p = 0.002$).Each additional decade of age corresponds to an average decrease of approximately 2.8 points, reflecting the premium placed on the physical agility and stamina associated with youth in ballroom dancing.
 
 \textbf{The Divergence of Fame and Skill.} 
-A critical insight is the independence of professional judgment from celebrity status. Pre-existing popularity is a highly significant predictor of fan vote share ($p = 0.001$) but has no statistically discernible effect on judge scores ($p = 0.46$). This confirms that while fan voting acts as a popularity contest, the judges effectively maintain a "blindness" to fame, focusing solely on performance quality.
+A critical insight is the independence of professional Judges' scores show no statistically significant link to pre-existing celebrity popularity (p = 0.46). In contrast, popularity is a strong, significant predictor of fan vote share (p = 0.001). This confirms that while audience voting functions as a popularity contest, judge assessment remains effectively independent of contestant fame.
 
 \textbf{The "Social Media" Industry Effect.}
 Contestants categorized as "Social Media Personalities" demonstrate a massive outlier effect in judge scores ($\beta = +5.30, p = 0.005$). This likely stems from a selection bias: social media stars cast on the show are often younger and possess dance-adjacent skills (e.g., TikTok choreography trends), giving them a baseline technical advantage over traditional actors or musicians.
@@ -536,19 +584,17 @@ is\_US & $-0.44$ & $-0.85$ & Similar \\
 \caption{Comparison of $t$-statistics across Judge and Fan models}
 \end{table}
 
-Our comparative analysis reveals a clear dichotomy in decision criteria. \textbf{Judges} prioritize physical capability and technical foundation, as evidenced by the significant negative impact of age and the relevance of prior dance experience on their scoring. In contrast, \textbf{Fans} are primarily driven by engagement and fame; pre-existing celebrity popularity and real-time social media buzz are strong predictors of vote share but have negligible effect on professional scores. Interestingly, \textbf{Both} groups consistently reward specific industry backgrounds, particularly athletes, suggesting that physical discipline and competitiveness translate well into both technical merit and audience appeal.
-
-
-This divergence justifies the show's hybrid scoring system: judges ensure 
-technical quality is rewarded, while fan votes maintain audience engagement 
-and emotional investment.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/task3_2_judge_fan_sensitivity.png}
+    \caption{Sensitivity comparison between judges and fans. The $|t|$-statistic measures the strength of each factor's influence. Judges prioritize age (physical capability), while fans respond strongly to celebrity popularity. The dashed line indicates the $p=0.05$ significance threshold.}
+    \label{fig:judge_fan_sensitivity}
+\end{figure}
+A clear dichotomy emerges: text{Judges} emphasize physical and technical factors (age, dance experience), while text{Fans} respond strongly to pre-existing popularity and social media presence. Notably, both groups reward athletes, suggesting physical discipline appeals to judges and audiences alike. This divergence supports the hybrid scoring system: judges uphold technical standards, while fan voting sustains viewer engagement.
 
 %------------------------------------------------------------------
 \subsection{Professional Dancer Effect}
-
-Celebrity contestants are paired with professional dancers whose skill, teaching ability, and choreography may significantly influence outcomes. 
-
-We quantify this effect using a \textbf{Linear Mixed-Effects Model (LMM)} rather than including dancers as fixed covariates in the previous regression. This separate modeling approach is necessary for two reasons. There are over 50 unique professional dancers across 34 seasons. Including them as separate dummy variables in the OLS model would consume excessive degrees of freedom, making the estimates for static characteristics unstable. Also, by modeling dancers as \textit{random effects}, we can estimate the global variance ($\sigma^2_u$) attributable to the "partner factor" itself, rather than testing individual coefficients. This allows us to calculate how much of the total success is driven by the partner assignment via the Intraclass Correlation Coefficient (ICC).
+To measure the influence of professional dance partners, we employ a  \textbf{Linear Mixed-Effects Model (LMM)} This approach, treating dancers as random effects, is preferred over including them as fixed covariates for two key reasons: it avoids consuming excessive degrees of freedom (given over 50 unique dancers across seasons), and it allows us to estimate the global variance($\sigma^2_u$) ttributable to the "partner factor" itself. The Intraclass Correlation Coefficient (ICC) is then calculated to determine the proportion of total success variance explained by partner assignment.
 
 \subsubsection{Mixed-Effects Model Specification}
 
@@ -617,6 +663,13 @@ professional dancers in DWTS history.
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/task3_2_judge_fan_sensitivity.png}
+    \caption{Sensitivity comparison between judges and fans. The $|t|$-statistic measures the strength of each factor's influence. Judges prioritize age (physical capability), while fans respond strongly to celebrity popularity. The dashed line indicates the $p=0.05$ significance threshold.}
+    \label{fig:judge_fan_sensitivity}
+\end{figure}
 
 \textbf{Key Observations:}
 
