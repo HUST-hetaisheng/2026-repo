@@ -1,0 +1,422 @@
+celebrity_name,season,industry,age,height_cm,bmi,athletic_background_score,dance_experience_score,pre_show_social_media_followers_k,pre_show_google_search_index,career_achievement_score,public_image_score,charisma_index,has_controversy
+John O'Hurley,1,Actor/Actress,50,186,24.2,5.4,4.9,390571,6.1,5,6.9,10,TRUE
+Kelly Monaco,1,Actor/Actress,29,172,25.2,1.6,7.1,211713,14.8,1.4,5.1,7.6,FALSE
+Evander Holyfield,1,Athlete,42,167,20.6,8.1,1.8,161138,10.2,7.2,5.5,8.3,FALSE
+Rachel Hunter,1,Model,35,173,19.3,9.1,2.1,61138,27,6.3,7,7.2,FALSE
+Joey McIntyre,1,Singer/Rapper,32,183,18,0.8,3.5,75637,46.5,4.4,6.5,8.4,FALSE
+Trista Sutter,1,TV Personality,32,179,25.5,5.4,0.3,201434,37.6,5.5,8.1,7.7,FALSE
+Tatum O'Neal,2,Actor/Actress,42,185,21,3.7,2.1,25212,58.6,8.1,9,3,FALSE
+Tia Carrere,2,Actor/Actress,39,161,26.5,0.8,7.4,423491,17.9,5.9,6.5,6.9,FALSE
+George Hamilton,2,Actor/Actress,66,189,24.3,3.8,3.2,44671,26.1,4,10,8.6,FALSE
+Lisa Rinna,2,Actor/Actress,42,174,25,8.3,6,19505,11.2,6.4,6.1,5.9,FALSE
+Stacy Keibler,2,Athlete,26,190,19.7,9.5,0,4247044,30,7.8,7.9,6.2,TRUE
+Jerry Rice,2,Athlete,43,200,20.9,9.9,0.9,177598,71.6,7,7.9,10,FALSE
+Giselle Fernandez,2,News Anchor,44,157,25.3,1.4,1.7,339970,23.4,8.2,6.3,6.9,FALSE
+Master P,2,Singer/Rapper,35,175,23.4,5.5,3.4,100526,31.2,5.8,8.4,5.7,TRUE
+Drew Lachey,2,Singer/Rapper,29,160,24,2.9,8.6,343939,17.8,6.4,8.3,9.9,FALSE
+Kenny Mayne,2,Sports Broadcaster,46,172,25.1,3,4.1,2165385,39.6,2.5,6.4,4.6,FALSE
+Harry Hamlin,3,Actor/Actress,54,163,20.9,1.1,1.6,70017,27.6,5.6,10,4.5,FALSE
+Vivica A. Fox,3,Actor/Actress,42,173,24,5.6,8.9,134021,15.2,4.8,9.1,5.1,FALSE
+Monique Coleman,3,Actor/Actress,25,174,22.2,3.6,2.6,11976162,48,5.2,7.8,9.6,FALSE
+Joey Lawrence,3,Actor/Actress,30,170,21.4,2.2,2.5,331928,45.2,3.9,7,10,FALSE
+Mario Lopez,3,Actor/Actress,32,181,23.7,7.6,1.7,29829,27.8,8.2,7.6,10,FALSE
+Emmitt Smith,3,Athlete,37,188,22.8,10,3,164668,35.9,8.2,7,10,TRUE
+Shanna Moakler,3,Model,31,179,18.8,4,2.1,240944,10.3,6.4,7.8,5.1,FALSE
+Willa Ford,3,Singer/Rapper,25,176,23.4,4.1,6.4,2878592,27.5,7.9,6.2,7.1,FALSE
+Sara Evans,3,Singer/Rapper,35,170,18.9,6.5,8.2,44840,35.4,1.6,8,8.5,FALSE
+Jerry Springer,3,TV Personality,62,173,21.9,1.4,3.3,1525245,38.3,9.3,6.9,7.9,FALSE
+Tucker Carlson,3,TV Personality,37,166,21.7,4.1,1.7,2393143,18.8,6.9,7.7,5.4,FALSE
+John Ratzenberger,4,Actor/Actress,59,173,24.4,4.8,6.9,141064,61.8,6,8.3,6,FALSE
+Ian Ziering,4,Actor/Actress,42,169,22.9,4.7,2.6,15870661,14.4,6.9,7,7.1,TRUE
+Clyde Drexler,4,Athlete,44,179,19.3,10,3.3,169416,36.1,5.6,5.5,5.6,FALSE
+Laila Ali,4,Athlete,29,187,21.9,8.6,1.3,356763,14.8,6.5,7.6,9.5,FALSE
+Apolo Anton Ohno,4,Athlete,24,188,20.2,10,2.3,5306562,19.1,7.9,6,8.8,FALSE
+Shandi Finnessey,4,Beauty Pagent,28,163,21.9,5.2,3.7,7415471,24.5,6.2,6.2,5.3,TRUE
+Paulina Porizkova,4,Model,41,173,18.5,4.8,3,42057,69.4,10,8.6,4.4,FALSE
+Heather Mills,4,Model,39,165,20.1,5.6,2.3,193078,13,6.8,7.5,6.1,FALSE
+Billy Ray Cyrus,4,Singer/Rapper,45,176,22.3,6.5,0.3,3593769,4.8,5.8,5.1,9.2,FALSE
+Joey Fatone,4,Singer/Rapper,30,159,22.5,0.8,6.5,434820,30.5,7.7,8.3,10,FALSE
+Leeza Gibbons,4,TV Personality,50,175,23.9,6.1,2.4,434956,23,4.6,8.1,5.4,FALSE
+Cameron Mathison,5,Actor/Actress,38,167,23,5.3,4.9,351383,24.5,5.7,5.6,8.5,FALSE
+Jane Seymour,5,Actor/Actress,56,167,26.8,4.6,4.4,1583432,34.2,10,7.3,8.6,TRUE
+Sabrina Bryan,5,Actor/Actress,23,173,23.9,2.8,5.3,83751,47.2,4.5,8.5,6.1,FALSE
+Jennie Garth,5,Actor/Actress,35,184,23.9,4.5,5.9,2556652,7.7,7.3,6.8,8.2,FALSE
+Floyd Mayweather Jr. ,5,Athlete,30,169,18.5,8.3,4.3,25359,12.4,6.3,3.6,4.5,FALSE
+Josie Maran,5,Model,29,160,24.4,1.2,0,444124,53.4,7.2,8.1,4.4,FALSE
+Albert Reed,5,Model,22,173,21.8,3.9,0.6,25955,12,8.8,9.3,5.7,FALSE
+Helio Castroneves,5,Racing Driver,32,164,22.6,5.1,0.5,112203,8.6,4.1,7,10,FALSE
+Mel B,5,Singer/Rapper,32,167,23.1,5.9,6.3,4322021,40.1,4.7,8.7,8.5,FALSE
+Wayne Newton,5,Singer/Rapper,65,162,21.6,3.6,7.8,454784,42.5,4.4,5.2,5.5,FALSE
+Marie Osmond,5,Singer/Rapper,47,169,23.9,7.4,9.2,70585,31.3,10,7.6,7.3,FALSE
+Mark Cuban,5,TV Personality,49,185,21.9,5.1,4.4,400837,34.7,4.6,7.1,4.8,TRUE
+Cristian de la Fuente,6,Actor/Actress,34,167,24.4,7.1,4.2,939924,44,3.6,8,10,FALSE
+Steve Guttenberg,6,Actor/Actress,49,166,22.9,6.1,4.2,1053627,20,6.2,5.9,6.9,FALSE
+Priscilla Presley,6,Actor/Actress,62,167,20.2,5.1,5.6,525652,42.8,5.4,7.8,6.9,FALSE
+Marlee Matlin,6,Actor/Actress,42,165,20.3,1.3,5,89730,2.1,6.1,7.1,6.4,FALSE
+Shannon Elizabeth,6,Actor/Actress,34,176,24.2,4,3.5,79042,20.9,6,6.7,7.3,FALSE
+Marissa Jaret Winokur,6,Actor/Actress,35,171,24.6,7.8,5.1,476939,11,4,7.1,8.8,FALSE
+Jason Taylor,6,Athlete,33,165,20,6.7,2.4,435637,8.7,8.6,6,8.9,FALSE
+Kristi Yamaguchi,6,Athlete,36,181,20.5,8.5,1.5,159109,47.8,8.6,3.2,10,TRUE
+Monica Seles,6,Athlete,34,178,22.5,8.6,0.2,1743368,26.8,2.1,8.3,3.3,TRUE
+Penn Jillette,6,Magician,53,160,23.4,4,2.9,125365,21.6,5.9,6.7,6.6,FALSE
+Adam Carolla,6,Radio Personality,43,165,18.4,4.6,2.3,581348,8.7,5,6.9,6.9,FALSE
+Mario,6,Singer/Rapper,21,177,23.6,7.6,9.1,812297,15.2,9.4,6.5,7.8,TRUE
+Ted McGinley,7,Actor/Actress,50,165,25.6,3,1.3,1414450,32.1,7.4,7.9,6,FALSE
+Cloris Leachman,7,Actor/Actress,82,169,22.5,7.7,5.1,1010226,42.4,9.6,7.8,8.1,TRUE
+Susan Lucci,7,Actor/Actress,61,176,22.6,3.8,1.4,37618,4.6,5.4,5,8.4,FALSE
+Cody Linley,7,Actor/Actress,18,170,23.6,4.5,7.2,1064819,50.4,7,7.6,7,FALSE
+Misty May-Treanor,7,Athlete,31,180,18.8,9.4,3.1,9746989,36.7,3.2,7.5,6.4,FALSE
+Maurice Greene,7,Athlete,34,178,19.2,8.8,0.7,129452,28.5,7.9,8.8,6.6,FALSE
+Warren Sapp,7,Athlete,35,168,19.3,8.6,0.8,90769,3,8.3,9.5,7.9,TRUE
+Jeffrey Ross,7,Comedian,43,159,25.5,2.9,5.8,48799,16.1,9.8,8.5,4.4,FALSE
+Toni Braxton,7,Singer/Rapper,40,171,25.6,7.2,4.7,3483655,51,5.6,5.7,5.8,FALSE
+Lance Bass,7,Singer/Rapper,29,184,24.3,3,9.7,5248245,25,5.4,9.8,10,FALSE
+Kim Kardashian,7,TV Personality,27,160,20.7,2.9,3.2,48918,33.7,2.8,6.4,5.1,FALSE
+Rocco DiSpirito,7,TV Personality,41,162,18,3.9,4.7,10157701,17.3,3.8,8.1,7.3,FALSE
+Brooke Burke,7,TV Personality,37,164,21.2,4.7,1.7,238334,7.8,5.5,6.2,9.5,TRUE
+Gilles Marini,8,Actor/Actress,33,155,24.8,6.5,3.4,608240,35.4,4.8,8.2,7.1,FALSE
+Denise Richards,8,Actor/Actress,38,161,27.8,5.2,4.7,163604,28.4,4.4,8.5,8,TRUE
+David Alan Grier,8,Actor/Actress,52,175,24.4,5.4,3.3,158967,42.3,5.9,7.7,6.9,FALSE
+Lawrence Taylor,8,Athlete,50,194,19.4,8.4,2.1,2713308,33.8,5.1,8.7,5.3,FALSE
+Ty Murray,8,Athlete,39,182,20.6,8.8,0,1254822,35.4,6.8,6.4,9.7,FALSE
+Shawn Johnson,8,Athlete,17,165,21.3,9.3,4.1,1982875,33.8,8.6,8.5,10,FALSE
+Steve Wozniak,8,Entrepreneur,58,169,22.2,2.1,2.6,2707746,11.1,6.5,6.9,5.7,FALSE
+Belinda Carlisle,8,Singer/Rapper,50,181,25.9,2.6,5.5,952577,18.2,6.7,5.8,4.4,FALSE
+Chuck Wicks,8,Singer/Rapper,29,173,25.6,3,8.3,6540422,25.4,1.5,5.5,6.2,FALSE
+Lil' Kim,8,Singer/Rapper,34,167,22.2,3.7,1.9,2851131,35.1,5.1,7.1,7.7,TRUE
+Steve-O,8,TV Personality,34,162,25.4,3.1,2.3,1387163,27.1,7.6,7.2,8.9,FALSE
+Holly Madison,8,TV Personality,30,180,20.4,5.4,3,147223,32.3,9.8,4.4,3,FALSE
+Melissa Rycroft,8,TV Personality,26,155,24.7,2.9,1.9,1492271,33.7,7.5,8.1,9.4,TRUE
+Ashley Hamiliton,9,Actor/Actress,34,179,21.9,6.3,3.2,982375,18.7,5.3,4.2,3,FALSE
+Debi Mazar,9,Actor/Actress,45,163,20.9,6.9,7.4,504732,23.1,5.1,7.1,5.7,TRUE
+Melissa Joan Hart,9,Actor/Actress,33,174,25.3,5.5,5.3,1572822,70.5,2.3,8.3,5.8,FALSE
+Mark Dacascos,9,Actor/Actress,45,184,25.6,8.3,5.5,661065,7.5,1.2,7.2,7.8,FALSE
+Chuck Liddell,9,Athlete,39,198,21.2,8.9,1.7,185178,3.4,4,6.7,3,FALSE
+Natalie Coughlin,9,Athlete,27,167,22.1,9.1,0,225177,13.1,7.7,6.8,6,TRUE
+Louie Vito,9,Athlete,21,172,21.4,9.1,0,348230,51.3,4.1,8.2,5.7,FALSE
+Michael Irvin,9,Athlete,43,167,22.3,8.6,2.2,4019983,50.2,3.7,6.7,5,FALSE
+Joanna Krupa,9,Model,30,178,20.7,6.5,3.7,768902,4.2,6.5,7.6,9,TRUE
+Kathy Ireland,9,Model,46,168,21.2,3.9,1.7,108624,12.5,7.5,8.5,3.6,FALSE
+Tom DeLay,9,Politician,62,186,21.5,2.1,0.4,88415,44.6,6.5,4.3,3,FALSE
+Macy Gray,9,Singer/Rapper,42,182,19.7,7.1,8.3,189474,29.3,5.1,9,4.6,FALSE
+Aaron Carter,9,Singer/Rapper,21,170,21.6,7.2,3.6,84552,45.9,6.6,6.9,5.8,TRUE
+Mya,9,Singer/Rapper,29,176,23,4.1,5.8,852486,41.3,5.3,8,8.5,FALSE
+Donny Osmond,9,Singer/Rapper,51,159,20,6.1,1.9,1281328,8.3,7,5.4,8.2,FALSE
+Kelly Osbourne,9,TV Personality,24,170,22.1,0,3.1,194724,32,10,8.7,10,FALSE
+Aiden Turner,10,Actor/Actress,32,168,20.4,4.9,2.9,64063,27.6,6.9,6.5,5.9,FALSE
+Shannen Doherty,10,Actor/Actress,38,176,22.3,5.8,3.9,3414326,42.3,4.3,6.1,6.6,FALSE
+Niecy Nash,10,Actor/Actress,40,193,22.5,7.4,3.3,1174629,51,5.7,8.7,7.2,FALSE
+Buzz Aldrin,10,Astronaut,80,176,18,5.3,2.3,136810,14.7,8.2,5.5,3,FALSE
+Chad Ochocinco,10,Athlete,32,172,20,8.6,3.3,828174,29.5,7.6,7.9,8.7,FALSE
+Evan Lysacek,10,Athlete,24,179,19.7,8.9,0.9,138919,23.3,7.3,4.2,9.3,TRUE
+Pamela Anderson,10,Model,42,183,21,3.6,2.1,110455,22.1,4.1,6.8,8.1,FALSE
+Nicole Scherzinger,10,Singer/Rapper,31,169,19,6.3,3.5,1137466,40.2,6.7,3,9.8,FALSE
+Erin Andrews,10,Sports Broadcaster,32,166,23.4,1.8,3.2,498557,25.4,10,5.9,9.8,FALSE
+Kate Gosselin,10,TV Personality,35,166,22.2,3,2.2,302787,50.9,6,6.5,6.2,FALSE
+Jake Pavelka,10,TV Personality,32,165,25.3,3.5,0.8,3101642,17.5,6.4,6.7,7.6,FALSE
+David Hasselhoff,11,Actor/Actress,58,174,21.8,0.1,3.7,5668374,35,4.4,7.1,4.3,FALSE
+Florence Henderson,11,Actor/Actress,76,173,22.4,4.1,4.3,1236973,40.8,1.4,4.9,3.9,TRUE
+Kyle Massey,11,Actor/Actress,19,168,25.9,5.7,4.6,1705896,12.5,6.7,4.7,10,TRUE
+Jennifer Grey,11,Actor/Actress,50,182,24.6,7.2,1.3,6839945,17.8,7.2,4.4,9.7,FALSE
+Rick Fox,11,Athlete,41,178,19.5,7,1.7,15175819,32.8,6.2,5.2,8.7,FALSE
+Kurt Warner,11,Athlete,39,180,23.3,8.8,2.3,1771914,26.3,5,8.5,5.5,FALSE
+Margaret Cho,11,Comedian,41,173,23.5,3.6,4.2,13560,20,4.4,6.7,7.5,TRUE
+Michael Bolton,11,Singer/Rapper,57,176,23.1,4.6,4.7,409664,11.2,7.1,7.5,3.9,FALSE
+Brandy,11,Singer/Rapper,31,184,21,3.4,3.5,778606,30.2,7.2,5.7,10,TRUE
+The Situation,11,TV Personality,28,172,24.2,4,0,499510,31.5,8.7,6.2,5.4,FALSE
+Audrina Patridge,11,TV Personality,25,160,22.5,3.1,2.9,100619,41.6,6.3,7.6,6.5,FALSE
+Bristol Palin,11,TV Personality,19,171,20.5,2.1,3.2,8930643,29.9,6.7,7.9,8.2,FALSE
+Ralph Macchio,12,Actor/Actress,49,161,24.2,6.8,3.1,351335,30.5,5,6.5,7,FALSE
+Chelsea Kane,12,Actor/Actress,22,161,19.8,5.5,4.3,826817,43.3,7.6,9.1,6.6,FALSE
+Kirstie Alley,12,Actor/Actress,60,172,21.1,4.2,5.4,833510,29.9,10,5.7,7,FALSE
+Hines Ward,12,Athlete,35,191,20.4,8.7,0,796595,6.5,7.3,7,10,FALSE
+Sugar Ray Leonard,12,Athlete,54,183,21.6,10,0.4,1196467,43.2,6.4,6.2,5.4,TRUE
+Chris Jericho,12,Athlete,40,185,18,8.4,0.5,92010,12.2,4.8,6.6,8.2,FALSE
+Petra Nemcova,12,Model,31,182,19.5,3.1,2.7,513828,13.7,2.6,7.1,4.8,FALSE
+Mike Catherwood,12,Radio Personality,32,175,21.9,5.1,2.2,14645,42.9,6.5,3.5,4.7,FALSE
+Romeo,12,Singer/Rapper,21,176,24.8,4.4,9.6,1655586,38.6,7.4,6.2,5.8,FALSE
+Wendy Williams,12,TV Personality,46,180,24.9,5.3,2.1,32456,19.9,7.7,6.9,5.7,FALSE
+Kendra Wilkinson,12,TV Personality,25,179,24.2,5,2.1,1184882,18.6,6.5,3.8,8.6,TRUE
+Elisabetta Canalis,13,Actor/Actress,33,163,21,5.8,5.6,283660,26.9,6.5,7.1,3.5,FALSE
+David Arquette,13,Actor/Actress,40,163,20.3,2,6.2,292355,57.8,7.9,5.3,8.9,TRUE
+Ricki Lake,13,Actor/Actress,42,176,22.7,7.8,6.3,126934,38.9,6.5,6.2,6,FALSE
+J.R. Martinez,13,Actor/Actress,28,172,21.5,4.5,2.2,2855955,56.1,2.7,6.9,7.3,FALSE
+Metta World Peace (Ron),13,Athlete,31,187,19.1,9.1,2.6,402134,17.1,5.7,8.8,5.5,FALSE
+Hope Solo,13,Athlete,30,171,19.6,9.8,2.4,1042188,18.8,7.5,6.7,7.9,FALSE
+Chynna Phillips,13,Singer/Rapper,43,169,19.8,4.8,7,694914,33,5.7,7.5,5.8,FALSE
+Kristin Cavallari,13,TV Personality,24,168,19.8,7.5,4.1,178300,33.2,7.1,5.8,4,FALSE
+Carson Kressley,13,TV Personality,41,185,22.4,7.2,3.5,2283990,32.5,7.5,9.1,7,FALSE
+Chaz Bono,13,TV Personality,42,165,23.1,5.4,1.7,6193968,51.2,5.5,6.7,8.7,FALSE
+Nancy Grace,13,TV Personality,51,178,21,0.8,0,2777621,34.9,7.7,6,7.5,FALSE
+Rob Kardashian,13,TV Personality,24,168,25.9,1.5,3.2,815188,18.3,3.9,7.9,10,TRUE
+William Levy,14,Actor/Actress,31,163,20.8,5.2,0.7,31716,29.8,7.1,5.3,6.5,FALSE
+Jack Wagner,14,Actor/Actress,52,170,21.3,5.4,10,1373712,20.4,6.3,10,3,FALSE
+Sherri Sheperd,14,Actor/Actress,44,164,24.1,2.9,5.5,936554,60.7,3.5,7.2,3,FALSE
+Jaleel White,14,Actor/Actress,35,160,21.9,7,8.2,73337,3,8.1,3,6.5,FALSE
+Roshon Fegan,14,Actor/Actress,20,176,27.4,5.5,2.2,478402,22.9,7.3,6.8,7.3,FALSE
+Melissa Gilbert,14,Actor/Actress,47,169,22.9,10,1.8,7117527,29.5,6.3,6.9,9.3,FALSE
+Martina Navratilova,14,Athlete,55,178,23.1,9.3,1.6,419415,29.9,3.9,6.6,5.4,FALSE
+Donald Driver,14,Athlete,37,175,21.3,10,1.3,28766,51.5,6.2,6.1,6.2,FALSE
+Gavin DeGraw,14,Singer/Rapper,35,182,24.9,4.6,10,1952470,43.9,8.9,8.1,6.4,FALSE
+Gladys Knight,14,Singer/Rapper,67,175,21.3,7.8,7.4,671479,17,6.4,9.5,7.6,FALSE
+Katherine Jenkins,14,Singer/Rapper,31,186,25.2,4.8,3.6,296576,54.2,4.4,8.3,8.8,FALSE
+Maria Menounos,14,TV Personality,33,164,26,5,3.5,486529,38.3,5.9,5.2,6.7,FALSE
+Gilles Marini,15,Actor/Actress,36,163,24.4,1.9,5.2,3985499,42.6,7.2,5.6,9.2,FALSE
+Sabrina Bryan,15,Actor/Actress,28,174,19.9,5.2,3.5,2303905,17.2,5.4,7.5,6.5,FALSE
+Kirstie Alley,15,Actor/Actress,61,166,23.3,7.3,2.4,1445987,43,5.5,8.8,5.6,FALSE
+Kelly Monaco,15,Actor/Actress,36,180,20.4,6.2,6.7,1486024,33.1,6.7,7.2,8.5,FALSE
+Apolo Anton Ohno,15,Athlete,30,194,20.3,7.9,1.2,1449696,25.5,4.4,8.7,8.3,FALSE
+Emmitt Smith,15,Athlete,43,175,21.2,10,1.2,103057,48.5,5.5,8.5,10,FALSE
+Shawn Johnson,15,Athlete,20,183,19.5,8,2.6,277852,57.1,7.7,7.8,10,FALSE
+Pamela Anderson,15,Model,45,177,21.7,4.1,2.8,4175,40.5,7.1,9.6,5.9,FALSE
+Helio Castroneves,15,Racing Driver,37,165,22.7,5.9,2.4,305381,32.2,4.4,7.4,5.1,FALSE
+Joey Fatone,15,Singer/Rapper,35,167,22.6,4.6,4.5,1052039,16.1,5.1,5.2,3,FALSE
+Drew Lachey,15,Singer/Rapper,36,168,21.8,7.7,3.7,776300,31.7,4.3,9,4.9,TRUE
+Bristol Palin,15,TV Personality,21,173,28.4,4.7,0.5,1188503,13.7,5.2,6.8,4.5,FALSE
+Melissa Rycroft,15,TV Personality,29,176,26.3,6.3,3,736909,41.8,7.7,9.6,9.4,FALSE
+Ingo Rademacher,16,Actor/Actress,41,181,22.9,6.9,3.3,67700,16.6,6.7,9.9,9.9,FALSE
+Zendaya,16,Actor/Actress,16,162,24.3,0.8,5.7,228700,39,4.3,7.7,8.4,FALSE
+Dorothy Hamill,16,Athlete,56,171,21.3,10,1.2,180191,19.9,4.9,5.3,5,FALSE
+Victor Ortiz,16,Athlete,26,177,21.8,9.2,2.6,4031639,65.2,5,8.2,6,TRUE
+Alexandra Raisman,16,Athlete,18,172,20,9.2,1.7,18422,3.3,5.6,6.2,10,FALSE
+Jacoby Jones,16,Athlete,28,175,19.3,10,2.3,546109,68,8.8,4.7,8,TRUE
+D. L. Hughley,16,Comedian,50,167,23.7,1,3.1,104230,6.5,4.8,5.9,6.6,FALSE
+Andy Dick,16,Comedian,47,177,23.2,2.7,1.8,1942404,30.3,5.9,7.8,6.8,FALSE
+Wynonna Judd,16,Singer/Rapper,48,184,25,6.7,5.1,378811,31.1,8.1,6.1,4.2,FALSE
+Kellie Pickler,16,Singer/Rapper,26,165,20.5,4.1,3.7,278049,30,0,10,8.9,FALSE
+Lisa Vanderpump,16,TV Personality,52,175,26,2.1,4.6,5820765,25.1,7.2,5.8,4.1,FALSE
+Sean Lowe,16,TV Personality,29,165,19.2,4.5,4.6,1308848,9.4,10,7.2,5.5,FALSE
+Valerie Harper,17,Actor/Actress,74,182,21.3,6.1,4.4,1355668,48.1,7.7,6.8,5.1,FALSE
+Brant Daugherty,17,Actor/Actress,28,163,22.8,5.3,2.6,1721640,53.6,3.5,6.9,7.2,FALSE
+Elizabeth Berkley Lauren,17,Actor/Actress,39,168,26.8,6.1,1.3,1891403,6,6.9,5.1,4.9,FALSE
+Leah Remini,17,Actor/Actress,43,163,21.7,4.9,2.3,5806573,16.9,5.1,5.8,4.1,FALSE
+Corbin Bleu,17,Actor/Actress,24,173,23.9,4,4.1,21835,16,6.1,6.5,9.3,FALSE
+Amber Riley,17,Actor/Actress,27,174,21.2,5.4,5,659407,11.3,5.3,4.7,10,FALSE
+Keyshawn Johnson,17,Athlete,41,177,19.8,10,0.7,240495,33.3,4.1,6.9,3.2,FALSE
+Bill Engvall,17,Comedian,56,173,25,4,0,345966,20.8,7.4,9.2,7.2,FALSE
+Christina Milian,17,Singer/Rapper,31,166,26.6,6.6,7.1,2136783,24.6,8.3,6.7,6,FALSE
+"Nicole ""Snooki"" Polizzi",17,TV Personality,25,190,18,5.3,0,1072272,25.9,6.8,9,4.2,FALSE
+Jack Osbourne,17,TV Personality,27,170,24.2,2.6,3.3,17858618,37.8,3.7,7.7,5.7,FALSE
+Bill Nye,17,TV Personality,57,169,22.3,7,1.3,426372,16,9.3,6.4,3.7,FALSE
+Billy Dee Williams,18,Actor/Actress,76,170,24.5,1.2,6.6,1062322,26.2,8,4.4,7.2,FALSE
+Danica McKellar,18,Actor/Actress,39,158,23.7,3,5.9,662862,39.3,4.8,6.1,8,FALSE
+James Maslow,18,Actor/Actress,23,171,21.2,6.7,3.3,12166,16.4,1.3,9,8.5,FALSE
+Candace Cameron Bure,18,Actor/Actress,37,170,22.7,3.4,1.3,12165163,14.9,5.2,7.8,6.8,FALSE
+Sean Avery,18,Athlete,33,171,19.9,7.8,1.2,2495291,38.3,5.9,5.8,6.5,FALSE
+Diana Nyad,18,Athlete,64,176,20.7,9.5,3.7,2802815,14.6,3.8,4.2,3,FALSE
+Charlie White,18,Athlete,26,177,21.7,9.1,2.6,806438,38.6,5.8,8.4,8.2,FALSE
+Amy Purdy,18,Athlete,34,187,23.5,10,3.4,43751,62,8.1,7.9,7,FALSE
+Meryl Davis,18,Athlete,27,182,19.5,8.3,3.9,1859784,28.7,7.7,5.4,10,FALSE
+Drew Carey,18,Comedian,55,167,21.3,4.4,2.1,2422322,74.8,8.1,5.4,5.6,FALSE
+Cody Simpson,18,Singer/Rapper,17,173,19.3,6.2,6.6,4093610,43.8,6.5,5.7,4.4,FALSE
+NeNe Leakes,18,TV Personality,46,181,26.5,6.3,0.1,81792,34.7,7.3,9.3,5.5,FALSE
+Antonio Sabato Jr.,19,Actor/Actress,42,164,25.7,7.3,4.3,1118757,33.8,4.3,4.7,8.3,FALSE
+Jonathan Bennett,19,Actor/Actress,33,169,21.8,4.9,4.5,4934550,18.3,6.7,5.8,3.1,FALSE
+Lea Thompson,19,Actor/Actress,53,162,25.3,5.7,2.1,1374046,8.3,7.6,9.6,7,FALSE
+Janel Parrish,19,Actor/Actress,25,168,19.5,7.1,4.7,636833,23.2,4,5.7,8.6,TRUE
+Alfonso Ribeiro,19,Actor/Actress,42,173,21.2,1.9,4.5,5199894,18.6,6,8.4,7.2,FALSE
+Lolo Jones,19,Athlete,32,182,22.9,8.4,4,276397,51.9,5.9,6.4,3.3,FALSE
+Randy Couture,19,Athlete,51,171,22.8,8.2,4.4,393075,47.6,3.7,6.1,4.3,FALSE
+Tommy Chong,19,Comedian,76,161,23,0,1,55086,43.8,3.3,10,6.3,TRUE
+Betsey Johnson,19,Fashion Designer,72,175,23.3,3.8,0.2,1952701,63,5.3,7.8,3.9,FALSE
+Michael Waltrip,19,Racing Driver,51,172,21.6,6,2.4,13894,50.3,6.2,6.7,7.7,FALSE
+Tavis Smiley,19,Radio Personality,50,171,22.8,7.9,0,472936,49.2,4.3,7.7,4.9,FALSE
+Bethany Mota,19,Social Media Personality,18,176,21.4,3.8,1.3,11508998,36.8,10,6.1,9.3,TRUE
+Sadie Robertson,19,TV Personality,17,187,21.3,2.9,1.8,5777228,32.4,3.1,7.6,9.6,FALSE
+Suzanne Somers,20,Actor/Actress,68,181,21.9,7.5,4.4,6647784,30,5.8,5,6.3,FALSE
+Willow Shields,20,Actor/Actress,14,161,23.6,5.3,2.8,1276391,57.2,6.5,6.4,5.9,FALSE
+Riker Lynch,20,Actor/Actress,23,167,22.7,5.6,0,29243,21.2,3.7,7.2,7.9,FALSE
+Rumer Willis,20,Actor/Actress,26,173,25,5.4,1.3,557009,33.3,7.6,6.9,9.4,TRUE
+Nastia Liukin,20,Athlete,25,166,21.2,9.3,2.2,379801,8.1,8.2,3,7.5,TRUE
+Michael Sam,20,Athlete,25,171,20.2,10,3,156565,5.2,6,8.2,4.9,TRUE
+Robert Herjavec,20,Entrepreneur,52,164,20.4,5,1.5,109534,32.2,5.9,6.1,8.6,FALSE
+Charlotte McKinney,20,Model,21,185,18.4,4.9,2.7,69894,63,8.2,5.6,6.9,TRUE
+Noah Galloway,20,Motivational Speaker,33,182,20.7,0,1.2,1279683,6,3.5,4.9,9,FALSE
+Redfoo,20,Singer/Rapper,39,171,22.7,5.7,8.9,6370564,9.1,7.7,5.3,3.9,FALSE
+Patti LaBelle,20,Singer/Rapper,70,186,20.1,1.3,6.2,1698860,18.3,6.2,5.7,5.9,FALSE
+Chris Soules,20,TV Personality,33,155,25.4,5.9,2.1,2401694,30.5,6.8,7.5,7.8,FALSE
+Gary Busey,21,Actor/Actress,71,167,21.4,3.7,2.5,2350496,2.3,3.6,4.8,5.1,FALSE
+Alexa PenaVega,21,Actor/Actress,27,181,22.2,7.1,5.2,33995968,6.4,6.4,5.5,8.5,FALSE
+Carlos PenaVega,21,Actor/Actress,26,169,23.9,4.1,3.3,1073649,35.6,4.4,5.8,5.5,FALSE
+Victor Espinoza,21,Athlete,43,180,21.2,8.9,2.6,1840555,38.6,4.8,8.8,5.3,FALSE
+Alek Skarlatos,21,Military,22,172,20.1,2.6,0,1658934,58.1,4.7,7.2,8.6,FALSE
+Chaka Khan,21,Singer/Rapper,62,175,23.5,4.3,6.7,1469885,33.5,4.5,5.8,3,FALSE
+Andy Grammer,21,Singer/Rapper,31,168,24.4,3.9,6.8,2909588,28.4,1.8,5.4,6.5,FALSE
+Tamar Braxton,21,Singer/Rapper,38,174,23.6,7.4,3.5,5300781,27.7,5.1,8.5,8.8,FALSE
+Nick Carter,21,Singer/Rapper,35,176,22.3,4.6,9.6,1045733,40.3,8.5,7.1,10,FALSE
+Hayes Grier,21,Social Media Personality,15,182,22.7,5.1,3.3,1488956,38.5,7.2,8.4,5.7,TRUE
+Bindi Irwin,21,TV Personality,17,172,23.4,1.2,3.2,7889799,13.6,6.1,4.9,7.6,FALSE
+Kim Zolciak-Biermann,21,TV Personality,37,180,22.7,10,5.5,1347984,42.8,9.5,6.1,5.4,FALSE
+Paula Deen,21,TV Personality,68,164,26.7,0.7,1.6,2008261,42.3,5.8,4.9,4.9,TRUE
+Mischa Barton,22,Actor/Actress,30,166,24,5.6,4.3,250292,36.8,3,6.1,5,TRUE
+Kim Fields,22,Actor/Actress,46,171,22.1,3.9,6.2,19380124,15.9,6,7.4,3.6,FALSE
+Jodie Sweetin,22,Actor/Actress,34,164,25.6,6.3,2.9,5004487,28.8,4.4,4.3,7.7,FALSE
+Doug Flutie,22,Athlete,53,187,20.5,9,3.4,228594,22.9,5,5.6,4.8,FALSE
+Von Miller,22,Athlete,27,182,19.7,9.1,4,1627176,11.7,6,6.8,6.8,FALSE
+Antonio Brown,22,Athlete,27,173,18.8,9.7,0,1404603,14.1,4.5,8.2,9.5,FALSE
+Paige VanZant,22,Athlete,22,173,21.1,8,0,380363,20.2,7.3,6.4,9.4,FALSE
+Geraldo Rivera,22,Journalist,72,182,21.9,6.4,0,140434,14.2,7,5.1,3,FALSE
+Nyle DiMarco,22,Model,26,169,20.4,6.5,2.6,58165,29,4,9.4,10,FALSE
+Ginger Zee,22,News Anchor,35,168,24.1,6.8,1.8,151933,42.8,5.7,6.1,6.4,TRUE
+Wanya Morris,22,Singer/Rapper,42,168,21.4,5,5.6,1051072,12.5,4.4,7.2,9.5,FALSE
+Marla Maples,22,TV Personality,52,168,22.1,3.5,2.9,13417404,12,6.5,6.6,3,FALSE
+Jake T. Austin,23,Actor/Actress,21,174,23.4,1.3,2.2,1048109,27.9,5.5,8,4.4,FALSE
+Maureen McCormick,23,Actor/Actress,60,181,22.6,7.4,2.9,1466056,30.8,6.8,6.8,5.1,FALSE
+Marilu Henner,23,Actor/Actress,64,184,22.4,7.7,1.2,2778637,20.7,4.1,4.8,6.9,FALSE
+Ryan Lochte,23,Athlete,32,172,18,9,3.4,152956,42.3,5.6,8.1,4.7,FALSE
+Calvin Johnson Jr.,23,Athlete,30,170,21.3,9.5,4.3,2649472,62.8,8,6.5,7.3,FALSE
+Laurie Hernandez,23,Athlete,16,166,23.3,9.9,1.9,2517425,17.2,8.1,5.2,9.1,FALSE
+Amber Rose,23,Model,32,188,21.9,2.8,1.1,223954,19.7,7.8,7.1,6.7,FALSE
+Rick Perry,23,Politician,66,169,21.6,9,3.9,45860,28.3,6.2,7.1,4.2,FALSE
+James Hinchcliffe,23,Racing Driver,29,176,20.9,6.7,4.5,29113138,21.1,6.2,9.9,7.8,FALSE
+Babyface,23,Singer/Rapper,57,175,19.6,6.1,5.6,1915552,67,5.4,7,4.1,FALSE
+Vanilla Ice,23,Singer/Rapper,48,165,22.9,5,6.9,244831,44.3,5.7,6.3,5.9,FALSE
+Jana Kramer,23,Singer/Rapper,32,184,23.1,5.2,4.7,11127522,27.9,5.8,9.5,10,FALSE
+Terra Jole,23,TV Personality,36,166,22.4,2.4,1.6,20924309,47.3,10,5.8,8.9,FALSE
+Charo,24,Actor/Actress,66,178,22.9,6.9,8.4,375994,7.7,10,9.1,3,TRUE
+Mr. T,24,Actor/Actress,64,175,23.4,3,4.4,10704748,30,7.7,5.6,5.5,FALSE
+Heather Morris,24,Actor/Actress,30,178,25.3,3.2,2.8,934778,55.8,6.2,5.2,5.8,FALSE
+Nancy Kerrigan,24,Athlete,47,176,20.5,9.5,1,8983643,4.5,5.4,8.3,6.6,FALSE
+Bonner Bolton,24,Athlete,29,178,21.2,9.1,2.6,1674257,15.6,5.5,8,8.7,TRUE
+Simone Biles,24,Athlete,20,167,19.8,10,3.3,659307,21.4,6.6,8.7,6.8,FALSE
+David Ross,24,Athlete,40,171,24.2,8.3,3.1,582466,25.5,6.4,7.2,8,FALSE
+Rashad Jennings,24,Athlete,32,182,19.4,8.3,4.7,240410,54.3,7.8,6.9,10,FALSE
+Chris Kattan,24,Comedian,46,174,24,6.7,2.6,218993,38.9,5.8,5.9,3.9,FALSE
+Erika Jayne,24,Singer/Rapper,45,179,22.6,6.1,5,742786,51.3,6.2,6.4,6.7,FALSE
+Normani,24,Singer/Rapper,20,168,21.6,4.7,9,803600,20.6,7,5,8.4,FALSE
+Nick Viall,24,TV Personality,36,186,22.3,4.6,1.2,553138,18.6,3.8,6.4,6.9,FALSE
+Sasha Pieterse,25,Actor/Actress,21,170,24.9,1.6,9.3,4713414,15.4,2.9,7,5.8,FALSE
+Frankie Muniz,25,Actor/Actress,31,173,20.8,3,2.1,1456955,18.8,3.7,5.7,6.8,TRUE
+Jordan Fisher,25,Actor/Actress,23,170,23.9,6.7,4.3,763266,14.6,5,10,10,FALSE
+Derek Fisher,25,Athlete,43,179,22.8,7.9,2.8,12351438,22,4.1,4.7,3,FALSE
+Nikki Bella,25,Athlete,33,179,23.3,9.3,4,3744993,18.3,4.1,3,6.9,FALSE
+Terrell Owens,25,Athlete,43,188,21.3,9.2,0.4,1063236,51.3,6,8.5,6.6,FALSE
+Victoria Arlen,25,Athlete,22,173,19.1,7.5,1.1,13968760,31.8,6,6.9,4.5,FALSE
+Barbara Corcoran,25,Entrepreneur,68,167,21.1,3.9,2.5,6361999,52.1,6.5,6.1,3.7,FALSE
+Lindsey Stirling,25,Musician,31,166,24,3.1,0,201461,64.3,4,5.8,8.4,FALSE
+Debbie Gibson,25,Singer/Rapper,47,161,21.8,2.5,6.6,1839881,16.4,6.2,7.2,6.1,FALSE
+Nick Lachey,25,Singer/Rapper,43,163,23.3,4.3,6,1732644,58.3,4.8,8.4,8,FALSE
+Drew Scott,25,TV Personality,39,168,25.2,7.2,2.6,21028286,44.2,6.3,8.4,8.5,TRUE
+Vanessa Lachey,25,TV Personality,36,190,22.9,0.8,0.6,877572,3.6,6.8,8.1,6.8,FALSE
+Jamie Anderson,26,Athlete,27,177,20.4,9.2,3.6,1508296,43.1,5.1,6.5,4.8,FALSE
+Johnny Damon,26,Athlete,44,173,19.4,9.1,3.5,2037336,0.9,5.5,7.3,4.5,TRUE
+Kareem Abdul-Jabbar,26,Athlete,71,181,20.4,8.5,2.9,617847,39.3,4.7,8.4,3.9,FALSE
+Arike Ogunbowale,26,Athlete,21,189,19.6,8.2,3.6,3179795,24.4,5.8,8.3,6.3,FALSE
+Jennie Finch Daigle,26,Athlete,37,176,20.4,10,1.8,298357,38.8,5.5,7.1,6.9,FALSE
+Chris Mazdzer,26,Athlete,29,181,23.1,8.1,3.9,3194525,22.3,6.6,6.3,4.8,TRUE
+Mirai Nagasu,26,Athlete,25,162,22.5,9.4,1.3,79914,51,6.6,8.8,8.9,TRUE
+Tonya Harding,26,Athlete,47,163,21.7,10,1.3,366511,40.5,8.4,7.4,6.8,FALSE
+Josh Norman,26,Athlete,30,169,22.1,10,4.3,1687424,9.4,7.8,5.8,7.3,TRUE
+Adam Rippon,26,Athlete,28,183,21.5,10,3.9,1748860,33.9,7.2,8.1,7.4,FALSE
+Juan Pablo Di Pace,27,Actor/Actress,39,180,23.2,4.1,5,385518,23.9,5.1,6.4,7.5,FALSE
+Evanna Lynch,27,Actor/Actress,27,184,23.8,3.1,2.8,660846,24.6,1.7,5.2,7.1,FALSE
+Nancy McKeon,27,Actor/Actress,52,161,23.6,4.6,5,845579,39,5.9,7.7,4.7,FALSE
+John Schneider,27,Actor/Actress,58,175,21.8,3.1,3.6,334375,17.8,5,8.6,6.7,FALSE
+Milo Manheim,27,Actor/Actress,17,188,25.1,7.9,5.9,1113960,21.3,8.4,8.1,8,TRUE
+Danelle Umstead,27,Athlete,46,181,21.1,10,0,60217,3.7,5,6.8,3.6,FALSE
+Mary Lou Retton,27,Athlete,50,191,22.3,9.7,0.6,707966,19.8,5,5.4,8.1,FALSE
+DeMarcus Ware,27,Athlete,36,178,21.7,8.5,0.7,1113021,17.1,5.9,6.2,5.2,TRUE
+Nikki Glaser,27,Comedian,34,178,21.8,2.5,1.7,50201,57.1,5.7,7.3,3,FALSE
+Bobby Bones,27,Radio Personality,38,181,23,7.6,1.3,92493,41.7,6.4,7.2,9.5,FALSE
+Tinashe,27,Singer/Rapper,25,169,25.6,5.8,8.6,1567973,55.3,9.7,6.5,5.7,FALSE
+Alexis Ren,27,Social Media Personality,21,164,25.3,1.5,2,196969,41.5,5.4,6.6,8,FALSE
+Joe Amabile,27,TV Personality,32,168,26.5,2.2,3.2,3699152,38.6,3.4,4.7,6.2,FALSE
+Kate Flannery,28,Actor/Actress,55,167,26.9,2.1,3.9,150594,4.2,8.8,6.6,10,FALSE
+James Van Der Beek,28,Actor/Actress,42,159,22.5,4.5,5.3,1450957,49.1,6.2,7.4,6.3,FALSE
+Kel Mitchell,28,Actor/Actress,41,166,24.4,4.4,1.7,1822759,42.3,6.1,5.1,10,FALSE
+Ray Lewis,28,Athlete,44,183,19.4,9.7,0.6,2323399,58,3.9,9.2,3.5,FALSE
+Lamar Odom,28,Athlete,39,174,19.9,8.5,0,122060,6.9,5.5,7.7,4.2,FALSE
+Sailor Brinkley-Cook,28,Model,21,175,20.3,2,0,821422,36.5,7.2,8.4,5.4,FALSE
+Sean Spicer,28,Politician,48,175,24.1,5.1,1.2,150923,19.4,8.4,7.1,6.6,FALSE
+Mary Wilson,28,Singer/Rapper,75,180,24,5.1,5.4,1978821,0.2,10,5.2,3.9,FALSE
+Lauren Alaina,28,Singer/Rapper,24,173,22.8,2.8,6.7,2309501,52.1,7.4,3,8.2,FALSE
+Ally Brooke,28,Singer/Rapper,26,173,20.8,3.3,6.2,11702213,18.3,5.3,6.2,8.9,FALSE
+Karamo Brown,28,TV Personality,38,181,21.8,5.3,0.1,7211222,19.9,6.5,7.7,4.7,FALSE
+Hannah Brown,28,TV Personality,24,172,21.1,5.3,2,68796,83.7,4.4,7.4,9.9,FALSE
+Anne Heche,29,Actor/Actress,51,171,18.8,2,4.8,1262143,51.3,5.2,5.7,3,FALSE
+Jesse Metcalfe,29,Actor/Actress,41,175,19.1,0.9,5.5,2985235,34.4,4.4,5.9,5,FALSE
+Chrishell Stause,29,Actor/Actress,39,171,22.3,3.6,6.3,173744,28,5.5,5.6,7.7,FALSE
+Skai Jackson,29,Actor/Actress,18,170,22.6,3.3,4,1270201,51.7,6.7,8.3,5.7,TRUE
+Justina Machado,29,Actor/Actress,48,172,26,3.4,3.1,398944,11.5,6.2,6.7,6.7,FALSE
+Charles Oakley,29,Athlete,56,189,21.8,7.3,1.2,364359,16.7,3.3,8.8,6,TRUE
+Veron Davis,29,Athlete,36,174,21.6,8.8,2.4,176107,15.2,3,6.2,4.7,FALSE
+Johnny Weir,29,Athlete,36,200,23,8,2.3,339982,14.3,6,6,8.5,TRUE
+Nev Schulman,29,Producer,35,175,21.4,6.4,2.9,402690,26.5,5.1,7.3,8.4,FALSE
+AJ McLean,29,Singer/Rapper,42,173,24.3,3.4,3.6,979192,26.8,4.1,8,7.4,FALSE
+Nelly,29,Singer/Rapper,45,160,20.1,5.8,5.1,595059,32.8,4.4,9,5.7,FALSE
+Kaitlyn Bristowe,29,TV Personality,35,161,23.4,6.1,1.4,17458370,44.8,4.2,7.9,10,FALSE
+Carole Baskin,29,TV Personality,59,177,24.8,3.9,0.7,1083258,8.3,1.6,8.5,3.7,FALSE
+Monica Aldama,29,TV Personality,48,172,25.5,6,0,5551353,11.2,8.4,5.9,3,FALSE
+Jeannie Mai,29,TV Personality,41,175,22.1,7.1,2.5,581243,38.7,8.1,5.3,5.3,FALSE
+Martin Kove,30,Actor/Actress,75,171,23.6,3.7,3.5,350775,52.2,0.3,5.5,3,FALSE
+Brian Austin Green,30,Actor/Actress,48,175,18.5,4,6.3,30757218,28,5.7,9.8,5,TRUE
+Melora Hardin,30,Actor/Actress,54,173,27.8,0.8,5.4,1208503,31.8,9.6,8.2,5.7,FALSE
+Matt James,30,Athlete,29,178,19,8.2,0.8,6540825,54.9,4.3,7.1,4.4,FALSE
+"Mike ""The Miz"" Mizanin",30,Athlete,40,180,20.6,9.1,1.2,37048,18.1,2.8,4.5,3,FALSE
+Suni Lee,30,Athlete,18,188,22.9,9,0.1,5714995,32.1,7.2,10,10,FALSE
+Iman Shumpert,30,Athlete,31,174,19.7,9.8,0.7,1062652,55.2,7.7,4.3,8.5,FALSE
+Cody Rigsby,30,Fitness Instructor,34,156,24.5,4.7,2.5,213229,16.9,5.7,6.4,8,FALSE
+Melanie C,30,Singer/Rapper,47,180,19.2,2.5,6.3,3325611,30.9,5.1,4.6,3.3,FALSE
+Jimmie Allen,30,Singer/Rapper,36,179,23.4,5.2,6.1,11215809,19.8,6.2,5.4,7.9,FALSE
+Olivia Jade,30,Social Media Personality,21,190,21.5,3.9,3.8,421217,39,5,6.8,4.1,FALSE
+JoJo Siwa,30,Social Media Personality,18,165,21.5,4.1,3.5,679847,29.3,3.9,7.1,7.4,FALSE
+Christine Chiu,30,TV Personality,38,172,27.7,3.3,3,2323247,24.2,4.5,4.5,3,TRUE
+Kenya Moore,30,TV Personality,50,164,24.4,2.6,1.6,2316785,27.7,6.8,7.7,3,FALSE
+Amanda Kloots,30,TV Personality,39,172,22.1,2.9,2.9,930032,13.8,7.6,5.2,7.8,FALSE
+Jason Lewis,31,Actor/Actress,51,179,24,3.9,2.3,1451992,11.5,6.5,3.9,3,FALSE
+Cheryl Ladd,31,Actor/Actress,71,172,21.2,7.8,2,643196,10,1.9,8.6,5.3,TRUE
+Selma Blair,31,Actor/Actress,50,156,23.4,4.1,3.6,2561269,68.2,5.3,7.3,3,FALSE
+Joseph Baena,31,Actor/Actress,24,185,22.5,7.9,2.2,150410,27.2,6.5,6.8,6,FALSE
+Trevor Donovan,31,Actor/Actress,39,191,25.3,4,1.9,1620499,40.1,6.7,7.8,7.4,FALSE
+Daniel Durant,31,Actor/Actress,32,167,23.1,0.3,2.9,2438772,53.4,6.9,6.3,8.3,FALSE
+Wayne Brady,31,Comedian,50,186,20.9,3.5,2.5,7327076,5.3,5.8,5.7,9.6,FALSE
+Sam Champion,31,News Anchor,61,177,22.4,5,3.3,245138,25.2,5.2,8.2,3,FALSE
+Jessie James Decker,31,Singer/Rapper,34,166,21.4,2.7,5.2,803475,3,6.5,7.6,6.8,FALSE
+Jordin Sparks,31,Singer/Rapper,32,165,22.3,3.3,4.8,7317275,23.5,10,7.6,6.3,FALSE
+Heidi D'Amelio,31,Social Media Personality,50,168,20.1,1.5,0.8,370716,13.4,9.2,7.6,4.2,FALSE
+Charli D'Amelio,31,Social Media Personality,18,182,24.2,0.6,1,2659717,42,10,7.8,10,FALSE
+Teresa Giudice,31,TV Personality,50,164,22.5,6.2,1.8,678238,23.3,5.5,8.9,3,FALSE
+Vinny Guadagnino,31,TV Personality,34,173,22.6,6.7,0.5,1236558,35.3,6.4,5.6,6.4,FALSE
+Shangela,31,TV Personality,40,181,22,4.4,2.7,177088,20.4,6.5,8.8,6.8,FALSE
+Gabby Windey,31,TV Personality,31,168,24.8,2.7,2.7,1538845,18,5.5,5.2,10,FALSE
+Jamie Lynn Spears,32,Actor/Actress,32,164,22.5,0.6,0,1595503,31.9,6.3,8.7,3,FALSE
+Mira Sorvino,32,Actor/Actress,55,179,22.3,1.1,2.7,977457,16.3,1.2,5.1,6,FALSE
+Barry Williams,32,Actor/Actress,68,178,20.5,2.7,1.8,1369352,26.2,7.2,6.2,5.6,FALSE
+Alyson Hannigan,32,Actor/Actress,49,167,24.4,4.7,4,402408,30.2,5.3,5.1,10,TRUE
+Xochitl Gomez,32,Actor/Actress,17,163,23.2,5.3,1.2,5057524,23.7,2.2,7.5,7.7,FALSE
+Adrian Peterson,32,Athlete,38,176,21,9.5,2.3,310816,45,5.3,6,5.8,FALSE
+Matt Walsh,32,Comedian,58,165,22.2,0,1.1,57698,40.3,5.6,8,4.4,FALSE
+Tyson Beckford,32,Model,52,174,18.8,3.2,0,1112009,29.2,4.6,5.6,3.4,FALSE
+Jason Mraz,32,Singer/Rapper,46,162,20.3,8.5,6.6,302924,19.1,8,9.1,8.1,FALSE
+Lele Pons,32,Social Media Personality,27,169,19,3.5,2,3658804,47.9,6.2,6.1,5.2,FALSE
+Harry Jowsey,32,TV Personality,26,175,22.7,7.3,1.7,2426508,13,6.2,7.1,3.4,FALSE
+Mauricio Umansky,32,TV Personality,53,177,20.3,5.9,4.1,407896,8.9,8.4,3.6,7.9,FALSE
+Charity Lawson,32,TV Personality,27,168,23.3,1.2,1.3,8835839,37.9,5.5,6.8,8.2,FALSE
+Ariana Madix,32,TV Personality,38,177,22.5,5.3,1.4,2951253,37.6,7.2,3.6,7.5,FALSE
+Tori Spelling,33,Actor/Actress,51,165,21.3,3.8,6.2,1587106,24.6,8.6,7.3,3.8,TRUE
+Eric Roberts,33,Actor/Actress,68,192,22.9,5.2,4.9,392151,57.5,5,8.1,7.5,FALSE
+Reginald VelJohnson,33,Actor/Actress,74,155,22,7.7,2.1,2864175,19,5.9,4.8,5.1,FALSE
+Chandler Kinney,33,Actor/Actress,24,180,19.3,0,4.4,1047854,35,10,7.3,7.8,FALSE
+Dwight Howard ,33,Athlete,38,182,21,8.6,1.5,538238,30.4,4.9,7,9.9,FALSE
+Danny Amendola,33,Athlete,39,188,19.7,10,1.4,9034350,60.5,5,8.4,7.8,TRUE
+Stephen Nedoroscik,33,Athlete,26,184,22.7,7.6,2.6,623341,24.1,6.6,8.5,8.6,FALSE
+Ilona Maher,33,Athlete,28,181,21.1,7.9,2.3,507003,37.8,7.2,8.5,7.8,FALSE
+Anna Delvey,33,Con artist,33,171,23.8,3.7,1.5,24070,11.1,6.7,8.4,3,FALSE
+Brooks Nader,33,Model,27,177,21.5,3.1,2.3,294000,32.5,8.7,7.9,5,FALSE
+Phaedra Parks,33,TV Personality,51,176,18,6.7,3.1,187857,10.1,5.6,7.1,5.8,FALSE
+Jenn Tran,33,TV Personality,26,181,22.8,0.8,1.6,9507890,18.9,4.6,8,4.1,FALSE
+Joey Graziadei,33,TV Personality,29,172,24.4,5.4,0,18976018,60.9,3.4,7,9.8,TRUE
+Corey Feldman,34,Actor/Actress,54,182,22.7,6,4.1,297203,24,5.6,9.1,3,FALSE
+Danielle Fishel,34,Actor/Actress,44,165,23.7,2.9,7.4,3503706,27.1,5.8,7.9,6,TRUE
+Elaine Hendrix,34,Actor/Actress,55,170,19,6.1,8.7,697547,24.5,2.4,7.4,7.7,FALSE
+Baron Davis,34,Athlete,46,177,21.6,8.7,2.7,653928,60.3,3.7,9.6,3,FALSE
+Jordan Chiles,34,Athlete,24,175,20.5,7.1,0,184181,24.9,6.7,8.1,8.8,FALSE
+Andy Richter,34,Comedian,59,169,21.7,4.2,2.5,80380,43.9,5.2,7.3,6.5,FALSE
+Robert Irwin,34,Conservationist,22,164,18.5,3.6,0.6,592530,7.9,7.9,6,6.6,FALSE
+Hilaria Baldwin,34,Entrepreneur,41,174,23.2,3.4,2.9,316009,49.8,7.4,5.7,5,FALSE
+Lauren Jauregui,34,Singer/Rapper,29,161,18.6,5.5,7.7,389108,36.1,10,3.4,3.5,FALSE
+Scott Hoying,34,Singer/Rapper,34,158,23.6,5.3,5.4,2244739,70.2,6.6,6.6,4.4,FALSE
+Alix Earle,34,Social media personality,24,186,22.9,6.4,1.8,10680,8.4,4.4,7.4,7.6,TRUE
+Jen Affleck,34,TV Personality,26,174,18.1,5.4,0.8,3428443,33.7,8.4,9.8,4.1,TRUE
+Whitney Leavitt,34,TV Personality,32,173,25.7,3.5,1.8,503135,32.1,9.5,5.2,6.1,FALSE
+Dylan Efron,34,TV Personality,33,160,26.7,0.8,1.5,2408079,57.5,4.9,5.7,8.9,FALSE
