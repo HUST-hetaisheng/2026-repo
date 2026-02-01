@@ -275,50 +275,52 @@ Instead of brute-force enumeration ($N!$ complexity), we employ a \textbf{Stocha
 \textbf{Third}, if the constraint is violated (i.e., the actual eliminated star has a "better" score than a survivor), the algorithm performs minimal swaps between the survivor and the eliminated star until the condition holds, prioritizing permutations that minimize the Kendall-Tau distance from the previous week.
 
 \subsubsection{Rank-to-Share Mapping (Gibbs Distribution)}
-To compare these results with Percent seasons, we map the inferred discrete ranks $r^F_{i,w}$ to continuous shares $f_{i,w}$ using a Softmax distribution:
+To compare these results with Percent seasons, we map the inferred discrete ranks $r^F_i$ to continuous shares $f_i$ using a Softmax distribution:
 \begin{equation}
-    f_{i,w} = \frac{\exp(-\gamma \cdot (r^F_{i,w} - 1))}{\sum_k \exp(-\gamma \cdot (r^F_{k,w} - 1))}
-    \label{eq:gibbs_softmax}
+    f_{i} = \frac{\exp(-\gamma \cdot (r^F_{i} - 1))}{\sum_k \exp(-\gamma \cdot (r^F_{k} - 1))}
 \end{equation}
-where $\gamma > 0$ controls the steepness of the vote-share decay across ranks. This parameter is calibrated using early Percent-era seasons where both rank and percentage data are available.
+where $\gamma$ is solved using data from the third season, then back-substituted into the current stage's problem solution.
 
 % =================================================================================
 % MODEL 3: JUDGES' SAVE REGIME (The Probabilistic Extension)
 % =================================================================================
 \subsection{The Judges' Choice Model (Seasons 28--34)}
 
-Starting from Season 28, the competition introduced a significant procedural discontinuity: the "Judges' Save." Under this regime, the combined judge and fan votes determine a "Bottom Two" (or occasionally Bottom Three) pool, from which the judges programmatically select one contestant to eliminate. This mechanism breaks the deterministic "lowest score eliminated" rule, as the person actually eliminated might not be the one with the absolute minimum total support.
+Starting from Season 28, the competition introduced a two-stage elimination procedure: combined judge and fan votes first determine a ``Bottom Two'' pool, then judges vote to save one contestant. This mechanism requires explicit probabilistic modeling of the judges' decision.
 
-\subsubsection{Constraint Relaxation: The Bottom-Two Set}
-To reflect this mechanism, we relax the hard elimination constraint used in earlier seasons. Instead of requiring the eliminated contestant $e$ to possess the minimum combined score, we define a \textbf{Set-Membership Constraint}. Let $R_{i,w}$ be the combined rank of contestant $i$ in week $w$, where $R_{i,w} = r^J_{i,w} + r^F_{i,w}$ (with higher values indicating worse performance). The feasible space $\Omega_w$ is defined such that the eliminated contestant must belong to the bottom $K$ of the field:
-\begin{equation}
-    e \in \text{Bottom}_K(\mathbf{R}_w) \iff \text{Rank}(R_{e,w}) \ge N - K + 1
-\end{equation}
-In our implementation, we set $K=2$ to align with the standard "Bottom Two" format. This relaxation acknowledges that the eliminated individual was \textit{at risk}, but their final exit was moderated by judicial discretion.
+\subsubsection{Two-Stage Elimination Framework}
 
-\subsubsection{Solution Algorithm: Stochastic Greedy Swapping}
-Since the rank-based combined score is discrete and non-differentiable, we employ a \textbf{Greedy Swapping Heuristic}  to find a feasible fan ranking $\mathbf{r}^F_w$. 
-
-$\star$ \textbf{Initialization:} The fan ranks are initially set to a prior distribution (e.g., the previous week's ranks or judge-correlated ranks).
-
-$\star$ \textbf{Violation Identification:} If the observed eliminated contestant $e$ is not
-within the $\text{Bottom}_2$ of the combined ranks $\mathbf{R}_w$, the algorithm identifies
-\emph{offenders}—contestants who currently occupy the bottom two but should be safer than $e$.
-
-$\star$ \textbf{Minimal Swap Logic:} The algorithm iteratively executes minimal rank swaps between $e$ and these offenders. Each swap is designed to push $e$ deeper into the danger zone while minimizing the Kendall-Tau distance from the prior ranking, ensuring the reconstructed votes represent the \textit{least-informed sufficient deviation} required to explain the result.
-
-\subsubsection{Probabilistic Judges' Save and Ensemble Inference}
-The Judges' Save mechanism introduces an additional layer of uncertainty: even after determining the Bottom-Two, the final elimination depends on judges' discretion. We model this decision as a score-biased logistic choice: given Bottom-Two members $\{a, b\}$, the probability of eliminating $a$ is
+The latent variable to infer is the fan vote ranking $\mathbf{r}^F_w = (r^F_{1,w}, \ldots, r^F_{N,w})$, a permutation of $\{1, \ldots, N\}$ where $r^F_i = 1$ indicates the highest fan support. The combined rank $R_{i,w} = r^J_{i,w} + r^F_{i,w}$ determines overall standing, with higher values indicating worse performance. The Bottom-Two set $\mathcal{B}(\mathbf{r}^F_w) = \{a, b\}$ consists of the two contestants with the highest combined ranks. Given this set, the probability that judges eliminate contestant $a$ follows a logistic choice model:
 \begin{equation}
     P(\text{Elim } a \mid a, b \in \mathcal{B}) = \frac{1}{1 + \exp\left(\beta(J_a - J_b)\right)}
-    \label{eq:judge_save_prob}
+    \label{eq:judge_choice}
 \end{equation}
-where $\beta > 0$ quantifies judges' tendency to save higher-scored contestants. The optimal fan ranking $\mathbf{r}^{F*}_w$ maximizes the likelihood of the observed elimination: $\mathbf{r}^{F*}_w = \arg\max P(\text{Elim } e_w \mid \mathcal{B}(\mathbf{r}^F))$ subject to $e_w \in \mathcal{B}(\mathbf{r}^F)$.
+where $\beta > 0$ quantifies the judges' tendency to save higher-scored contestants. When $\beta \to \infty$, the lower-scored contestant is deterministically eliminated; when $\beta = 0$, the choice is random.
 
-To quantify the inherent ambiguity, we employ an \textbf{Ensemble Perturbation Method}. By injecting Gaussian noise $\epsilon \sim \mathcal{N}(0, \sigma^2)$ into judge scores and running the optimization $K=1{,}000$ times, we generate a posterior distribution over fan rankings. These discrete rankings are then converted to continuous vote shares using the Gibbs-Softmax mapping in Eq.~\eqref{eq:gibbs_softmax}. The variance of this ensemble (Coefficient of Variation) serves as our formal measure of model certainty, reflecting the ``transparency'' of each elimination event.
+\subsubsection{Optimal Ranking Inference}
+
+The inference task is to find the fan ranking $\mathbf{r}^{F*}_w$ that maximizes the likelihood of the observed elimination outcome. Let $e$ denote the actually eliminated contestant. The optimization problem is:
+\begin{equation}
+    \mathbf{r}^{F*}_w = \arg\max_{\mathbf{r}^F \in \mathcal{S}_N} \; P(\text{Elim } e \mid \mathcal{B}(\mathbf{r}^F)) \quad \text{s.t.} \quad e \in \mathcal{B}(\mathbf{r}^F)
+\end{equation}
+where $\mathcal{S}_N$ is the set of all permutations. To maximize $P(\text{Elim } e)$, the other Bottom-Two member $b$ should satisfy $b^* = \arg\max_{b \neq e} J_b$, i.e., the highest-scored contestant who can feasibly join $e$ in the danger zone. This choice minimizes $(J_e - J_b)$, thereby maximizing the elimination probability. Consequently, the fan ranking must satisfy, for all survivors $i \notin \{e, b^*\}$:
+\begin{equation}
+    r^F_e \geq r^F_i + (r^J_i - r^J_e), \quad r^F_{b^*} \geq r^F_i + (r^J_i - r^J_{b^*})
+    \label{eq:rank_constraint}
+\end{equation}
+These inequalities impose lower bounds on $r^F_e$ and $r^F_{b^*}$, forcing them to occupy sufficiently poor fan-vote positions to form the Bottom-Two.
+
+\subsubsection{Algorithmic Implementation and Vote Share Conversion}
+
+Since the search space $\mathcal{S}_N$ is factorial, we employ a greedy swapping heuristic. Starting from a prior ranking (previous week's result or judge-correlated ranks), the algorithm iteratively swaps positions to satisfy the constraints in Eq.~\eqref{eq:rank_constraint} while maximizing the objective. Once the optimal ranking $\mathbf{r}^{F*}_w$ is obtained, it is converted to continuous vote shares via Gibbs-Softmax transformation:
+\begin{equation}
+    f_{i,w} = \frac{\exp\left(-\gamma (r^{F*}_{i,w} - 1)\right)}{\sum_{k=1}^N \exp\left(-\gamma (r^{F*}_{k,w} - 1)\right)}
+\end{equation}
+where $\gamma > 0$ controls the steepness of the decay. To quantify uncertainty, we perform ensemble inference by perturbing judge scores with Gaussian noise and repeating the optimization, yielding a posterior distribution over $f_{i,w}$.
 \subsection{Model Performance and Empirical Validation}
 
 To address the core questions of consistency and certainty in our fan vote estimates, we evaluate model performance along two orthogonal dimensions: (1)~\textit{consistency}---whether our inferred fan votes produce elimination outcomes that match the observed results; and (2)~\textit{uncertainty}---how precisely we can pinpoint the fan vote shares, quantified by the coefficient of variation (CV) and confidence interval width.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/cons&cer..png}
