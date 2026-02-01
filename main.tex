@@ -202,21 +202,29 @@ $K$ & Number of ensemble runs for uncertainty quantification \\
 
 The raw dataset covers 34 seasons and includes 421 celebrity--partner pairs with weekly judges' scores and elimination outcomes. Several preprocessing steps are applied to prepare the data for inverse modeling.
 
-\begin{itemize}
-\item \textbf{Missing and placeholder values.}  
-In the original dataset, zero values indicate either judge absences or post-elimination weeks. A contestant-week is treated as \emph{active} if at least one judge score is positive. For each active observation, the total judges' score $J_{i,t}$ is computed as the sum of all non-zero individual scores. Elimination outcomes are extracted from the \texttt{results} column. Contestants labeled as ``Withdrew'' are flagged separately, as their exits are not vote-determined and thus impose no constraints on fan vote estimation.
+% \begin{itemize}
+% \item \textbf{Missing and placeholder values.}  
+% In the original dataset, zero values indicate either judge absences or post-elimination weeks. A contestant-week is treated as \emph{active} if at least one judge score is positive. For each active observation, the total judges' score $J_{i,t}$ is computed as the sum of all non-zero individual scores. Elimination outcomes are extracted from the \texttt{results} column. Contestants labeled as ``Withdrew'' are flagged separately, as their exits are not vote-determined and thus impose no constraints on fan vote estimation.
 
-\item \textbf{Rule regime classification.}  
-Each season is classified according to the competition rules in effect \cite{WikiDWTS}: \emph{Rank} (Seasons~1--2), where judges' and fan rankings are combined; \emph{Percent} (Seasons~3--27), where normalized score shares are added; and \emph{Bottom2} (Seasons~28--34), where judges select which contestant to save from the bottom two. This classification determines the form of elimination constraints used in the inverse model.
+% \item \textbf{Rule regime classification.}  
+% Each season is classified according to the competition rules in effect \cite{WikiDWTS}: \emph{Rank} (Seasons~1--2), where judges' and fan rankings are combined; \emph{Percent} (Seasons~3--27), where normalized score shares are added; and \emph{Bottom2} (Seasons~28--34), where judges select which contestant to save from the bottom two. This classification determines the form of elimination constraints used in the inverse model.
 
-\item \textbf{Elimination pattern annotation.}  
-Each week is labeled by its elimination structure, including single elimination, double elimination, no elimination (results shows), and finals. For finals weeks, the \texttt{placement} column is used to determine the final ranking among remaining contestants.
+% \item \textbf{Elimination pattern annotation.}  
+% Each week is labeled by its elimination structure, including single elimination, double elimination, no elimination (results shows), and finals. For finals weeks, the \texttt{placement} column is used to determine the final ranking among remaining contestants.
 
-\item \textbf{Data validation.}  
-We verify that eliminations are monotonic (no contestant reappears after elimination), that finals rankings are consistent with the final active set, and that all judge scores lie within the valid 1--10 range.
-\end{itemize}
+% \item \textbf{Data validation.}  
+% We verify that eliminations are monotonic (no contestant reappears after elimination), that finals rankings are consistent with the final active set, and that all judge scores lie within the valid 1--10 range.
+% \end{itemize}
+
+The data provided in the task is complete and clear. To facilitate calculations, we performed some processing. We marked cells with judges' scores of N/A as 0. We marked "whether born in the US" as a 0/1 variable. For eliminated contestants, we recorded the number of weeks of elimination. For the special case of a contestant withdrawing midway through the competition, we marked it to distinguish it and recorded the number of weeks of withdrawal. Additionally, we coded the dance partners.
+
+Because the show's rules have changed twice, we labeled the data for different seasons according to the corresponding rules: seasons 1-2 were labeled "rank," seasons 3-27 were labeled "percent," and seasons 28-34 were labeled "bottom2."
+
+To enrich the data required for Task 3, we used web scraping to collect contestants' weekly social media follower counts and search frequencies from social media and Google Trends during the competition. We also scraped the contestants' BMI and dance experience metrics.
 
 After preprocessing, the cleaned dataset contains 2,699 valid contestant-week observations with complete judges' scores and unambiguous elimination status.
+
+
 \section{The Entropy-Inertia Regularized Inverse Optimization Model}
 
 \subsection{Rationale and Overall Architecture}
@@ -321,42 +329,45 @@ where $\gamma > 0$ controls the steepness of the decay. To quantify uncertainty,
 In conclusion, our model demonstrates strong empirical validity: it correctly recovers elimination outcomes with high probability (overall $\bar{P}_{\text{cons}} = 0.93$), while uncertainty quantification reveals interpretable regime-dependent patterns that align with the theoretical information content of each voting mechanism. The Percent regime provides the most reliable inference, while the judges' save mechanism in recent seasons introduces irreducible ambiguity that is faithfully captured by our probabilistic framework.
 \section{Rank VS Percent Method with predicted data} 
 \subsection{Two methods' influence on final results}
-We combine the estimated fan vote shares with the original judge scores and simulate weekly eliminations under two counterfactual rules: the Rank method (rank-sum) and the Percentage method (score-share sum). Table~\ref{tab:rank_pct_metrics} reports both the overall metrics and the regime-level breakdown. The methods agree in 72.2\% of weeks, but still diverge in 93 weeks. Against historical eliminations, the Percentage method shows higher match accuracy (0.695 vs. 0.611). When the two methods disagree, a positive $\Delta_{fan}$ indicates that the Rank method eliminates a contestant with a higher fan share, implying the Percentage method is more fan-friendly in those weeks. Figure~\ref{fig:fan_vs_judge_scatter} visualizes the agreement structure between fan votes and judge scores; deviations from the diagonal highlight weeks where rule choice is most likely to change the elimination outcome.
+We combine the estimated fan vote shares with the original judge scores and simulate weekly eliminations under two counterfactual rules: the Rank method (rank-sum) and the Percentage method (score-share sum). Table~\ref{tab:rank_pct_metrics} reports both the overall metrics and the regime-level breakdown. The methods agree in 72.2\% of weeks, but still diverge in 93 weeks. When the two methods disagree, a positive $\Delta_{fan}$ indicates that the Rank method eliminates a contestant with a higher fan share, implying the Percentage method is more fan-friendly in those weeks. Figure~\ref{fig:fan_vs_judge_scatter} visualizes the agreement structure between fan votes and judge scores; deviations from the diagonal highlight weeks where rule choice is most likely to change the elimination outcome.
 
 \begin{table}[H]
-\centering
+% 移除 \centering，使用 \textwidth 占满全宽
+\setlength{\tabcolsep}{0pt} % 将默认列间距设为0，由 extracolsep 自动填充
 \caption{Rank vs. Percentage simulation metrics (overall and by regime).}
 \label{tab:rank_pct_metrics}
-\renewcommand{\arraystretch}{1.05}
-\begin{tabular}{@{}l r r r r r r r@{}}
+\renewcommand{\arraystretch}{1.2} % 稍微增加行高，防止拥挤
+% 使用 tabular* 并设置宽度为 \textwidth
+% @{\extracolsep{\fill}} 会自动计算列间距以填满整行
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r r r r r @{}}
 \toprule
-\multicolumn{8}{l}{\textbf{Overall (All Seasons)}}\\
+\multicolumn{6}{l}{\textbf{Overall (All Seasons)}}\\
 \midrule
-\textbf{Metric} & \textbf{Value} & \multicolumn{6}{c}{} \\
+\textbf{Metric} & \textbf{Value} & \multicolumn{4}{c}{} \\ % 使用 multicolumn 填补剩余空白
 \midrule
-Total weeks analyzed & 335 & \multicolumn{6}{c}{} \\
-Method agreement rate & 0.722 & \multicolumn{6}{c}{} \\
-Rank accuracy vs actual & 0.611 & \multicolumn{6}{c}{} \\
-Percentage accuracy vs actual & 0.695 & \multicolumn{6}{c}{} \\
-Disagree weeks & 93 & \multicolumn{6}{c}{} \\
-Fan-favored by Rank (count) & 37 & \multicolumn{6}{c}{} \\
-Fan-favored by Percentage (count) & 56 & \multicolumn{6}{c}{} \\
-Avg $\Delta_{fan}$ (disagree weeks) & 0.0086 & \multicolumn{6}{c}{} \\
-Avg eliminated fan share (Rank) & 0.1170 & \multicolumn{6}{c}{} \\
-Avg eliminated fan share (Pct) & 0.1146 & \multicolumn{6}{c}{} \\
+Total weeks analyzed & 335 & \multicolumn{4}{c}{} \\
+Method agreement rate & 0.722 & \multicolumn{4}{c}{} \\
+
+Disagree weeks & 93 & \multicolumn{4}{c}{} \\
+Fan-favored by Rank (count) & 37 & \multicolumn{4}{c}{} \\
+Fan-favored by Percentage (count) & 56 & \multicolumn{4}{c}{} \\
+Avg $\Delta_{fan}$ (disagree weeks) & 0.0086 & \multicolumn{4}{c}{} \\
+Avg eliminated fan share (Rank) & 0.1170 & \multicolumn{4}{c}{} \\
+Avg eliminated fan share (Pct) & 0.1146 & \multicolumn{4}{c}{} \\
 \midrule
-\multicolumn{8}{l}{\textbf{By Regime}}\\
+\multicolumn{6}{l}{\textbf{By Regime}}\\
 \midrule
-\textbf{Regime} & \textbf{Weeks} & \textbf{Agreement} & \textbf{Avg $\Delta_{fan}$ (disagree)} & \textbf{Fan->Rank} & \textbf{Fan->Pct} \\
+\textbf{Regime} & \textbf{Weeks} & \textbf{Agreement} & \textbf{Avg $\Delta_{fan}$} & \textbf{Fan$\to$Rank} & \textbf{Fan$\to$Pct} \\
 \midrule
 Bottom-2 Era (S28--34) & 73  & 0.808 & 0.0384 & 2  & 12 \\
 Percent Era (S3--27)   & 248 & 0.694 & 0.0006 & 35 & 41 \\
 Rank Era (S1--2)       & 14  & 0.786 & 0.0722 & 0  & 3  \\
 \bottomrule
-\end{tabular}
+\end{tabular*}
 
-\par\vspace{0.3em}
-{\footnotesize Note: $\Delta_{fan}>0$ means the Rank method eliminates a contestant with higher fan share, hence the Percentage method is more fan-friendly in those weeks. Higher accuracy indicates closer match to historical eliminations.}
+\par\vspace{0.5em}
+{\footnotesize 
+\noindent \textbf{Note:} $\Delta_{fan}>0$ implies the Rank method eliminates a contestant with a higher fan share compared to the Percentage method. Columns \textbf{Fan$\to$Rank} and \textbf{Fan$\to$Pct} denote the count of weeks where that specific method was more favorable to the popular vote.}
 \end{table}
 
 
@@ -382,9 +393,9 @@ To rigorously address this question, we have augmented the original competition 
 \begin{itemize}
     \setlength\itemsep{0em}
     \item \textbf{Physical Attributes:} Body Mass Index for each contestant.
-    \item \textbf{Prior Experience:} A quantified Dance Experience Score.
     \item \textbf{Social Media Metrics:} Aggregated weekly engagement across Twitter, Instagram, Facebook, and YouTube (standardized and aggregated).
     \item \textbf{Public Attention:} Weekly Google Search Volume trends.
+    \item \textbf{Prior Experience:} A quantified Dance Experience Score.
 \end{itemize}
 Leveraging this enriched dataset, we construct a comprehensive \textbf{multi-level regression framework}. Our approach analyzes performance at two distinct temporal scales---season-level outcomes and weekly fluctuations---across three key dependent variables: judges' scores, fan votes, and final placement. Furthermore, we employ a \textbf{mixed-effects model} to isolate and quantify the specific impact of professional dancer partners, separating their influence from the celebrity's own merit.
 
