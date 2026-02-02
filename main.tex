@@ -237,7 +237,16 @@ The central challenge of this problem is that fan votes ($\mathbf{v}_t$) are uno
 
 To reconstruct the fan votes robustly, a valid model must: (i) \textbf{Respect Historical Regimes} by adapting to the specific aggregation rules (Rank vs. Percent) that evolved over 34 seasons; (ii) \textbf{ Account for irregularities} such as weeks with no elimination, double eliminations, and mid-competition withdrawals; and (iii) \textbf{Avoid Bias}. Unlike simplistic approaches that impose a correlation between fan votes and judge scores, we adopt an \textbf{unbiased} approach that only assumes fundamental statistical properties: entropy and temporal inertia.
 
-Therefore, we propose a \textbf{Regime-Specific, Week-Type Aware Inverse Optimization Framework}. We classify the problem into three distinct mathematical sub-models corresponding to the show's eras: \textit{The Rank Regime} (S1--2), \textit{The Percent Regime} (S3--27), and \textit{The Judges' Choice Regime} (S28--34).
+Therefore, we propose a \textbf{Regime-Specific, Week-Type Aware Inverse Optimization Framework}. We classify the problem into three distinct mathematical sub-models 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{rules_chart.png}
+    \caption{Rule Timeline}
+    \label{fig:rules_chart}
+\end{figure}
+
+% corresponding to the show's eras: \textit{The Rank Regime} (S1--2), \textit{The Percent Regime} (S3--27), and \textit{The Judges' Choice Regime} (S28--34).
 
 \subsection{Week-Type Identification}
 The transformation from observed elimination results to latent fan votes represents an ill-posed inverse problem. To restrict the feasible solution space effectively, we must adapt our optimization constraints dynamically. Different competitive scenarios imply varying degrees of logical restrictiveness. Accordingly, we identify five distinct week archetypes to tailor the constraint set $\Omega_w$:
@@ -416,7 +425,7 @@ where $J_i$ and $J_j$ are raw technical scores and $\gamma$ quantifies the judge
 Our simulation highlights eight prominent "divergent" contestants whose trajectories differ significantly under the two rules. As illustrated in Figure~\ref{fig:survival_curves}, the Percentage Rule acts as a significant "fan-power amplifier." For contestants like Bobby Bones, Iman Shumpert, and Nelly, the Percentage Rule allows massive popular margins to effectively bridge large technical gaps, leading to substantial gains in cumulative survival. Conversely, under the Rank-Sum Rule, the technical disadvantage of performers such as Jerry Rice, Bristol Palin, and Billy Ray Cyrus becomes far more difficult to overcome due to the ceiling on rank points.
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\linewidth]{Code_Generated_Image.png}
+    \includegraphics[width=0.8\linewidth]{probabilistic_survival_comparison.png}
     \caption{Survival Curve:Rank VS Percent}
     \label{fig:survival_curves}
 \end{figure}
