@@ -25,8 +25,8 @@ FIGURES_DIR = os.path.join(SCRIPT_DIR, '..', 'figures')
 plt.style.use('seaborn-v0_8-whitegrid')
 plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['mathtext.fontset'] = 'stix'
-plt.rcParams['figure.dpi'] = 150
-plt.rcParams['savefig.dpi'] = 300
+plt.rcParams['figure.dpi'] = 1000
+plt.rcParams['savefig.dpi'] = 1000
 plt.rcParams['axes.labelsize'] = 12
 plt.rcParams['axes.titlesize'] = 14
 
