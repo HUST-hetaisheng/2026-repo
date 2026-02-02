@@ -13,7 +13,13 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import seaborn as sns
 import warnings
+import os
 warnings.filterwarnings('ignore')
+
+# 获取脚本所在目录的绝对路径
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(SCRIPT_DIR, '..', 'data')
+FIGURES_DIR = os.path.join(SCRIPT_DIR, '..', 'figures')
 
 # ============================================================
 # 自定义配色方案 (Custom Color Palette)
@@ -297,7 +303,7 @@ def plot_icc_variance():
 # ==== 图3: 舞伴排名 Top 10 ====
 def plot_partner_top10():
     """Plot top 10 professional dancers with gradient colors and champion effect annotation"""
-    df = pd.read_csv('../data/task3_partner_ranking_v3.csv')
+    df = pd.read_csv(os.path.join(DATA_DIR, 'task3_partner_ranking_v3.csv'))
     df = df.head(10)  # Top 10
     
     fig, ax = plt.subplots(figsize=(11, 6.5))
@@ -360,10 +366,112 @@ def plot_partner_top10():
     ax.spines['bottom'].set_color('#CCCCCC')
     
     plt.tight_layout()
-    plt.savefig('../figures/task3_2_partner_ranking_top10.png', bbox_inches='tight', 
+    plt.savefig(os.path.join(FIGURES_DIR, 'task3_2_partner_ranking_top10.png'), bbox_inches='tight', 
                 facecolor='white', edgecolor='none')
     plt.close()
     print("[VIZ] Saved: task3_2_partner_ranking_top10.png")
+
+
+# ==== 图3-2: 舞伴排名 Top 10 双轴图（加 Avg_Judge 折线）====
+def plot_partner_top10_2():
+    """Plot top 10 professional dancers with dual-axis: Avg_Placement bars + Avg_Judge line"""
+    df = pd.read_csv(os.path.join(DATA_DIR, 'task3_partner_ranking_v3.csv'))
+    df = df.head(10)  # Top 10
+    
+    fig, ax1 = plt.subplots(figsize=(12, 7))
+    fig.patch.set_facecolor('white')
+    
+    y_pos = np.arange(len(df))
+    
+    # 蓝色渐变系列
+    blue_gradient = ['#375093', '#4E70AF', '#5A7DB8', '#6A8BC1', '#7A99CA', 
+                     '#8AA7D3', '#9EBCDB', '#AEC9E3', '#BED6EB', '#C8D6E7']
+    bar_colors = blue_gradient
+    
+    # 左轴：Avg_Placement 条形图
+    bars = ax1.barh(y_pos, df['Avg_Placement'], color=bar_colors, 
+                    edgecolor='white', height=0.65, linewidth=1.5)
+    
+    # 条形图内的数值和出场次数标注
+    for i, (_, row) in enumerate(df.iterrows()):
+        # 出场次数标签
+        ax1.text(row['Avg_Placement'] + 0.12, i, f"n = {int(row['Appearances'])}", 
+                 va='center', fontsize=10, color='#7F8C8D', fontweight='bold')
+        # 精确数值（在条形内部）
+        if row['Avg_Placement'] > 1.5:
+            ax1.text(row['Avg_Placement'] - 0.15, i, f"{row['Avg_Placement']:.2f}", 
+                     va='center', ha='right', fontsize=10, color='white', fontweight='bold')
+    
+    ax1.set_yticks(y_pos)
+    ax1.set_yticklabels(df['Partner'], fontsize=12, fontweight='bold', color='#2C3E50')
+    ax1.invert_yaxis()  # Best at top
+    ax1.set_xlabel('Average Placement (Lower = Better)', fontsize=13, 
+                   labelpad=10, color='#34495E')
+    ax1.set_xlim(0, 8.5)
+    ax1.set_ylim(9.8, -0.6)
+    
+    # 左轴样式
+    ax1.spines['top'].set_visible(False)
+    ax1.spines['right'].set_visible(False)
+    ax1.spines['left'].set_color('#CCCCCC')
+    ax1.spines['bottom'].set_color('#CCCCCC')
+    
+    # Highlight Derek Hough (第一名)
+    ax1.get_yticklabels()[0].set_color(COLOR_ACCENT)
+    
+    # "Champion Effect" 标注框
+    first_placement = df['Avg_Placement'].iloc[0]
+    ax1.text(first_placement / 2, 0, 'Champion\nEffect', 
+             fontsize=11, fontweight='bold', color=COLOR_ACCENT,
+             ha='center', va='center',
+             bbox=dict(boxstyle='round,pad=0.4', facecolor='#FDF2F2', 
+                       edgecolor=COLOR_ACCENT, linewidth=1.5))
+      # 右轴：Avg_Judge 折线图
+    ax2 = ax1.twiny()  # 共享y轴，创建顶部x轴
+    ax2.set_xlim(20, 30.6)  # 根据 Avg_Judge 数据范围调整
+    
+    # 绘制 Avg_Judge 折线（橙色 #FA8600）
+    COLOR_JUDGE_LINE = '#FA8600'
+    ax2.plot(df['Avg_Judge'], y_pos, color=COLOR_JUDGE_LINE, linewidth=2.5, 
+             marker='o', markersize=8, markerfacecolor='white', 
+             markeredgecolor=COLOR_JUDGE_LINE, markeredgewidth=2, zorder=10)
+    
+    # 在每个点旁边显示数值
+    for i, (_, row) in enumerate(df.iterrows()):
+        ax2.text(row['Avg_Judge'] + 0.4, i, f"{row['Avg_Judge']:.1f}", 
+                 va='center', ha='left', fontsize=9, color=COLOR_JUDGE_LINE, fontweight='bold')
+    
+    # 右轴（顶部x轴）样式
+    ax2.set_xlabel('Average Judge Score', fontsize=13, labelpad=10, color=COLOR_JUDGE_LINE)
+    ax2.xaxis.label.set_color(COLOR_JUDGE_LINE)
+    ax2.tick_params(axis='x', colors=COLOR_JUDGE_LINE)
+    ax2.spines['top'].set_color(COLOR_JUDGE_LINE)
+    ax2.spines['top'].set_linewidth(1.5)
+    ax2.spines['bottom'].set_visible(False)
+    ax2.spines['left'].set_visible(False)
+    ax2.spines['right'].set_visible(False)
+    
+    # 标题
+    ax1.set_title('Top 10 Professional Dancers: Placement & Judge Scores', 
+                  fontsize=16, fontweight='bold', pad=45, color='#2C3E50')
+    
+    # 添加图例
+    from matplotlib.lines import Line2D
+    from matplotlib.patches import Patch
+    legend_elements = [
+        Patch(facecolor='#375093', edgecolor='white', label='Avg Placement'),
+        Line2D([0], [0], color=COLOR_JUDGE_LINE, linewidth=2.5, marker='o', 
+               markersize=8, markerfacecolor='white', markeredgecolor=COLOR_JUDGE_LINE,
+               label='Avg Judge Score')
+    ]
+    ax1.legend(handles=legend_elements, loc='lower right', fontsize=11, 
+               frameon=True, facecolor='white', edgecolor='#CCCCCC')
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(FIGURES_DIR, 'task3_2_partner_ranking_top10_dual.png'), bbox_inches='tight', 
+                facecolor='white', edgecolor='none')
+    plt.close()
+    print("[VIZ] Saved: task3_2_partner_ranking_top10_dual.png")
 
 
 # ==== 图4: Judge vs Fan 敏感度对比 ====
@@ -585,12 +693,12 @@ if __name__ == '__main__':
     print("=" * 60)
     print("Task 3 Final Visualizations (Times New Roman)")
     print("=" * 60)
-    
-    plot_coefficient_heatmap()
-    plot_variable_correlation()
-    plot_partner_top10()
-    plot_judge_fan_comparison()
-    plot_industry_effect()
+    # plot_coefficient_heatmap()
+    # plot_variable_correlation()
+    # plot_partner_top10()
+    plot_partner_top10_2()  # 双轴图：条形图 + Avg_Judge 折线
+    # plot_judge_fan_comparison()
+    # plot_industry_effect()
     
     print("\n" + "=" * 60)
     print("[DONE] All visualizations generated!")
@@ -599,5 +707,6 @@ if __name__ == '__main__':
     print("  - figures/task3_2_coefficient_heatmap.png")
     print("  - figures/task3_2_variable_correlation.png")
     print("  - figures/task3_2_partner_ranking_top10.png")
+    print("  - figures/task3_2_partner_ranking_top10_dual.png")
     print("  - figures/task3_2_judge_fan_sensitivity.png")
     print("  - figures/task3_2_industry_effect.png")
