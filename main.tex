@@ -32,6 +32,7 @@
   \usepackage{colortbl}  %彩色表格需要加载的宏包
 \usepackage{xcolor}
 \usepackage{array}
+\usepackage{cite} % 用于导入图片
 
 \usepackage{indentfirst}  %首行缩进，注释掉，首行就不再缩进。
 \usepackage{lipsum}
@@ -75,7 +76,7 @@ Vote Estimation;Inverse Optimization;Mixed‑Effects Model;Scoring Fairness
 \section{Introduction}
 \subsection{Background}
 
-DWTS (Dancing with the Stars) is a popular television competition where celebrity contestants are paired with professional dancers to compete in weekly dance performances. Elimination and advancement are determined by combining judges’ scores and audience votes.The judges assess technical proficiency, which can be subjective, while fan votes are influenced by factors such as celebrity popularity and charisma. As a result, the competition's outcomes have often sparked discussions and controversies, despite the show's attempts to improve the integration of these two elements. In recent years, with increasing audience concerns about fairness in competitive variety shows, DWTS faces a critical need for a fair, impartial, and effective scoring system. This system must ensure both the program's entertainment value and the confidentiality of fan votes, securing a balance between professionalism and popularity. This is essential for DWTS to maintain its viewership and grow its brand in future seasons.
+DWTS (Dancing with the Stars) is a popular television competition where celebrity contestants are paired with professional dancers to compete in weekly dance performances. Elimination and advancement are determined by combining judges’ scores and audience votes.The judges assess technical proficiency, which can be subjective, while fan votes are influenced by factors such as celebrity popularity and charisma\cite{r4}. As a result, the competition's outcomes have often sparked discussions and controversies, despite the show's attempts to improve the integration of these two elements. In recent years, with increasing audience concerns about fairness in competitive variety shows, DWTS faces a critical need for a fair, impartial, and effective scoring system. This system must ensure both the program's entertainment value and the confidentiality of fan votes, securing a balance between professionalism and popularity. This is essential for DWTS to maintain its viewership and grow its brand in future seasons.
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=0.35\linewidth]{figures/dwtc背景图.png}
@@ -230,7 +231,7 @@ After preprocessing, the cleaned dataset contains \textbf{2,777 valid contestant
 \section{The Entropy-Inertia Regularized Inverse Optimization Model}
 
 \subsection{Rationale and Overall Architecture}
-The central challenge of this problem is that fan votes ($\mathbf{v}_t$) are unobserved latent variables, while only the weekly elimination results ($E_{obs}$) are known. This constitutes an \textbf{ill-posed inverse problem} with incomplete information: a single elimination event determines the lowest-ranked contestant but leaves the relative ordering of the survivors underdetermined. 
+The central challenge of this problem is that fan votes ($\mathbf{v}_t$) are unobserved latent variables, while only the weekly elimination results ($E_{obs}$) are known. This constitutes an \textbf{ill-posed inverse problem} with incomplete information: a single elimination event determines the lowest-ranked contestant but leaves the relative ordering of the survivors underdetermined\cite{r2}. 
 
 To reconstruct the fan votes robustly, a valid model must: (i) \textbf{Respect Historical Regimes} by adapting to the specific aggregation rules (Rank vs. Percent) that evolved over 34 seasons; (ii) \textbf{ Account for irregularities} such as weeks with no elimination, double eliminations, and mid-competition withdrawals; and (iii) \textbf{Avoid Bias}. Unlike simplistic approaches that impose a correlation between fan votes and judge scores, we adopt an \textbf{unbiased} approach that only assumes fundamental statistical properties: entropy and temporal inertia.
 
@@ -462,7 +463,7 @@ After introducing judges' intervention in the elimination round, contestants wit
 Based on the stochastic survival modeling and counterfactual simulations conducted in this study, we propose a hybrid governance model for future seasons. This model combines the percentage aggregation method with a mandatory two-stage jury selection mechanism. The rationale for this dual-layer architecture stems from the following analytical conclusions:
 
 \subsubsection{Foundational Aggregation: Adopting the Percentage Aggregation Method}
-We recommend retaining the \textbf{percentage aggregation method} (sum of score shares) as the foundational aggregation rule, rather than adopting a ranking method.
+We recommend retaining the \textbf{percentage aggregation method} (sum of score shares) as the foundational aggregation rule, rather than adopting a ranking method\cite{r3}.
 \begin{itemize}
     \item \textbf{Mitigating Information Loss}: Ranking methods inherently discretize continuous performance data, leading to “ordinal information loss.” This approach weakens the quantification of fan support, resulting in equal ranking advantages for contestants securing 50% votes versus 20% votes when leading within their respective tiers.
 \item \textbf{Incentivizing Engagement}: The percentage method establishes a linear mapping between fan engagement and survival probability. This “high beta coefficient” characteristic stimulates active audience participation—marginal increases in votes directly translate into survival advantages, fostering “underdog storylines” that drive viewership (e.g., Iman Shumpert in Season 30).
@@ -503,7 +504,7 @@ We use final placement rather than a weighted composite score as our measure of 
 
 % 3.1.2 模型表达式
 \subsubsection{Contestant-Level Model (Static Characteristics)}
-We use a stratified modeling approach, beginning with static attributes (e.g., age, industry background, prior dance experience) that remain constant during a season. Performance metrics are aggregated to season-level averages to reduce weekly noise. Three separate regressions are estimated for $Y_1, Y_2 and Y_3$ to distinguish judge, audience, and overall success mechanisms.
+We use a stratified modeling approach, beginning with static attributes (e.g. age, industry background, prior dance experience) that remain constant during a season\cite{r1}. Performance metrics are aggregated to season-level averages to reduce weekly noise. Three separate regressions are estimated for $Y_1, Y_2 and Y_3$ to distinguish judge, audience, and overall success mechanisms.
 
 For contestant $i$:
 \begin{equation}
@@ -559,13 +560,12 @@ Table \ref{tab:coefficients} summarizes the regression results for the static ch
 \centering
 \begin{tabular}{lccccccl}
 \toprule
-Variable & Judge $\beta$ & $p$ & Fan $\beta$ & $p$ & Place $\beta$ & $p$ & Insight \\
+Variable & Judge $\beta$ & $p$ & Fan $\beta$ & $p$ & Place $\beta$ & $p$  \\
 \midrule
-Age & $-0.166$ & *** & $-0.001$ & *** & $+0.123$ & *** & Younger $\to$ higher scores \\
-Dance Experience & $-0.169$ & & $+0.000$ & & $+0.176$ & * & Weak effect \\
-Industry: Athlete & $+0.34$ & & $+0.004$ & & $-0.14$ & & Athletes perform well \\
-Industry: Social Media & $+5.61$ & *** & $-0.020$ & & $+0.04$ & & SM stars excel \\
-Industry: Model & $-2.69$ & * & $-0.022$ & & $+2.76$ & *** & Models struggle \\
+Age & $-0.166$ & *** & $-0.001$ & *** & $+0.123$ & ***  \\
+Dance Experience & $-0.169$ & & $+0.000$ & & $+0.176$ & *  \\
+Industry: Social Media & $+5.61$ & *** & $-0.020$ & & $+0.04$ &  \\
+Industry: Model & $-2.69$ & * & $-0.022$ & & $+2.76$ & ***  \\
 \bottomrule
 \end{tabular}
 \caption{Selected regression coefficients. *: $p<0.1$, **: $p<0.05$, ***: $p<0.01$}
@@ -579,7 +579,7 @@ A strong negative correlation exists between contestant age and judge scores ($\
 A critical finding emerges from the weekly model: \textbf{social media popularity} strongly predicts fan votes ($\beta = 0.014, p < 0.001$), where a one standard deviation increase in weekly social media buzz corresponds to a 1.4 percentage point gain in fan vote share. Judges also respond positively to social media presence, though to a lesser extent. The key distinction is that fan voting appears more directly driven by real-time publicity momentum.
 
 \textbf{The "Social Media" Industry Effect.}
-Contestants categorized as "Social Media Personalities" demonstrate a massive outlier effect in judge scores ($\beta = +5.61, p < 0.01$). This likely stems from a selection bias: social media stars cast on the show are often younger and possess dance-adjacent skills (e.g., TikTok choreography trends), giving them a baseline technical advantage over traditional actors or musicians.
+Contestants categorized as "Social Media Personalities" demonstrate a massive outlier effect in judge scores ($\beta = +5.61, p < 0.01$). This likely stems from a selection bias: social media stars cast on the show are often younger and possess dance-adjacent skills , giving them a baseline technical advantage over traditional actors or musicians.
 
 %------------------------------------------------------------------
 \subsection{Judge vs. Fan: What Do They Value?}
@@ -592,7 +592,7 @@ Contestants categorized as "Social Media Personalities" demonstrate a massive ou
 Factor & Judge ($t$-stat) & Fan ($t$-stat) & Who cares more? \\
 \midrule
 Age & $-9.18$*** & $-7.69$*** & \textbf{Judges} \\
-Social Media Popularity & $+28.25$*** & $+30.97$*** & \textbf{Fans} (slightly) \\
+Social Media Popularity & $+2.82$* & $+30.97$*** & \textbf{Fans}  \\
 Dance Experience & $-1.20$ & $+0.01$ & Neither \\
 BMI & $+0.29$ & $-0.03$ & Neither \\
 is\_US & $-0.37$ & $-0.82$ & Neither \\
@@ -612,7 +612,7 @@ is\_US & $-0.37$ & $-0.82$ & Neither \\
 A central question is whether judges and fans evaluate contestants 
 using the same criteria. We compare $t$-statistics across models.
 
-A clear dichotomy emerges: text{Judges} emphasize physical and technical factors (age, dance experience), while text{Fans} respond strongly to pre-existing popularity and social media presence. Notably, both groups reward athletes, suggesting physical discipline appeals to judges and audiences alike. This divergence supports the hybrid scoring system: judges uphold technical standards, while fan voting sustains viewer engagement.
+A clear dichotomy emerges: \textbf{Judges} emphasize physical and technical factors like age, dance experience, while \textbf{Fans} respond strongly to pre-existing popularity and social media presence.
 
 %------------------------------------------------------------------
 \subsection{Professional Dancer Effect}
@@ -694,13 +694,11 @@ Several notable patterns emerge from the data. \textbf{Derek Hough }clearly domi
 
 
 
-\begin{thebibliography}{99}
-\bibitem{Zhang2021} Zhang Jiaqi. (2021). A Study on the Development Status and Countermeasures of Dance Reality TV Shows. \textit{Southwestern University of Finance and Economics}. DOI:10.27412/d.cnki.gxncu.2021.002147.
 
-\bibitem{Ren2016} Ren Shujiang. (2016). The Commodification of the Ideal: An Investigation and Reflection on Competition-Based Music Variety Shows. \textit{Journal of Southwest Jiaotong University (Social Sciences Edition)} 17(2), 68--76.
+\bibliographystyle{unsrt}
+\bibliography{ref}  
 
-\bibitem{Warren2021} Warren, Derin. (2021). \textit{Audience Appeal: Why Can They Become Superstar Actors?} (Lin Siyun, Trans.). Huazhong University of Science and Technology Press.
-\end{thebibliography}
+
 
 \begin{appendices}
 
