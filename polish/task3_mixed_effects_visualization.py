@@ -27,8 +27,11 @@ plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['figure.dpi'] = 1000
 plt.rcParams['savefig.dpi'] = 1000
-plt.rcParams['axes.labelsize'] = 12
-plt.rcParams['axes.titlesize'] = 14
+plt.rcParams['axes.labelsize'] = 10  # 正文大小
+plt.rcParams['axes.titlesize'] = 11  # 标题略大
+plt.rcParams['xtick.labelsize'] = 9
+plt.rcParams['ytick.labelsize'] = 9
+plt.rcParams['legend.fontsize'] = 9
 
 # 配色
 COLOR_PRIMARY = '#375093'
@@ -239,24 +242,24 @@ def plot_top_bottom_partners(random_effects_all):
         # Top 10 和 Bottom 10
         top10 = re_df.head(10)
         bottom10 = re_df.tail(10)
-        
-        # 合并并绘制
+          # 合并并绘制
         combined = pd.concat([top10, bottom10])
         y_pos = np.arange(len(combined))
         
-        colors = [COLOR_POSITIVE if u < 0 else COLOR_NEGATIVE for u in combined['u_j']] \
-                 if model_name == 'Placement' else \
-                 [COLOR_POSITIVE if u > 0 else COLOR_NEGATIVE for u in combined['u_j']]
+        if model_name == 'Placement':
+            colors = [COLOR_POSITIVE if u < 0 else COLOR_NEGATIVE for u in combined['u_j']]
+        else:
+            colors = [COLOR_POSITIVE if u > 0 else COLOR_NEGATIVE for u in combined['u_j']]
         
         bars = ax.barh(y_pos, combined['u_j'], color=colors, 
                        edgecolor='white', height=0.7, linewidth=1)
         
         ax.set_yticks(y_pos)
-        ax.set_yticklabels(combined['Partner'], fontsize=9, color='#2C3E50')
+        ax.set_yticklabels(combined['Partner'], fontsize=8, color='#2C3E50')
         ax.invert_yaxis()
         ax.axvline(x=0, color='#2C3E50', linewidth=1.2)
-        ax.set_xlabel('Random Effect $u_j$', fontsize=11, color='#34495E')
-        ax.set_title(f'{title}', fontsize=13, fontweight='bold', color='#2C3E50', pad=10)
+        ax.set_xlabel('Random Effect $u_j$', fontsize=10, color='#34495E')
+        ax.set_title(f'{title}', fontsize=11, fontweight='bold', color='#2C3E50', pad=10)
         
         # 添加分隔线
         ax.axhline(y=9.5, color='#CCCCCC', linestyle='--', linewidth=1)
@@ -265,7 +268,7 @@ def plot_top_bottom_partners(random_effects_all):
         ax.spines['right'].set_visible(False)
     
     fig.suptitle('Top 10 and Bottom 10 Partners by Random Effect ($u_j$)', 
-                 fontsize=15, fontweight='bold', y=1.01, color='#2C3E50')
+                 fontsize=12, fontweight='bold', y=1.01, color='#2C3E50')
     
     plt.tight_layout()
     out_path = os.path.join(FIGURES_DIR, 'task3_me_top_bottom_partners.png')
