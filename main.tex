@@ -43,21 +43,18 @@
 \date{\today}
 \begin{document}
 \begin{abstract}
-\par Use this template to begin typing the first page (summary page) of your electronic report. This
-template uses a 12-point Times New Roman font. Submit your paper as an Adobe PDF
-electronic file (e.g. 1111111.pdf), typed in English, with a readable font of at least 12-point type. 
+\par To ensure a systematic evaluation of the fairness of the scoring mechanism in \textit{Dancing with the Stars} (DWTS) and its influencing factors, this study constructs a comprehensive \textbf{analytical framework}. This framework integrates several core objectives, including fan vote estimation, comparison of voting rules, analysis of contestant and partner characteristics, and the design of alternative systems. By employing methods such as \textbf{entropy-inertia regularized inverse optimization}, \textbf{mixed-effects models}, and \textbf{counterfactual simulation}, we achieve a reliable quantification and in-depth analysis of the voting mechanisms, participant attributes, and professional partner effects.
 
-Do not include the name of your school, advisor, or team members on this or any page. 
+First, we develop an \textbf{entropy-inertia regularized inverse optimization model} tailored to specific rule regimes to estimate the latent weekly fan vote shares, based on the judges'scores and elimination outcomes provided in the dataset. The model adheres to the distinct rule systems across seasons (e.g. Rank method for Seasons 1-2; Percent method for Seasons 3-27; Judges'Choice method for Seasons 28-34) and minimizes prior assumptions by maximizing entropy and enforcing temporal smoothness. The results show that the model successfully reconstructs elimination events with a high \textbf{consistency probability (0.93)}, with the most reliable inference occurring under the \textbf{Percent regime}.
 
-Be sure to change the control number and problem choice above. 
+Subsequently, we conduct \textbf{counterfactual simulations} to compare the \textbf{Rank-Sum method} and the \textbf{Percentage (Score-Share Sum) method}. The simulations reveal that the two methods disagree in 93 weeks of simulated outcomes, with the Percentage method protecting the contestant with higher fan support in \textbf{60.2\%} of these cases, acting as a "fan-power amplifier." Introducing the \textbf{two-stage elimination framework (Judges' Choice)} significantly reduces the survival probability of low-skil, high-popularity contestants, demonstrating its effectiveness as a professional corrective mechanism.
 
-You may delete these instructions as you begin to type your report here.  
+Furthermore, we employ a \textbf{multi-level regression framework and a Linear Mixed-Effects Model (LMM)} to quantify the impact of \textbf{static and dynamic contestant characteristics} as well as \textbf{professional dancer effects}. Key findings include: judges'scores are negatively correlated with contestant age (\( \beta = -0.28, p=0.002 \)), while fan votes are significantly driven by the contestant's pre-existing \textbf{celebrity popularity} (\( p=0.001 \)). \textbf{Professional dancer assignment} explains approximately \textbf{18.2\%} of the variance in final placement, with \textbf{Derek Hough} identified as the most successful professional dancer (average partner placement: \textbf{2.94}).
 
-\textbf{Follow us @COMAPMath on Twitter or COMAPCHINAOFFICIAL on Weibo for the
-most up to date contest information.}
+Finally, we synthesize all models and analyses to propose \textbf{strategic recommendations for future rule design}: the \textbf{Percentage Aggregation Method} should be adopted as the foundational rule to maximize viewer engagement, while the \textbf{Judges'Selection Privilege (Bottom-Two mechanism)} must be incorporated to uphold technical standards and ensure competitive fairness.
 
 \begin{keywords}
-keyword1; keyword2
+Vote Estimation;Inverse Optimization;Mixed‑Effects Model;Scoring Fairness
 \end{keywords}
 \end{abstract}
 \maketitle
@@ -423,7 +420,7 @@ where $J_i$ and $J_j$ are raw technical scores and $\gamma$ quantifies the judge
 \subsubsection{Empirical Analysis of Divergent Contestants}
 
 Our simulation highlights eight prominent "divergent" contestants whose trajectories differ significantly under the two rules. As illustrated in Figure~\ref{fig:survival_curves}, the Percentage Rule acts as a significant "fan-power amplifier." For contestants like Bobby Bones, Iman Shumpert, and Nelly, the Percentage Rule allows massive popular margins to effectively bridge large technical gaps, leading to substantial gains in cumulative survival. Conversely, under the Rank-Sum Rule, the technical disadvantage of performers such as Jerry Rice, Bristol Palin, and Billy Ray Cyrus becomes far more difficult to overcome due to the ceiling on rank points.
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{probabilistic_survival_comparison.png}
     \caption{Survival Curve:Rank VS Percent}
@@ -453,7 +450,7 @@ Billy Ray Cyrus (S4) & 5 & 9 & 8 & Percentage \\
 
 The empirical results in Table~\ref{tab:placement_shifts} further validate that the introduction of the Judges' Choice mechanism significantly curtails the advancement of these divergent performers. For instance, while Cody Rigsby and Stephen Nedoroscik maintained high survival under popular vote rules, our model predicts that their probability of victory would drop by over 60\% if they were forced into a Bottom-Two decision against technical front-runners. Ultimately, the transition from the Rank Rule to the Percentage Rule favors popular appeal, but the addition of the Judges' Choice serves as a necessary professional correction that aligns final results more closely with ballroom expertise.
 \subsubsection{Impacts of judge's choice rule}
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{Code_Generated_Image (1).png}
     \caption{Judge's Choice impact}
@@ -698,13 +695,11 @@ Several notable patterns emerge from the data. \textbf{Derek Hough }clearly domi
 
 
 \begin{thebibliography}{99}
-\bibitem{Boyd2004} Boyd, S., \& Vandenberghe, L. (2004). \emph{Convex optimization}. Cambridge University Press.
+\bibitem{Zhang2021} Zhang Jiaqi. (2021). A Study on the Development Status and Countermeasures of Dance Reality TV Shows. \textit{Southwestern University of Finance and Economics}. DOI:10.27412/d.cnki.gxncu.2021.002147.
 
-\bibitem{WikiDWTS} Wikipedia contributors. (2024). Dancing with the Stars (American TV series). \emph{Wikipedia, The Free Encyclopedia}. Retrieved January 2026.
+\bibitem{Ren2016} Ren Shujiang. (2016). The Commodification of the Ideal: An Investigation and Reflection on Competition-Based Music Variety Shows. \textit{Journal of Southwest Jiaotong University (Social Sciences Edition)} 17(2), 68--76.
 
-\bibitem{Jaynes1957} Jaynes, E. T. (1957). Information theory and statistical mechanics. \emph{Physical Review}, 106(4), 620--630.
-
-\bibitem{GoogleTrendsTV} Goel, S., Hofman, J. M., Lahaie, S., Pennock, D. M., \& Watts, D. J. (2010). Predicting consumer behavior with Web search. \emph{Proceedings of the National Academy of Sciences}, 107(41), 17486--17490.
+\bibitem{Warren2021} Warren, Derin. (2021). \textit{Audience Appeal: Why Can They Become Superstar Actors?} (Lin Siyun, Trans.). Huazhong University of Science and Technology Press.
 \end{thebibliography}
 
 \begin{appendices}
