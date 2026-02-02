@@ -346,9 +346,8 @@ def main():
     df_full, df_fan, df_trends, schedule = load_data()
     
     # 选择5个代表赛季
-    # percent: 3, 10, 20 (早中晚期)
-    # bottom2: 29, 32
-    test_seasons = [3, 10, 20, 29, 32]
+    # percent: 5, 8, 12, 18, 25 (不同时期)
+    test_seasons = [5, 8, 12, 18, 25]
     print(f"    测试赛季: {test_seasons}")
     
     weights = (0.2, 0.1, 0.3, 0.2, 0.2)
