@@ -32,6 +32,8 @@
   \usepackage{colortbl}  %彩色表格需要加载的宏包
 \usepackage{xcolor}
 \usepackage{pdfpages}
+\usepackage{graphicx}
+\usepackage{subcaption}
 
 \usepackage{array}
 \usepackage{cite} % 用于导入图片
@@ -245,25 +247,27 @@ $K$ & Number of ensemble runs \\
 The raw dataset covers 34 seasons and includes 421 celebrity--partner pairs with weekly judges' scores and elimination outcomes. Several preprocessing steps are applied to prepare the data for modeling.
 
 The provided dataset is complete and well-structured. To facilitate computation, we performed systematic cleaning: cells with judges' scores marked as ``N/A'' are converted to 0, and a contestant-week is considered \textbf{active} if at least one judge score is positive. For each active observation, the total judges' score $J_{i,t}$ is computed as the sum of all non-zero individual scores. Binary indicators are created for variables such as \textbf{``born in the US''}. For eliminated contestants, we record the \textbf{week of elimination}; for contestants who withdrew mid-competition, we flag them separately since their exits are not vote-determined. Professional dance partners were assigned with unique identifiers as well.
-As shown in the Figure~ref{}, we have also visualized the seasonal trends in the number of weeks and the variations in judges' scores across different seasons and weeks within each season. 
-\begin{figure}[htbp]
+
+As shown in the Figure   ~\ref{fig:judge_score_distribution}, we have also visualized the seasonal trends in the number of weeks and the variations in judges' scores across different seasons and weeks within each season.
+
+\begin{figure*}[htbp]
     \centering
-    \begin{subfigure}{0.48\textwidth}
+    \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{}
+        \includegraphics[width=\linewidth]{figures/season_length_5880x3840_1000dpi.png}
         \caption{Maximum Weekly Judges' Scores by Season}
         \label{fig:max_score_season}
     \end{subfigure}
     \hfill
-    \begin{subfigure}{0.48\textwidth}
+    \begin{subfigure}{0.45\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{fig4_judge_scores_3d.png}
+        \includegraphics[width=\linewidth]{figures/fig4_judge_scores_3d.png}
         \caption{Mean Judges' Scores by Season and Week}
         \label{fig:mean_score_3d}
     \end{subfigure}
     \caption{Distribution of Judges' Scores Across Seasons and Competition Weeks}
     \label{fig:judge_score_distribution}
-\end{figure}
+\end{figure*}
 
 \textbf{Rule regime classification} is essential given the show's evolving format. Each season is labeled according to the competition rules in effect: Seasons 1--2 use the \textbf{``Rank''} method (judges' and fan rankings are summed), Seasons 3--27 use the \textbf{``Percent''} method (normalized score shares are added), and Seasons 28--34 use the \textbf{``Bottom-2''} method (judges select which contestant to eliminate from the bottom two). This classification determines the form of elimination constraints used in the inverse model.
 
@@ -739,10 +743,31 @@ that nearly one-quarter of the variation in final ranking can be attributed
 to which dancer a celebrity is paired with---a factor entirely outside 
 the contestant's control.
 
+% \subsubsection{Partner Random Effects}
+
+The mixed-effects model estimates a random effect $u_j$ for each of the 60 professional dancers, representing their ``added value'' beyond contestant characteristics. Figure~\ref{fig:partner_random_effects} displays the top 10 and bottom 10 dancers ranked by their random effects across all three outcome variables.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/task3_me_top_bottom_partners.png}
+    \caption{Random effects ($u_j$) for professional dancers across three outcome models. Green bars indicate positive contributions---higher scores or better placements; red bars indicate negative contributions. The horizontal dashed line separates the top 10 from the bottom 10 dancers.}
+    \label{fig:partner_random_effects}
+\end{figure}
+
+% Several insights emerge from the random effect estimates:
+
+\begin{itemize}
+    \item \textbf{Derek Hough dominates all metrics.} He exhibits the highest positive effect on judge scores ($u_j = +2.78$) and the strongest negative effect on placement ($u_j = -1.37$, indicating his partners finish approximately 1.4 positions higher than expected). This confirms his status as the most impactful professional dancer in DWTS history.
+    
+    \item \textbf{Judge score effects are more dispersed.} The standard deviation of $u_j$ for judge scores is larger than for fan votes, suggesting that partner quality has a more pronounced effect on technical evaluation than on audience popularity.
+    
+    \item \textbf{Some dancers underperform expectations.} Partners such as Louis van Amstel and Gleb Savchenko show consistently negative random effects, indicating their celebrity partners tend to underperform relative to their baseline characteristics.
+\end{itemize}
+
 \subsubsection{Top Professional Dancers}
 
 We rank dancers by the average placement of their partners 
-(lower is better). Figure~\ref{fig:partner_ranking} presents the most successful professional dancers in DWTS history.
+(lower is better). Figure~\ref{fig:partner_ranking} presents the most successful professional dancers in DWTS.
 
 % \begin{table}[H]
 % \centering
@@ -773,7 +798,7 @@ We rank dancers by the average placement of their partners
     \label{fig:partner_ranking}
 \end{figure}
 
-Several notable patterns emerge from the data. \textbf{Derek Hough }clearly dominates in terms of professional success: across 17 partners, his average partner placement is 2.94, implying that his partners finish in the top three on average, making him statistically the most successful professional dancer on the show. However, we also found that while the first-place partner did indeed have the highest average judges' score, these scores did not necessarily indicate the partner's overall average score. Julianne Hough, who ranked second, only received an average judges' score of 23.6. Meanwhile, Valentin Chmerkovskiy, who had the same average score as Derek at 28.7, only ranked fifth among the partners, with an average placement of 5.26. This suggests that \textbf{audience preferences} are \textbf{not} significantly influenced by the dance partners.
+\textbf{Derek Hough }clearly dominates in terms of professional success: across 17 partners, his average partner placement is 2.94, implying that his partners finish in the top three on average, making him statistically the most successful professional dancer on the show. However, we also found that while the first-place partner did indeed have the highest average judges' score, these scores did not necessarily indicate the partner's overall average score. Julianne Hough, who ranked second, only received an average judges' score of 23.6. Meanwhile, Valentin Chmerkovskiy, who had the same average score as Derek at 28.7, only ranked fifth among the partners, with an average placement of 5.26. This suggests that \textbf{audience preferences} are \textbf{less} significantly influenced by the dance partners.
 
 
 % ----------------------------------------------------------------------
@@ -889,31 +914,31 @@ In summary, Task 4 proves that commercial peak and competitive fairness can be h
 \begin{ReportAiUse}{5}
 
 \bibitem{AI1}
-GitHub Copilot (Agent Mode)\\
+GitHub Copilot (Ask Mode)\\
 \textbf{Query:} Design an entropy-regularized inverse optimization model to estimate latent fan vote shares from elimination outcomes.\\
 \textbf{Human Input:} We identified that naive regression approaches introduce confirmation bias. We required an unbiased approach using only elimination constraints.\\
 \textbf{Output:} Copilot assisted in formulating the MaxEnt + KL-divergence objective function and implementing the SLSQP solver in Python. All hyperparameter choices ($\lambda$, $\rho$) were manually tuned via cross-validation.
 
 \bibitem{AI2}
-GitHub Copilot (Agent Mode)\\
+GitHub Copilot (Ask Mode)\\
 \textbf{Query:} Implement a Mixed-Effects Model to quantify professional dancer impact on contestant placement.\\
 \textbf{Human Input:} We recognized that including dancer identity as fixed effects would consume excessive degrees of freedom. We decided to treat dancers as random effects to estimate the global variance attributable to partner assignment.\\
 \textbf{Output:} Copilot generated the \texttt{statsmodels.MixedLM} code structure. We manually verified ICC calculations and cross-checked results against the theoretical formula $\text{ICC} = \sigma^2_u / (\sigma^2_u + \sigma^2_\epsilon)$.
 
 \bibitem{AI3}
-GitHub Copilot (Agent Mode)\\
+GitHub Copilot (Ask Mode)\\
 \textbf{Query:} Generate counterfactual survival curves comparing Rank-Sum and Percentage-Sum elimination rules.\\
 \textbf{Human Input:} We specified the logistic survival function with threshold $\alpha=2.2$ and sensitivity $\beta_s=1.5$ based on empirical analysis of historical elimination patterns. The "Bobby Bones anomaly" was identified as a key test case.\\
 \textbf{Output:} Copilot assisted with vectorized simulation code and matplotlib visualization. All statistical interpretations (e.g., "60.2\% fan-favored by Percentage") were computed and verified manually.
 
 \bibitem{AI4}
-GitHub Copilot (Agent Mode)\\
+GitHub Copilot (Ask Mode)\\
 \textbf{Query:} Debug web scraping pipeline for social media follower counts and Google Trends data.\\
 \textbf{Human Input:} We designed the data collection strategy targeting Twitter, Instagram, Facebook, and YouTube. Rate limiting and API authentication were handled manually.\\
 \textbf{Output:} Copilot suggested error handling patterns and pandas data cleaning operations. All scraped data was manually validated against public profiles before integration.
 
 \bibitem{AI5}
-GitHub Copilot (Agent Mode)\\
+GitHub Copilot (Ask Mode)\\
 \textbf{Query:} Format regression coefficient tables and ICC results in LaTeX with proper significance notation.\\
 \textbf{Human Input:} We specified the three-level significance scheme and requested a compact table layout suitable for two-column format.\\
 \textbf{Output:} Copilot generated the \texttt{tabular} environment structure. Caption text and variable interpretations were written entirely by the team.
