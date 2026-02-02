@@ -416,10 +416,11 @@ where $J_i$ and $J_j$ are raw technical scores and $\gamma$ quantifies the judge
 Our simulation highlights eight prominent "divergent" contestants whose trajectories differ significantly under the two rules. As illustrated in Figure~\ref{fig:survival_curves}, the Percentage Rule acts as a significant "fan-power amplifier." For contestants like Bobby Bones, Iman Shumpert, and Nelly, the Percentage Rule allows massive popular margins to effectively bridge large technical gaps, leading to substantial gains in cumulative survival. Conversely, under the Rank-Sum Rule, the technical disadvantage of performers such as Jerry Rice, Bristol Palin, and Billy Ray Cyrus becomes far more difficult to overcome due to the ceiling on rank points.
 \begin{figure}
     \centering
-    \includegraphics[width=1.0\linewidth]{Code_Generated_Image.png}
+    \includegraphics[width=0.8\linewidth]{Code_Generated_Image.png}
     \caption{Survival Curve:Rank VS Percent}
     \label{fig:survival_curves}
 \end{figure}
+
 \begin{table}[htbp]
 \centering
 \caption{Comparative Estimated Placements and Survival Gains}
@@ -427,7 +428,7 @@ Our simulation highlights eight prominent "divergent" contestants whose trajecto
 \rowcolors{2}{gray!10}{white}
 \begin{tabular}{lcccc}
 \hline
-\rowcolor{blue!}Contestant (Season) & Actual Rank & Rank Rule Est. & Percent Rule Est. & Survival Advantage \\
+\rowcolor{blue!20} Contestant (Season) & Actual Rank & Rank Rule Est. & Percent Rule Est. & Survival Advantage \\
 \midrule
 Bobby Bones (S27) & 1 & 11 & 5 & Percentage \\
 Iman Shumpert (S30) & 1 & 10 & 3 & Percentage \\
@@ -445,23 +446,23 @@ The empirical results in Table~\ref{tab:placement_shifts} further validate that 
 \subsubsection{Impacts of judge's choice rule}
 \begin{figure}
     \centering
-    \includegraphics[width=1\linewidth]{Code_Generated_Image (1).png}
+    \includegraphics[width=0.8\linewidth]{Code_Generated_Image (1).png}
     \caption{Judge's Choice impact}
     \label{fig:judge}
 \end{figure}
 After introducing judges' intervention in the elimination round, contestants with lower initial judge scores—such as Bobby Bones and Iman Shumpert—faced significantly reduced survival rates. As shown in the Figure~ref{fig:judge}, the survival rate under the percent scoring method dropped substantially (to less than one-third of the original rate) compared to the rank scoring method following the judges' selection. This effectively curbed the “fan frenzy effect.” It is widely acknowledged that judges' scores are more subjective than audience votes and better reflect contestants' true abilities. This reduces the likelihood of upsets driven solely by fan voting, enhances the program's fairness, and makes the entire scoring mechanism more reasonable and balanced.                                  
-\section{Strategic Recommendations for Future Rule Design}
+\subsection{Strategic Recommendations for Future Rule Design}
 
 Based on the stochastic survival modeling and counterfactual simulations conducted in this study, we propose a hybrid governance model for future seasons. This model combines the percentage aggregation method with a mandatory two-stage jury selection mechanism. The rationale for this dual-layer architecture stems from the following analytical conclusions:
 
-\subsection{Foundational Aggregation: Adopting the Percentage Aggregation Method}
+\subsubsection{Foundational Aggregation: Adopting the Percentage Aggregation Method}
 We recommend retaining the \textbf{percentage aggregation method} (sum of score shares) as the foundational aggregation rule, rather than adopting a ranking method.
 \begin{itemize}
     \item \textbf{Mitigating Information Loss}: Ranking methods inherently discretize continuous performance data, leading to “ordinal information loss.” This approach weakens the quantification of fan support, resulting in equal ranking advantages for contestants securing 50% votes versus 20% votes when leading within their respective tiers.
 \item \textbf{Incentivizing Engagement}: The percentage method establishes a linear mapping between fan engagement and survival probability. This “high beta coefficient” characteristic stimulates active audience participation—marginal increases in votes directly translate into survival advantages, fostering “underdog storylines” that drive viewership (e.g., Iman Shumpert in Season 30).
 \end{itemize}
 
-\subsection{Essential Correction Mechanism: Judges' Selection Privilege}
+\subsubsection{Essential Correction Mechanism: Judges' Selection Privilege}
 While the percentage method maximizes engagement, it induces high volatility. Therefore, we strongly advise against using this mechanism alone. The “Judge's Choice (Bottom Two Safe)” must be enforced as a non-negotiable “elite system circuit breaker.”
 \begin{itemize}
     \item Filtering statistical outliers: Our simulation of the “Bobby Bones anomaly” (S27) shows that a pure fan-voting system could render technical skill nearly irrelevant to final rankings. The judge selection mechanism acts as a high-pass filter, effectively blocking contestants whose technical performance consistently falls below the threshold ($Z_{score} < -1.5$) from exploiting fan voting loopholes to advance to the finals.
@@ -487,24 +488,12 @@ Based on the enhanced dataset, we build a \textbf{multi-level regression framewo
 
 % 3.1.1 因变量定义
 \subsubsection{Dependent Variables}
-\begin{table}[H]
-\centering
-\begin{tabular}{lll}
-\toprule
-Symbol & Variable & Interpretation \\
-\midrule
-$Y_1$ & \texttt{avg\_judge\_score} & Professional evaluation (0--40 scale) \\
-$Y_2$ & \texttt{avg\_fan\_vote\_share} & Audience preference (0--1 scale) \\
-$Y_3$ & \texttt{placement} & Overall success (1 = winner) \\
-\bottomrule
-\end{tabular}
-\caption{Three dimensions of ``success'' on DWTS}
-\end{table}
 
-\textit{Note}: We use final \text{placement} rather than a weighted composite 
-score because of the following reasons: (1) it avoids subjective weighting choices, 
-(2) different scoring regimes across seasons make composite scores 
-non-comparable, and (3) placement directly answers ``who wins.''
+We consider three dependent variables capturing different dimensions of ``success'' . The first outcome,  $Y_1$ (\texttt{avg\_judge\_score}), measures professional evaluation and is defined as the average judges’ score received by a contestant. 
+The second outcome, $Y_2$ (\texttt{avg\_fan\_vote\_share}), reflects audience 
+preference and is operationalized as the contestant’s average share of fan votes,  ranging from 0 to 1. The third outcome, $Y_3$ (\texttt{placement}), captures overall competitive success and is defined as the contestant’s final ranking in the season.
+
+We use final placement rather than a weighted composite score as our measure of overall success because it avoids subjective weighting choices, remains comparable across seasons with different scoring regimes, and directly answers the question that, who ultimately wins the competition.
 
 % 3.1.2 模型表达式
 \subsubsection{Contestant-Level Model (Static Characteristics)}
@@ -517,7 +506,6 @@ Y_i = \beta_0 + \beta_1 \cdot \text{Age}_i + \beta_2 \cdot \text{isUS}_i
     + \beta_5 \cdot \text{DanceExp}_i + \sum_{k} \gamma_k \cdot \mathbf{1}[\text{Industry}_i = k] 
     + \epsilon_i
 \end{equation}
-\textit{Sample}: $N = 421$ contestants across 34 seasons.
 
 \subsubsection{Weekly-Level Model (Dynamic Characteristics)}
 The second stratum addresses dynamic variability. While static traits set a contestant's baseline, their trajectory is often shaped by real-time public sentiment. We construct a panel data model with contestant-week observations ($N=2,777$) to capture the immediate impact of time-varying predictors: Social Media Popularity and Google Search Volume.
@@ -530,7 +518,6 @@ Y_{it} = \alpha_0 + \alpha_1 \cdot \text{SocialMediaPop}_{it}
        + \alpha_2 \cdot \text{GoogleSearch}_{it} + \mathbf{X}_i'\boldsymbol{\beta} 
        + \epsilon_{it}
 \end{equation}
-\textit{Sample}: $N = 2{,}777$ contestant-weeks.
 
 %------------------------------------------------------------------
 \subsection{Results: Celebrity Characteristics}
@@ -555,9 +542,8 @@ Fan Vote (Weekly) & 0.319 & 0.316 & 92.6*** \\
 \caption{Model fit statistics. ***: $p < 0.001$}
 \end{table}
 
-\textit{Interpretation}: The contestant-level $R^2$ of 0.18--0.24 is consistent 
-with behavioral research norms, indicating that pre-competition characteristics 
-explain a meaningful but limited portion of variance---leaving room for actual 
+The contestant-level $R^2$ of 0.18--0.24 is consistent 
+with behavioral research norms, indicating that pre-competition characteristics explain a meaningful but limited portion of variance---leaving room for actual 
 dance performance to determine outcomes.
 
 % 3.2.2 关键发现
@@ -593,8 +579,6 @@ Contestants categorized as "Social Media Personalities" demonstrate a massive ou
 %------------------------------------------------------------------
 \subsection{Judge vs. Fan: What Do They Value?}
 
-A central question is whether judges and fans evaluate contestants 
-using the same criteria. We compare $t$-statistics across models:
 
 \begin{table}[H]
 \centering
@@ -619,6 +603,10 @@ is\_US & $-0.44$ & $-0.85$ & Similar \\
     \label{fig:judge_fan_sensitivity}
 \end{figure}
 
+
+A central question is whether judges and fans evaluate contestants 
+using the same criteria. We compare $t$-statistics across models.
+
 A clear dichotomy emerges: text{Judges} emphasize physical and technical factors (age, dance experience), while text{Fans} respond strongly to pre-existing popularity and social media presence. Notably, both groups reward athletes, suggesting physical discipline appeals to judges and audiences alike. This divergence supports the hybrid scoring system: judges uphold technical standards, while fan voting sustains viewer engagement.
 
 %------------------------------------------------------------------
@@ -635,13 +623,11 @@ Y_{ij} = \mathbf{X}_{ij}'\boldsymbol{\beta} + u_j + \epsilon_{ij},
 
 where $u_j$ is the random effect for dancer $j$, capturing the dancer's 
 ``added value'' beyond contestant characteristics. The key metric is the 
-\textbf{ICC}:
+\textbf{ICC}, represents the proportion of outcome variance attributable to the professional dancer assignment.
 \begin{equation}
 \text{ICC} = \frac{\sigma^2_u}{\sigma^2_u + \sigma^2_\epsilon}
 \end{equation}
 
-The ICC represents the proportion of outcome variance attributable to 
-the professional dancer assignment.
 
 \subsubsection{ICC Results}
 
@@ -668,30 +654,29 @@ the contestant's control.
 \subsubsection{Top Professional Dancers}
 
 We rank dancers by the average placement of their partners 
-(lower is better). Table~\ref{tab:top_dancers} presents the most successful 
-professional dancers in DWTS history.
+(lower is better). Figure~\ref{fig:partner_ranking} presents the most successful professional dancers in DWTS history.
 
-\begin{table}[H]
-\centering
-\caption{Top 10 Professional Dancers by Partner Performance}
-\label{tab:top_dancers}
-\begin{tabular}{clcccc}
-\toprule
-\textbf{Rank} & \textbf{Dancer} & \textbf{Avg Placement} & \textbf{Partners} & \textbf{Best} & \textbf{Avg Judge} \\
-\midrule
-1 & Derek Hough & 2.94 & 17 & 1 & 28.7 \\
-2 & Julianne Hough & 4.20 & 5 & 1 & 23.6 \\
-3 & Daniella Karagach & 4.60 & 5 & 1 & 27.6 \\
-4 & Mark Ballas & 5.19 & 21 & 1 & 27.1 \\
-5 & Valentin Chmerkovskiy & 5.26 & 19 & 1 & 28.7 \\
-6 & Lindsay Arnold & 5.40 & 10 & 1 & 25.6 \\
-7 & Witney Carson & 5.50 & 14 & 1 & 28.1 \\
-8 & Cheryl Burke & 5.80 & 25 & 1 & 24.3 \\
-9 & Maksim Chmerkovskiy & 6.00 & 17 & 1 & 25.1 \\
-10 & Sasha Farber & 6.08 & 12 & 3 & 28.0 \\
-\bottomrule
-\end{tabular}
-\end{table}
+% \begin{table}[H]
+% \centering
+% \caption{Top 10 Professional Dancers by Partner Performance}
+% \label{tab:top_dancers}
+% \begin{tabular}{clcccc}
+% \toprule
+% \textbf{Rank} & \textbf{Dancer} & \textbf{Avg Placement} & \textbf{Partners} & \textbf{Best} & \textbf{Avg Judge} \\
+% \midrule
+% 1 & Derek Hough & 2.94 & 17 & 1 & 28.7 \\
+% 2 & Julianne Hough & 4.20 & 5 & 1 & 23.6 \\
+% 3 & Daniella Karagach & 4.60 & 5 & 1 & 27.6 \\
+% 4 & Mark Ballas & 5.19 & 21 & 1 & 27.1 \\
+% 5 & Valentin Chmerkovskiy & 5.26 & 19 & 1 & 28.7 \\
+% 6 & Lindsay Arnold & 5.40 & 10 & 1 & 25.6 \\
+% 7 & Witney Carson & 5.50 & 14 & 1 & 28.1 \\
+% 8 & Cheryl Burke & 5.80 & 25 & 1 & 24.3 \\
+% 9 & Maksim Chmerkovskiy & 6.00 & 17 & 1 & 25.1 \\
+% 10 & Sasha Farber & 6.08 & 12 & 3 & 28.0 \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
 
 \begin{figure}[H]
     \centering
@@ -699,48 +684,8 @@ professional dancers in DWTS history.
     \caption{Top 10 professional dancers ranked by average partner placement. The annotation $n$ indicates the number of celebrity partners each dancer has trained.}
     \label{fig:partner_ranking}
 \end{figure}
-\textbf{Key Observations:}
-\begin{itemize}
-    \item \textbf{Derek Hough dominates}: With an average partner placement of 2.94 
-          across 17 partners, Derek Hough is statistically the most successful 
-          professional dancer. His partners finish in the top 3 on average.    
-    \item \textbf{The Hough siblings}: Julianne Hough (Derek's sister) ranks second 
-          despite fewer appearances, suggesting a family advantage in training 
-          methodology or partner chemistry.    
-    \item \textbf{Experience matters}: Top-10 dancers average 14.5 seasons 
-          on the show, compared to 6.8 for all dancers, suggesting that 
-          accumulated experience improves teaching and choreography skills.
-\end{itemize}
 
-%------------------------------------------------------------------
-\subsection{Summary of Task 3}
-
-\begin{enumerate}
-    \item \textbf{Age matters}: Younger contestants have a measurable advantage 
-          in judge scores ($\beta = -0.28$, $p = 0.002$), but the effect on fan votes is weaker.
-    
-    \item \textbf{Popularity $\neq$ Skill}: Celebrity popularity predicts fan votes 
-          ($p = 0.001$) but not professional evaluation---judges are ``blind'' to fame.
-    
-    \item \textbf{Dancer assignment is consequential}: Professional dancers explain 
-          14--18\% of outcome variance (ICC). Derek Hough's partners average 
-          placement 2.94, making him the statistically most successful professional dancer.
-    
-    \item \textbf{Dynamic effects exist}: Weekly social media popularity 
-          significantly predicts that week's fan vote share ($p < 0.001$), 
-          suggesting real-time engagement drives audience voting behavior.
-    
-    \item \textbf{Industry background matters}: Social media personalities 
-          score 5.3 points higher than baseline ($p = 0.005$), likely due to 
-          highly engaged online fanbases.
-\end{enumerate}
-
-
-
-
-
-
-
+Several notable patterns emerge from the data. \textbf{Derek Hough }clearly dominates in terms of professional success: across 17 partners, his average partner placement is 2.94, implying that his partners finish in the top three on average, making him statistically the most successful professional dancer on the show. \textbf{The Hough siblings} further stand out, as Julianne Hough ranks second despite having fewer appearances, which may point to a shared advantage in training methodology, choreography style, or partner chemistry. More broadly, \textbf{experience} appears to play a critical role in success, with top-10 professional dancers averaging 14.5 seasons on the show, compared to only 6.8 seasons for the full set of dancers, suggesting that accumulated experience enhances teaching effectiveness and choreographic skill.
 
 
 
