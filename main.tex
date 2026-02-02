@@ -511,9 +511,8 @@ We use a stratified modeling approach, beginning with static attributes (e.g., a
 For contestant $i$:
 \begin{equation}
 Y_i = \beta_0 + \beta_1 \cdot \text{Age}_i + \beta_2 \cdot \text{isUS}_i 
-    + \beta_3 \cdot \text{Popularity}_i + \beta_4 \cdot \text{BMI}_i 
-    + \beta_5 \cdot \text{DanceExp}_i + \sum_{k} \gamma_k \cdot \mathbf{1}[\text{Industry}_i = k] 
-    + \epsilon_i
+    + \beta_3 \cdot \text{BMI}_i + \beta_4 \cdot \text{DanceExp}_i 
+    + \sum_{k} \gamma_k \cdot \mathbf{1}[\text{Industry}_i = k] + \epsilon_i
 \end{equation}
 
 \subsubsection{Weekly-Level Model (Dynamic Characteristics)}
@@ -540,12 +539,12 @@ Y_{it} = \alpha_0 + \alpha_1 \cdot \text{SocialMediaPop}_{it}
 \toprule
 Model & $R^2$ & Adj. $R^2$ & $F$-statistic \\
 \midrule
-Judge Score (Contestant) & 0.237 & 0.211 & 9.01*** \\
-Fan Vote (Contestant) & 0.177 & 0.148 & 6.22*** \\
-Placement (Contestant) & 0.241 & 0.215 & 9.21*** \\
+Judge Score (Contestant) & 0.232 & 0.211 & 11.20*** \\
+Fan Vote (Contestant) & 0.154 & 0.131 & 6.75*** \\
+Placement (Contestant) & 0.221 & 0.200 & 10.54*** \\
 \midrule
-Judge Score (Weekly) & 0.331 & 0.327 & 97.6*** \\
-Fan Vote (Weekly) & 0.319 & 0.316 & 92.6*** \\
+Judge Score (Weekly) & 0.330 & 0.327 & 104.57*** \\
+Fan Vote (Weekly) & 0.319 & 0.316 & 99.48*** \\
 \bottomrule
 \end{tabular}
 \caption{Model fit statistics. ***: $p < 0.001$}
@@ -561,29 +560,29 @@ Table \ref{tab:coefficients} summarizes the regression results for the static ch
 
 \begin{table}[H]
 \centering
-\begin{tabular}{lcccc}
+\begin{tabular}{lccccccl}
 \toprule
-Variable & Judge ($\beta$) & Fan ($\beta$) & Placement ($\beta$) & Insight \\
+Variable & Judge $\beta$ & $p$ & Fan $\beta$ & $p$ & Place $\beta$ & $p$ & Insight \\
 \midrule
-Age & $-0.28$** & $-0.002$* & $+0.22$*** & Younger $\to$ higher scores \\
-Celeb Popularity & $-0.05$ & $+0.002$*** & $-0.14$** & Popularity $\to$ fan votes \\
-Dance Experience & $-0.16$ & $-0.000$ & $+0.17$* & Weak effect \\
-Industry: Athlete & $+0.52$ & $+0.004$ & $-0.15$ & Athletes perform well \\
-Industry: Social Media & $+5.30$** & $-0.020$ & $+0.31$ & SM stars excel \\
+Age & $-0.166$ & *** & $-0.001$ & *** & $+0.123$ & *** & Younger $\to$ higher scores \\
+Dance Experience & $-0.169$ & & $+0.000$ & & $+0.176$ & * & Weak effect \\
+Industry: Athlete & $+0.34$ & & $+0.004$ & & $-0.14$ & & Athletes perform well \\
+Industry: Social Media & $+5.61$ & *** & $-0.020$ & & $+0.04$ & & SM stars excel \\
+Industry: Model & $-2.69$ & * & $-0.022$ & & $+2.76$ & *** & Models struggle \\
 \bottomrule
 \end{tabular}
-\caption{Selected regression coefficients. *: $p<0.05$, **: $p<0.01$, ***: $p<0.001$}
+\caption{Selected regression coefficients. *: $p<0.1$, **: $p<0.05$, ***: $p<0.01$}
 \label{tab:coefficients}
 \end{table}
 
 \textbf{The Age Advantage in Professional Assessment.} 
-A strong negative correlation exists between contestant age and judge scores($\beta = -0.28, p = 0.002$).Each additional decade of age corresponds to an average decrease of approximately 2.8 points, reflecting the premium placed on the physical agility and stamina associated with youth in ballroom dancing.
+A strong negative correlation exists between contestant age and judge scores ($\beta = -0.166, p < 0.001$). Each additional decade of age corresponds to an average decrease of approximately 1.7 points, reflecting the premium placed on the physical agility and stamina associated with youth in ballroom dancing.
 
 \textbf{The Divergence of Fame and Skill.} 
-A critical insight is the independence of professional Judges' scores show no statistically significant link to pre-existing celebrity popularity (p = 0.46). In contrast, popularity is a strong, significant predictor of fan vote share (p = 0.001). This confirms that while audience voting functions as a popularity contest, judge assessment remains effectively independent of contestant fame.
+A critical finding emerges from the weekly model: \textbf{social media popularity} strongly predicts fan votes ($\beta = 0.014, p < 0.001$), where a one standard deviation increase in weekly social media buzz corresponds to a 1.4 percentage point gain in fan vote share. Judges also respond positively to social media presence, though to a lesser extent. The key distinction is that fan voting appears more directly driven by real-time publicity momentum.
 
 \textbf{The "Social Media" Industry Effect.}
-Contestants categorized as "Social Media Personalities" demonstrate a massive outlier effect in judge scores ($\beta = +5.30, p = 0.005$). This likely stems from a selection bias: social media stars cast on the show are often younger and possess dance-adjacent skills (e.g., TikTok choreography trends), giving them a baseline technical advantage over traditional actors or musicians.
+Contestants categorized as "Social Media Personalities" demonstrate a massive outlier effect in judge scores ($\beta = +5.61, p < 0.01$). This likely stems from a selection bias: social media stars cast on the show are often younger and possess dance-adjacent skills (e.g., TikTok choreography trends), giving them a baseline technical advantage over traditional actors or musicians.
 
 %------------------------------------------------------------------
 \subsection{Judge vs. Fan: What Do They Value?}
@@ -595,11 +594,11 @@ Contestants categorized as "Social Media Personalities" demonstrate a massive ou
 \toprule
 Factor & Judge ($t$-stat) & Fan ($t$-stat) & Who cares more? \\
 \midrule
-Age & $-3.06$** & $-2.27$* & \textbf{Judges} \\
-Celebrity Popularity & $-0.74$ & $+3.29$*** & \textbf{Fans} \\
-Dance Experience & $-1.17$ & $-0.02$ & Judges (weak) \\
-BMI & $+0.38$ & $-0.16$ & Similar \\
-is\_US & $-0.44$ & $-0.85$ & Similar \\
+Age & $-9.18$*** & $-7.69$*** & \textbf{Judges} \\
+Social Media Popularity & $+28.25$*** & $+30.97$*** & \textbf{Fans} (slightly) \\
+Dance Experience & $-1.20$ & $+0.01$ & Neither \\
+BMI & $+0.29$ & $-0.03$ & Neither \\
+is\_US & $-0.37$ & $-0.82$ & Neither \\
 \bottomrule
 \end{tabular}
 \caption{Comparison of $t$-statistics across Judge and Fan models}
@@ -646,17 +645,17 @@ where $u_j$ is the random effect for dancer $j$, capturing the dancer's
 \toprule
 Dependent Variable & ICC & Interpretation \\
 \midrule
-Judge Score & \textbf{13.7\%} & Dancer explains $\sim$14\% of judge score variance \\
-Fan Vote Share & \textbf{15.4\%} & Dancer matters slightly more for audience votes \\
-Placement & \textbf{18.2\%} & Dancer assignment most strongly affects final ranking \\
+Judge Score & \textbf{13.6\%} & Dancer explains $\sim$14\% of judge score variance \\
+Fan Vote Share & \textbf{13.9\%} & Dancer matters similarly for audience votes \\
+Placement & \textbf{22.8\%} & Dancer assignment most strongly affects final ranking \\
 \bottomrule
 \end{tabular}
 \caption{Intraclass Correlation Coefficients for professional dancers}
 \end{table}
 
 \textit{Interpretation}: Being assigned to a top-tier professional dancer 
-provides a substantial advantage. The ICC of 18.2\% for placement means 
-that nearly one-fifth of the variation in final ranking can be attributed 
+provides a substantial advantage. The ICC of 22.8\% for placement means 
+that nearly one-quarter of the variation in final ranking can be attributed 
 to which dancer a celebrity is paired with---a factor entirely outside 
 the contestant's control.
 
