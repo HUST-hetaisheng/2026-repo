@@ -46,7 +46,10 @@
 \author{\small \href{https://www.latexstudio.net/}
   {\includegraphics[width=7cm]{mcmthesis-logo}}}
 \date{\today}
+\title{Balancing Professional Integrity and Popular Appeal: Evaluation and Optimization of the DWTS Scoring Mechanism
+}
 \begin{document}
+
 \begin{abstract}
 \par In the show \textit{Dancing with the Stars}, judges’ scores and fan votes determine competition outcomes together, directly influencing fairness as different scoring regulations lead to different results. Our study establishes a systematic analytical framework to estimate confidential fan votes.By using the model,we can evaluate the impact of voting rules, quantify the effects of contestant traits and partner characteristics,and ultimately proposing  fairer and more effective scoring rules.
 
@@ -66,11 +69,12 @@ Vote Estimation;Inverse Optimization;Mixed‑Effects Model;Scoring Fairness
 \end{keywords}
 \end{abstract}
 \maketitle
+
 %% Generate the Table of Contents, if it's needed.
 
 {
-\setlength{\parskip}{-1pt} % 段间距设为0
-\renewcommand{\baselinestretch}{0.9} % 行距设为0.9倍（可按需调整，如 0.8）
+\setlength{\parskip}{-2pt} % 段间距设为0
+\renewcommand{\baselinestretch}{0.8} % 行距设为0.9倍（可按需调整，如 0.8）
 \tableofcontents
 }
 \newpage
@@ -141,9 +145,16 @@ The impacts of professional dancer traits and celebrity characteristics on compe
 \textbf{Task 4: Alternative Scoring System.}
 An alternative scoring system combining \quad
 judges’ scores and fan votes is proposed and evaluated to determine whether it improves fairness or other aspects of the competition.
-
+\subsection{Our Work}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/our work.png}
+    \caption{Our Work}
+    \label{fig:placeholder}
+\end{figure}
 
 \section{Preparations for Modeling}
+
 
 \subsection{Model Assumptions}
 
@@ -380,10 +391,10 @@ Since the search space $\mathcal{S}_N$ is factorial, we employ a greedy swapping
 where $\gamma > 0$ controls the steepness of the decay. To quantify uncertainty, we perform ensemble inference by perturbing judge scores with Gaussian noise and repeating the optimization, yielding a posterior distribution over $f_{i,w}$.
 
 In conclusion, our model demonstrates strong empirical validity: it correctly recovers elimination outcomes with high probability (overall $\bar{P}_{\text{cons}} = 0.93$), while uncertainty quantification reveals interpretable regime-dependent patterns that align with the theoretical information content of each voting mechanism\cite{r6}. The Percent regime provides the most reliable inference, while the judges' Choice mechanism in recent seasons introduces irreducible ambiguity that is faithfully captured by our probabilistic framework.
-\section{Rank VS Percent Method with predicted data} 
+\section{Rank VS Percent: Choice of Score Combination and Elimination Rules} 
 \subsection{Influence of Voting Methods on Final Outcomes}
 
-Estimated fan vote shares are combined with original judges’ scores to simulate eliminations under two counterfactual rules: the Rank method (rank-sum) and the Percentage method (score-share sum). As shown in Table~\ref{tab:rank_pct_metrics}, the two methods agree in 72.2\% of weeks but differ in 93 cases. In weeks of disagreement, a positive $\Delta_{fan}$ indicates that the Rank method eliminates a contestant with higher fan support, implying that the Percentage method is more fan-favorable.
+Estimated fan vote shares are combined with original judges’ scores to simulate eliminations under two counterfactual rules: the Rank method (rank-sum) and the Percentage method (score-share sum). As shown in Table~\ref{tab:rank_pct_overall} and ~\ref{tab:rank_pct_regime}, the two methods agree in 72.2\% of weeks but differ in 93 cases. In weeks of disagreement, a positive $\Delta_{fan}$ indicates that the Rank method eliminates a contestant with higher fan support, implying that the Percentage method is more fan-favorable.
 
 Regression results in Figure~\ref{fig:safety_margin} show a positive association ($\beta = 2.40$), indicating that a 10-percentage-point increase in fan vote share improves a contestant’s relative standing by approximately 0.24 ranks under the Percentage Rule compared to the Rank Rule. Although the $R^2$ is modest, the relationship is statistically significant.
 
@@ -571,7 +582,7 @@ While the percentage method maximizes engagement, it induces high volatility. Th
 % TASK 3: Impact of Contestant and Partner Characteristics
 %==================================================================
 
-\section{Impact of Contestant and Partner Characteristics}
+\section{Impact of Contestant Characteristics and Dance Partners}
 
 To identify the most influential pre-competition traits of celebrities and professional dancers on Dancing with the Stars outcomes, we supplement the original dataset with four external data dimensions: \textbf{physical attributes} (specifically, BMI), aggregated and standardized weekly \textbf{social media engagement} across platforms including Twitter, Instagram, Facebook, and YouTube, weekly trends in \textbf{public attention} measured via Google Search Volume, and a quantified assessment of \textbf{prior dance experience}.
 
@@ -798,7 +809,7 @@ We rank dancers by the average placement of their partners
     \label{fig:partner_ranking}
 \end{figure}
 
-\textbf{Derek Hough }clearly dominates in terms of professional success: across 17 partners, his average partner placement is 2.94, implying that his partners finish in the top three on average, making him statistically the most successful professional dancer on the show. However, we also found that while the first-place partner did indeed have the highest average judges' score, these scores did not necessarily indicate the partner's overall average score. Julianne Hough, who ranked second, only received an average judges' score of 23.6. Meanwhile, Valentin Chmerkovskiy, who had the same average score as Derek at 28.7, only ranked fifth among the partners, with an average placement of 5.26. This suggests that \textbf{audience preferences} are \textbf{less} significantly influenced by the dance partners.
+\textbf{Derek Hough }clearly dominates in terms of professional success: across 17 partners, his average partner placement is 2.94. However, we also found that while the first-place partner did indeed have the highest average judges' score, these scores did not necessarily indicate the partner's overall average score. Julianne Hough, who ranked second, only received an average judges' score of 23.6. Meanwhile, Valentin Chmerkovskiy, who had the same average score as Derek at 28.7, only ranked fifth among the partners, with an average placement of 5.26. This suggests that \textbf{audience preferences} are \textbf{less} significantly influenced by the dance partners.
 
 
 % ----------------------------------------------------------------------
@@ -890,6 +901,7 @@ In summary, Task 4 proves that commercial peak and competitive fairness can be h
 \subsection{Conclusion}
 \noindent This study develops a computational framework to analyze voting and scoring in \emph{Dancing with the Stars}. It introduces an inverse optimization model to estimate latent audience votes and adapts this analysis across different historical scoring regimes. A dynamic control system is designed to balance viewer engagement with competitive fairness over time. The framework integrates external data and quantifies uncertainty, providing a principled tool for evaluating and designing engaging competition formats.
 
+% \newpage
 \bibliographystyle{unsrt}
 \bibliography{ref}  
 
@@ -903,6 +915,56 @@ In summary, Task 4 proves that commercial peak and competitive fairness can be h
 
 
 \begin{appendices}
+%==================================================================
+% APPENDIX: Key Algorithms
+%==================================================================
+\appendix
+
+
+\section{Inverse Optimization for Fan Vote Estimation}
+
+\begin{lstlisting}[language=Python, caption={Fan Vote Estimation via Entropy-Regularized Inverse Optimization}]
+def estimate_fan_votes(week_data, lambda_ent=0.1, rho_smooth=0.2):
+    """Estimate latent fan vote shares using MaxEnt + elimination constraints."""
+    n = len(week_data)
+    
+    def objective(f):
+        entropy = -np.sum(f * np.log(f + 1e-12))
+        kl_div = np.sum(f * np.log(f / prior + 1e-12))
+        return -lambda_ent * entropy + kl_div + rho_smooth * np.sum((f - f_prev)**2)
+    
+    constraints = [{'type': 'eq', 'fun': lambda f: np.sum(f) - 1.0},
+                   {'type': 'ineq', 'fun': lambda f: elimination_constraint(f, week_data)}]
+    return minimize(objective, x0=np.ones(n)/n, method='SLSQP',
+                    bounds=[(0.01, 0.99)]*n, constraints=constraints).x
+\end{lstlisting}
+
+\section{Mixed-Effects Model for Partner Effect}
+
+\begin{lstlisting}[language=Python, caption={Mixed-Effects Model with Partner Random Effects}]
+def fit_partner_effect_model(df, outcome='placement'):
+    """Fit LMM: Y_ij = X_ij * beta + u_j + epsilon_ij"""
+    X = sm.add_constant(pd.get_dummies(df['Industry'], drop_first=True)
+                        .join(df[['age', 'bmi', 'dance_experience_score']]))
+    model = MixedLM(df[outcome], X, groups=df['Partner'])
+    result = model.fit(method='powell')
+    
+    var_u, var_e = result.cov_re.iloc[0,0], result.scale
+    return {'icc': var_u/(var_u+var_e), 'random_effects': result.random_effects}
+\end{lstlisting}
+
+\section{Counterfactual Elimination Simulation}
+
+\begin{lstlisting}[language=Python, caption={Rank vs. Percentage Rule Comparison}]
+def simulate_elimination(week_data, method='percentage'):
+    """Compare elimination outcomes under different voting rules."""
+    j, f = week_data['judge_score_share'], week_data['fan_vote_share']
+    if method == 'percentage':
+        combined = j + f
+    else:  # rank-based
+        combined = -(j.rank(ascending=False) + f.rank(ascending=False))
+    return week_data.loc[combined.idxmin(), 'contestant']
+\end{lstlisting}
 
 
 \end{appendices}
@@ -923,13 +985,13 @@ GitHub Copilot (Ask Mode)\\
 GitHub Copilot (Ask Mode)\\
 \textbf{Query:} Implement a Mixed-Effects Model to quantify professional dancer impact on contestant placement.\\
 \textbf{Human Input:} We recognized that including dancer identity as fixed effects would consume excessive degrees of freedom. We decided to treat dancers as random effects to estimate the global variance attributable to partner assignment.\\
-\textbf{Output:} Copilot generated the \texttt{statsmodels.MixedLM} code structure. We manually verified ICC calculations and cross-checked results against the theoretical formula $\text{ICC} = \sigma^2_u / (\sigma^2_u + \sigma^2_\epsilon)$.
+\textbf{Output:} Copilot generated the \texttt{statsmodels.MixedLM} code structure. We verified ICC calculations and cross-checked results against the theoretical formula $\text{ICC} = \sigma^2_u / (\sigma^2_u + \sigma^2_\epsilon)$.
 
 \bibitem{AI3}
 GitHub Copilot (Ask Mode)\\
 \textbf{Query:} Generate counterfactual survival curves comparing Rank-Sum and Percentage-Sum elimination rules.\\
 \textbf{Human Input:} We specified the logistic survival function with threshold $\alpha=2.2$ and sensitivity $\beta_s=1.5$ based on empirical analysis of historical elimination patterns. The "Bobby Bones anomaly" was identified as a key test case.\\
-\textbf{Output:} Copilot assisted with vectorized simulation code and matplotlib visualization. All statistical interpretations (e.g., "60.2\% fan-favored by Percentage") were computed and verified manually.
+\textbf{Output:} Copilot assisted with vectorized simulation code and matplotlib visualization. All statistical interpretations were computed and verified manually.
 
 \bibitem{AI4}
 GitHub Copilot (Ask Mode)\\
@@ -941,7 +1003,7 @@ GitHub Copilot (Ask Mode)\\
 GitHub Copilot (Ask Mode)\\
 \textbf{Query:} Format regression coefficient tables and ICC results in LaTeX with proper significance notation.\\
 \textbf{Human Input:} We specified the three-level significance scheme and requested a compact table layout suitable for two-column format.\\
-\textbf{Output:} Copilot generated the \texttt{tabular} environment structure. Caption text and variable interpretations were written entirely by the team.
+\textbf{Output:} Copilot generated the \texttt{tabular} environment structure. Caption text and variable interpretations were written by the team.
 
 \end{ReportAiUse}
 
