@@ -197,7 +197,7 @@ def plot_tolerance_frontier():
     
     plt.tight_layout()
     plt.subplots_adjust(bottom=0.12)
-    plt.savefig('d:/2026-repo/figures/tolerance_frontier.png', dpi=800, bbox_inches='tight')
+    plt.savefig('d:/2026-repo/figures/tolerance_frontier.png', dpi=1000, bbox_inches='tight')
     plt.savefig('d:/2026-repo/figures/tolerance_frontier.pdf', bbox_inches='tight')
     print("Saved: figures/tolerance_frontier.png/pdf")
     plt.show()

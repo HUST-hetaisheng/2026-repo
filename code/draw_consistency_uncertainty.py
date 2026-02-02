@@ -169,7 +169,7 @@ def plot_consistency_by_season():
     add_regime_legend(ax)
 
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "consistency_by_season.png", dpi=600)
+    fig.savefig(FIG_DIR / "consistency_by_season.png", dpi=1000)
 
 
 def plot_consistency_by_week():
@@ -202,7 +202,7 @@ def plot_consistency_by_week():
     ax.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.18), ncol=3)
 
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "consistency_by_week.png", dpi=600)
+    fig.savefig(FIG_DIR / "consistency_by_week.png", dpi=1000)
 
 
 def plot_uncertainty_by_season():
@@ -241,7 +241,7 @@ def plot_uncertainty_by_season():
     add_regime_legend(ax, include_bottom2=False)
 
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "uncertainty_by_season.png", dpi=600)
+    fig.savefig(FIG_DIR / "uncertainty_by_season.png", dpi=1000)
 
 
 def plot_uncertainty_by_week():
@@ -276,7 +276,7 @@ def plot_uncertainty_by_week():
     ax.legend(frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.18), ncol=3)
 
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "uncertainty_by_week.png", dpi=600)
+    fig.savefig(FIG_DIR / "uncertainty_by_week.png", dpi=1000)
 
 
 def main():

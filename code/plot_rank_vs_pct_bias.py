@@ -110,7 +110,7 @@ ax3.text(mean_delta, ax3.get_ylim()[1] * 0.9, f'Mean={mean_delta:.2f}',
          fontsize=10, color='#3498db', ha='left' if mean_delta > 0 else 'right')
 
 plt.tight_layout()
-plt.savefig(FIG_DIR / "rank_vs_pct_fan_bias.png", dpi=800, bbox_inches='tight')
+plt.savefig(FIG_DIR / "rank_vs_pct_fan_bias.png", dpi=1000, bbox_inches='tight')
 plt.savefig(FIG_DIR / "rank_vs_pct_fan_bias.pdf", bbox_inches='tight')
 plt.close()
 
@@ -169,7 +169,7 @@ ax.set_xticklabels(regime_df_stats['regime'], rotation=0)
 ax.legend(loc='upper right')
 
 plt.tight_layout()
-plt.savefig(FIG_DIR / "rank_vs_pct_fan_bias_by_regime.png", dpi=800, bbox_inches='tight')
+plt.savefig(FIG_DIR / "rank_vs_pct_fan_bias_by_regime.png", dpi=1000, bbox_inches='tight')
 plt.savefig(FIG_DIR / "rank_vs_pct_fan_bias_by_regime.pdf", bbox_inches='tight')
 plt.close()
 

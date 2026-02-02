@@ -81,7 +81,7 @@ def plot_correlation_heatmap(scores_df, save_path):
     axes[1].set_title('Spearman Correlation Between Judges', fontsize=12, fontweight='bold')
     
     plt.tight_layout()
-    plt.savefig(save_path, dpi=150, bbox_inches='tight')
+    plt.savefig(save_path, dpi=1000, bbox_inches='tight')
     plt.close()
     print(f"Saved: {save_path}")
 
@@ -116,7 +116,7 @@ def plot_pairwise_scatter(scores_df, save_path):
     
     plt.suptitle('Pairwise Judge Score Comparison (n = 2759)', fontsize=13, fontweight='bold', y=1.02)
     plt.tight_layout()
-    plt.savefig(save_path, dpi=150, bbox_inches='tight')
+    plt.savefig(save_path, dpi=1000, bbox_inches='tight')
     plt.close()
     print(f"Saved: {save_path}")
 
@@ -173,7 +173,7 @@ def plot_residual_analysis(scores_df, save_path):
     plt.suptitle('Residual Analysis (After Controlling for Contestant Skill)', 
                  fontsize=13, fontweight='bold', y=1.02)
     plt.tight_layout()
-    plt.savefig(save_path, dpi=150, bbox_inches='tight')
+    plt.savefig(save_path, dpi=1000, bbox_inches='tight')
     plt.close()
     print(f"Saved: {save_path}")
 
@@ -215,7 +215,7 @@ def plot_bland_altman(scores_df, save_path):
     plt.suptitle('Bland-Altman Analysis (Systematic Bias Detection)', 
                  fontsize=13, fontweight='bold', y=1.02)
     plt.tight_layout()
-    plt.savefig(save_path, dpi=150, bbox_inches='tight')
+    plt.savefig(save_path, dpi=1000, bbox_inches='tight')
     plt.close()
     print(f"Saved: {save_path}")
 
@@ -284,7 +284,7 @@ def plot_season_trends(results_df, save_path):
     plt.suptitle('Judge Independence Metrics Across 34 Seasons', 
                  fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
-    plt.savefig(save_path, dpi=150, bbox_inches='tight')
+    plt.savefig(save_path, dpi=1000, bbox_inches='tight')
     plt.close()
     print(f"Saved: {save_path}")
 
@@ -378,7 +378,7 @@ def plot_summary_dashboard(scores_df, save_path):
     
     plt.suptitle('DWTS Judge Independence Analysis Dashboard', 
                  fontsize=14, fontweight='bold', y=0.98)
-    plt.savefig(save_path, dpi=150, bbox_inches='tight')
+    plt.savefig(save_path, dpi=1000, bbox_inches='tight')
     plt.close()
     print(f"Saved: {save_path}")
 

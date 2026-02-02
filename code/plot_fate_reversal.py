@@ -132,7 +132,7 @@ ax1.text(0.98, 0.95, f'Rank hurts fans: {pos_count} weeks\nPct hurts fans: {neg_
          bbox=dict(boxstyle='round', facecolor='white', alpha=0.9))
 
 plt.tight_layout()
-plt.savefig(FIG_DIR / "fate_divergence_bar.png", dpi=800, bbox_inches='tight')
+plt.savefig(FIG_DIR / "fate_divergence_bar.png", dpi=1000, bbox_inches='tight')
 plt.savefig(FIG_DIR / "fate_divergence_bar.pdf", bbox_inches='tight')
 plt.close()
 print(f"保存: fate_divergence_bar.png")
@@ -213,7 +213,7 @@ ax2.text(0.98, 0.05, f'Pct better: {pct_advantage_count} ({pct_advantage_count/l
          bbox=dict(boxstyle='round', facecolor='white', alpha=0.9))
 
 plt.tight_layout()
-plt.savefig(FIG_DIR / "safety_margin_correlation.png", dpi=800, bbox_inches='tight')
+plt.savefig(FIG_DIR / "safety_margin_correlation.png", dpi=1000, bbox_inches='tight')
 plt.savefig(FIG_DIR / "safety_margin_correlation.pdf", bbox_inches='tight')
 plt.close()
 print(f"保存: safety_margin_correlation.png")
@@ -318,7 +318,7 @@ for i, (_, row) in enumerate(survival_df.iterrows()):
     ax3.text(i, 3, f'n={row["total"]}', ha='center', fontsize=8, color='gray')
 
 plt.tight_layout()
-plt.savefig(FIG_DIR / "survival_probability_curves.png", dpi=800, bbox_inches='tight')
+plt.savefig(FIG_DIR / "survival_probability_curves.png", dpi=1000, bbox_inches='tight')
 plt.savefig(FIG_DIR / "survival_probability_curves.pdf", bbox_inches='tight')
 plt.close()
 print(f"保存: survival_probability_curves.png")
@@ -413,7 +413,7 @@ ax.legend(loc='upper right', fontsize=9)
 ax.set_ylim(0, 100)
 
 plt.tight_layout()
-plt.savefig(FIG_DIR / "fate_reversal_combined.png", dpi=800, bbox_inches='tight')
+plt.savefig(FIG_DIR / "fate_reversal_combined.png", dpi=1000, bbox_inches='tight')
 plt.savefig(FIG_DIR / "fate_reversal_combined.pdf", bbox_inches='tight')
 plt.close()
 print(f"保存: fate_reversal_combined.png")

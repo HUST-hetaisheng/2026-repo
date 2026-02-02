@@ -180,7 +180,7 @@ def main():
     ax3.set_title('C) Fan Vote by Industry', fontsize=12, fontweight='bold')
     
     plt.tight_layout()
-    plt.savefig('../figures/task3_industry_effect.png', dpi=150, facecolor='white', bbox_inches='tight')
+    plt.savefig('../figures/task3_industry_effect.png', dpi=1000, facecolor='white', bbox_inches='tight')
     plt.close()
     print("    Saved: task3_industry_effect.png")
     
@@ -215,7 +215,7 @@ def main():
     ax2.invert_yaxis()
     
     plt.tight_layout()
-    plt.savefig('../figures/task3_industry_boxplot.png', dpi=150, facecolor='white', bbox_inches='tight')
+    plt.savefig('../figures/task3_industry_boxplot.png', dpi=1000, facecolor='white', bbox_inches='tight')
     plt.close()
     print("    Saved: task3_industry_boxplot.png")
     

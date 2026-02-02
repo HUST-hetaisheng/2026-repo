@@ -40,15 +40,15 @@ def load_data():
 
 def compute_weekly_metrics(df, season):
     """
-    对于每周,计算每位选手的归一化Safety Margin (0 = 淘汰�? 1 = 最安全)
+    对于每周,计算每位选手的归一化Safety Margin (0 = 淘汰�? 1 = 最安全)
     
     Rank Method: 
-      - judge_rank + fan_rank (越小越安�?
-      - 归一�? (max_combined - my_combined) / (max_combined - min_combined)
+      - judge_rank + fan_rank (越小越安�?
+      - 归一�? (max_combined - my_combined) / (max_combined - min_combined)
     
     Percentage Method:
-      - judge_share + fan_share (越大越安�?  
-      - 归一�? (my_combined - min_combined) / (max_combined - min_combined)
+      - judge_share + fan_share (越大越安�?  
+      - 归一�? (my_combined - min_combined) / (max_combined - min_combined)
     """
     season_df = df[df['season'] == season].copy()
     
@@ -68,14 +68,14 @@ def compute_weekly_metrics(df, season):
         n = len(week_df)
         
         # === Rank Method ===
-        # 裁判排名: 分数越高排名越好(1=最�?
+        # 裁判排名: 分数越高排名越好(1=最�?
         week_df['judge_rank'] = week_df['judge_total'].rank(ascending=False, method='min')
-        # 粉丝排名: 份额越高排名越好(1=最�?
+        # 粉丝排名: 份额越高排名越好(1=最�?
         week_df['fan_rank'] = week_df['fan_vote_share'].rank(ascending=False, method='min')
-        # 综合排名: rank越低越安�?
+        # 综合排名: rank越低越安�?
         week_df['combined_rank'] = week_df['judge_rank'] + week_df['fan_rank']
         
-        # 归一�? 0 = 最危险(最高combined_rank), 1 = 最安全(最低combined_rank)
+        # 归一�? 0 = 最危险(最高combined_rank), 1 = 最安全(最低combined_rank)
         max_rank = week_df['combined_rank'].max()
         min_rank = week_df['combined_rank'].min()
         if max_rank > min_rank:
@@ -84,14 +84,14 @@ def compute_weekly_metrics(df, season):
             week_df['rank_margin'] = 0.5
         
         # === Percentage Method ===
-        # 裁判得分百分�?
+        # 裁判得分百分�?
         judge_sum = week_df['judge_total'].sum()
         week_df['judge_share'] = week_df['judge_total'] / judge_sum if judge_sum > 0 else 0
         # 粉丝份额已有 (fan_vote_share)
-        # 综合份额: 越高越安�?
+        # 综合份额: 越高越安�?
         week_df['combined_share'] = week_df['judge_share'] + week_df['fan_vote_share']
         
-        # 归一�? 0 = 最危险(最低combined_share), 1 = 最安全(最高combined_share)
+        # 归一�? 0 = 最危险(最低combined_share), 1 = 最安全(最高combined_share)
         max_share = week_df['combined_share'].max()
         min_share = week_df['combined_share'].min()
         if max_share > min_share:
@@ -127,10 +127,10 @@ def plot_counterfactual_survival():
         ax = axes[idx]
         season = info['season']
         
-        # 计算该赛季的周指�?
+        # 计算该赛季的周指�?
         metrics_df = compute_weekly_metrics(df, season)
         
-        # 筛选该选手的数�?
+        # 筛选该选手的数�?
         celeb_df = metrics_df[metrics_df['celebrity_name'] == name].copy()
         
         if celeb_df.empty:
@@ -148,14 +148,14 @@ def plot_counterfactual_survival():
         ax.plot(weeks, pct_margins, 's--', color=colors['Pct'], 
                 label='Percentage Method', markersize=5, linewidth=1.5)
         
-        # 找出分歧最大的�?(Point of Divergence)
+        # 找出分歧最大的�?(Point of Divergence)
         diffs = np.abs(rank_margins - pct_margins)
         if len(diffs) > 0:
             max_diff_idx = np.argmax(diffs)
             max_diff_week = weeks[max_diff_idx]
             max_diff = diffs[max_diff_idx]
             
-            if max_diff > 0.1:  # 只有差异足够大时才标�?
+            if max_diff > 0.1:  # 只有差异足够大时才标�?
                 ax.axvline(x=max_diff_week, color='gray', linestyle=':', alpha=0.7)
                 ax.annotate(f'Max Δ = {max_diff:.2f}', 
                            xy=(max_diff_week, 0.95), 
@@ -176,7 +176,7 @@ def plot_counterfactual_survival():
     plt.suptitle('Counterfactual Survival Trajectories\n(0 = Elimination Line, 1 = Safest)', 
                  fontsize=14, fontweight='bold', y=1.02)
     plt.tight_layout()
-    plt.savefig('d:/2026-repo/figures/counterfactual_survival.png', dpi=800, bbox_inches='tight')
+    plt.savefig('d:/2026-repo/figures/counterfactual_survival.png', dpi=1000, bbox_inches='tight')
     plt.savefig('d:/2026-repo/figures/counterfactual_survival.pdf', bbox_inches='tight')
     print("Saved: figures/counterfactual_survival.png/pdf")
     plt.show()

@@ -20,7 +20,7 @@ plt.rcParams['font.size'] = 12
 plt.rcParams['axes.labelsize'] = 14
 plt.rcParams['axes.titlesize'] = 14
 plt.rcParams['figure.dpi'] = 150
-plt.rcParams['savefig.dpi'] = 300
+plt.rcParams['savefig.dpi'] = 1000
 
 def plot_judge_fan_sensitivity():
     """

@@ -125,7 +125,7 @@ def build_democracy_scale():
     )
 
     fig.subplots_adjust(left=0.04, right=0.98, top=0.88, bottom=0.12, wspace=0.12)
-    fig.savefig(FIG_DIR / "democracy_scale_rank_vs_percent.png", dpi=600)
+    fig.savefig(FIG_DIR / "democracy_scale_rank_vs_percent.png", dpi=1000)
 
 
 def gradient_fill(ax, x, y, color_left, color_right, alpha=0.6):
@@ -221,7 +221,7 @@ def build_compression_echo():
     fig.suptitle("The Loudest Voice: How Rank Silences Superstars", y=0.97, fontsize=18)
 
     fig.subplots_adjust(left=0.1, right=0.96, top=0.9, bottom=0.08, hspace=0.5)
-    fig.savefig(FIG_DIR / "compression_echo_rank_vs_percent.png", dpi=600)
+    fig.savefig(FIG_DIR / "compression_echo_rank_vs_percent.png", dpi=1000)
 
 
 def build_terrain_comparison():
@@ -308,7 +308,7 @@ def build_terrain_comparison():
     ax.grid(False)
 
     fig.subplots_adjust(left=0.02, right=0.98, top=0.92, bottom=0.06)
-    fig.savefig(FIG_DIR / "terrain_rank_vs_percent.png", dpi=600)
+    fig.savefig(FIG_DIR / "terrain_rank_vs_percent.png", dpi=1000)
 
 
 if __name__ == "__main__":

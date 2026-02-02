@@ -161,7 +161,7 @@ ax.text(0.03, 0.03, interpretation, transform=ax.transAxes, fontsize=10,
 plt.tight_layout()
 
 # 保存
-plt.savefig(FIG_DIR / "safety_margin_correlation_beautiful.png", dpi=800, bbox_inches='tight', 
+plt.savefig(FIG_DIR / "safety_margin_correlation_beautiful.png", dpi=1000, bbox_inches='tight', 
             facecolor='white', edgecolor='none')
 plt.savefig(FIG_DIR / "safety_margin_correlation_beautiful.pdf", bbox_inches='tight',
             facecolor='white', edgecolor='none')

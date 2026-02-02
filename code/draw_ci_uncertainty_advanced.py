@@ -118,7 +118,7 @@ def plot_ci_width_by_season():
     ax.legend(handles=legend_handles, frameon=False, loc="upper center", bbox_to_anchor=(0.5, -0.18), ncol=3)
 
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "ci_width_by_season.png", dpi=600)
+    fig.savefig(FIG_DIR / "ci_width_by_season.png", dpi=1000)
 
 
 def plot_ci_width_by_week():
@@ -169,7 +169,7 @@ def plot_ci_width_by_week():
     )
 
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "ci_width_by_week.png", dpi=600)
+    fig.savefig(FIG_DIR / "ci_width_by_week.png", dpi=1000)
 
 
 def main():

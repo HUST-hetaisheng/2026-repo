@@ -129,7 +129,7 @@ try:
 
     plt.tight_layout()
     output_img = os.path.join(script_dir, 'probabilistic_survival_comparison.png')
-    plt.savefig(output_img, dpi=300)
+    plt.savefig(output_img, dpi=1000)
     print(f"Plot saved to {output_img}")
 
 except Exception as e:

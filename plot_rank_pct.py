@@ -61,7 +61,7 @@ style_axes(ax)
 ax.legend(frameon=False, loc='upper left', bbox_to_anchor=(1.02, 1.0), borderaxespad=0)
 
 out1 = os.path.join(OUT_DIR, 'rank_rank_scatter.png')
-fig.savefig(out1, dpi=600, bbox_inches='tight', pad_inches=0.05)
+fig.savefig(out1, dpi=1000, bbox_inches='tight', pad_inches=0.05)
 plt.close(fig)
 
 
@@ -94,7 +94,7 @@ style_axes(ax)
 ax.legend(frameon=False, loc='upper left', bbox_to_anchor=(1.02, 1.0), borderaxespad=0)
 
 out2 = os.path.join(OUT_DIR, 'percent_percent_scatter.png')
-fig.savefig(out2, dpi=600, bbox_inches='tight', pad_inches=0.05)
+fig.savefig(out2, dpi=1000, bbox_inches='tight', pad_inches=0.05)
 plt.close(fig)
 
 print(out1)

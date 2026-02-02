@@ -122,5 +122,5 @@ ax.legend(handles=legend_handles, loc='upper center', bbox_to_anchor=(0.5, -0.06
 plt.tight_layout()
 
 output_path = os.path.join(output_dir, 'rules_chart.png')
-plt.savefig(output_path, dpi=600)
+plt.savefig(output_path, dpi=1000)
 print(f"Chart saved to {output_path}")

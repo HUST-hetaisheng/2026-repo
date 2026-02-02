@@ -142,7 +142,7 @@ def build_infographic():
                                       mutation_scale=12, linewidth=1.2, color="#444444"))
 
     fig.subplots_adjust(left=0.03, right=0.97, top=0.9, bottom=0.08)
-    fig.savefig(FIG_DIR / "judges_vs_fans_rank_vs_percent.png", dpi=600)
+    fig.savefig(FIG_DIR / "judges_vs_fans_rank_vs_percent.png", dpi=1000)
 
 
 if __name__ == "__main__":

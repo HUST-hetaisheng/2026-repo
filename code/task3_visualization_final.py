@@ -70,7 +70,7 @@ plt.style.use('seaborn-v0_8-whitegrid')
 plt.rcParams['font.family'] = 'Times New Roman'
 plt.rcParams['mathtext.fontset'] = 'stix'  # 数学字体与 Times 兼容
 plt.rcParams['figure.dpi'] = 150
-plt.rcParams['savefig.dpi'] = 300
+plt.rcParams['savefig.dpi'] = 1000
 plt.rcParams['axes.labelsize'] = 13
 plt.rcParams['axes.titlesize'] = 15
 plt.rcParams['axes.facecolor'] = '#FAFAFA'

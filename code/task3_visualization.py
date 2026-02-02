@@ -21,7 +21,7 @@ warnings.filterwarnings('ignore')
 plt.style.use('seaborn-v0_8-whitegrid')
 plt.rcParams['font.family'] = 'DejaVu Sans'
 plt.rcParams['figure.dpi'] = 150
-plt.rcParams['savefig.dpi'] = 300
+plt.rcParams['savefig.dpi'] = 1000
 
 def load_data():
     """Load analysis data"""
