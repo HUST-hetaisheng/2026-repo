@@ -244,7 +244,26 @@ $K$ & Number of ensemble runs \\
 
 The raw dataset covers 34 seasons and includes 421 celebrity--partner pairs with weekly judges' scores and elimination outcomes. Several preprocessing steps are applied to prepare the data for modeling.
 
-The provided dataset is complete and well-structured. To facilitate computation, we performed systematic cleaning: cells with judges' scores marked as ``N/A'' are converted to 0, and a contestant-week is considered \textbf{active} if at least one judge score is positive. For each active observation, the total judges' score $J_{i,t}$ is computed as the sum of all non-zero individual scores. Binary indicators are created for variables such as \textbf{``born in the US''}. For eliminated contestants, we record the \textbf{week of elimination}; for contestants who withdrew mid-competition, we flag them separately since their exits are not vote-determined. Professional dance partners were assigned with unique identifiers.
+The provided dataset is complete and well-structured. To facilitate computation, we performed systematic cleaning: cells with judges' scores marked as ``N/A'' are converted to 0, and a contestant-week is considered \textbf{active} if at least one judge score is positive. For each active observation, the total judges' score $J_{i,t}$ is computed as the sum of all non-zero individual scores. Binary indicators are created for variables such as \textbf{``born in the US''}. For eliminated contestants, we record the \textbf{week of elimination}; for contestants who withdrew mid-competition, we flag them separately since their exits are not vote-determined. Professional dance partners were assigned with unique identifiers as well.
+As shown in the Figure~ref{}, we have also visualized the seasonal trends in the number of weeks and the variations in judges' scores across different seasons and weeks within each season. 
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{}
+        \caption{Maximum Weekly Judges' Scores by Season}
+        \label{fig:max_score_season}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{fig4_judge_scores_3d.png}
+        \caption{Mean Judges' Scores by Season and Week}
+        \label{fig:mean_score_3d}
+    \end{subfigure}
+    \caption{Distribution of Judges' Scores Across Seasons and Competition Weeks}
+    \label{fig:judge_score_distribution}
+\end{figure}
 
 \textbf{Rule regime classification} is essential given the show's evolving format. Each season is labeled according to the competition rules in effect: Seasons 1--2 use the \textbf{``Rank''} method (judges' and fan rankings are summed), Seasons 3--27 use the \textbf{``Percent''} method (normalized score shares are added), and Seasons 28--34 use the \textbf{``Bottom-2''} method (judges select which contestant to eliminate from the bottom two). This classification determines the form of elimination constraints used in the inverse model.
 
