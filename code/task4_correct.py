@@ -1,9 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-Task 4: 动态权重优化系统 V4 - 固定权重版
+Task 4: 动态权重优化系统 - 正确版
 
-每季使用固定的单一 λ，搜索范围 [0.2, 0.8]，步长 0.05
-遍历所有34个赛季
+正确逻辑：
+1. 反演使用固定规则 S = j_share + f_share（论文模型，已完成）
+2. Task 4 是提出新规则：S_new = λ * j_share + (1-λ) * f_share
+3. 用已反演的 fan_vote_share 评估不同 λ 下的淘汰效果
+4. 分歧度 = |fan_rank - judge_rank| （已反演的 f 和 j 之间的差异，与 λ 无关）
+
+λ 的作用：
+- 决定新规则下谁会被淘汰
+- 影响 Celebrity Benefit, Dancer Effect, Satisfaction（因为存活周数变了）
+- 分歧度是固定的（基于已反演的数据）
 
 Author: MCM 2026
 """
@@ -11,7 +19,6 @@ Author: MCM 2026
 import pandas as pd
 import numpy as np
 from scipy.stats import spearmanr, rankdata
-import time
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -22,6 +29,10 @@ warnings.filterwarnings('ignore')
 
 def load_data():
     """加载数据"""
+    # 加载已反演好的粉丝投票数据（使用固定规则 S = j + f）
+    df_fan = pd.read_csv(r'd:\2026-repo\data\fan_vote_results_final.csv')
+    
+    # 加载完整数据（含人气分数）
     df_full = pd.read_csv(r'd:\2026-repo\data\task3_dataset_full.csv')
     
     # 填充0值
@@ -35,12 +46,13 @@ def load_data():
             else:
                 df_full.loc[mask, col] = df_full[df_full[col] > 0][col].mean()
     
-    df_fan = pd.read_csv(r'd:\2026-repo\data\fan_vote_results_final.csv')
+    # 合并人气数据
     pop_cols = ['season', 'week', 'celebrity_name', 'Celebrity_Average_Popularity_Score', 
                 'ballroom_partner_Average_Popularity_Score', 'placement']
     df_fan = df_fan.merge(df_full[pop_cols].drop_duplicates(subset=['season', 'week', 'celebrity_name']),
                           on=['season', 'week', 'celebrity_name'], how='left')
     
+    # 加载 Google Trends
     df_trends = pd.read_csv(r'd:\2026-repo\data\time_series_US_20040101-0800_20260202-0337.csv')
     df_trends.columns = ['Time', 'search_volume']
     df_trends['Time'] = pd.to_datetime(df_trends['Time'])
@@ -64,47 +76,19 @@ def load_data():
         31: ('2022-09-19', '2022-11-21'), 32: ('2023-09-26', '2023-11-21'),
         33: ('2024-09-17', '2024-11-26'), 34: ('2025-02-25', '2025-05-06'),
     }
-    return df_full, df_fan, df_trends, schedule
+    return df_fan, df_full, df_trends, schedule
 
 
 # ============================================================================
-# 提取历史淘汰
+# 模拟淘汰（使用新规则 S = λ*j + (1-λ)*f）
 # ============================================================================
 
-def extract_historical_elimination(df_season):
-    """提取历史淘汰结果"""
-    weeks = sorted(df_season['week'].unique())
-    results = []
-    
-    for i, week in enumerate(weeks):
-        week_df = df_season[df_season['week'] == week].copy()
-        if len(week_df) <= 1:
-            break
-        
-        if i + 1 < len(weeks):
-            next_contestants = set(df_season[df_season['week'] == weeks[i + 1]]['celebrity_name'])
-            current = set(week_df['celebrity_name'])
-            eliminated = list(current - next_contestants)
-            eliminated_name = eliminated[0] if eliminated else None
-        else:
-            eliminated_name = None
-        
-        results.append({
-            'week': week, 'week_idx': i,
-            'eliminated': eliminated_name,
-            'week_data': week_df,
-            'n': len(week_df)
-        })
-    
-    return results
-
-
-# ============================================================================
-# 模拟淘汰
-# ============================================================================
-
-def simulate_elimination(df_season, lam, regime='percent'):
-    """模拟淘汰过程，使用固定 λ"""
+def simulate_elimination_with_new_rule(df_season, lam):
+    """
+    使用新规则模拟淘汰过程
+    新规则: S = λ * j_share + (1-λ) * f_share
+    每周淘汰综合得分最低的人
+    """
     weeks = sorted(df_season['week'].unique())
     all_contestants = df_season['celebrity_name'].unique().tolist()
     survival_weeks = {name: 0 for name in all_contestants}
@@ -118,16 +102,17 @@ def simulate_elimination(df_season, lam, regime='percent'):
                 survival_weeks[name] = i + 1
             break
         
-        if regime == 'percent':
-            j_sum = week_df['judge_total'].sum()
-            f_sum = week_df['fan_vote_share'].sum()
-            week_df['score'] = lam * (week_df['judge_total'] / j_sum) + (1 - lam) * (week_df['fan_vote_share'] / f_sum)
-            eliminated = week_df.loc[week_df['score'].idxmin(), 'celebrity_name']
-        else:
-            week_df['j_rank'] = week_df['judge_total'].rank(ascending=False)
-            week_df['f_rank'] = week_df['fan_vote_share'].rank(ascending=False)
-            week_df['rank'] = lam * week_df['j_rank'] + (1 - lam) * week_df['f_rank']
-            eliminated = week_df.loc[week_df['rank'].idxmax(), 'celebrity_name']
+        # 计算新规则的综合得分
+        j_sum = week_df['judge_total'].sum()
+        f_sum = week_df['fan_vote_share'].sum()
+        j_share = week_df['judge_total'] / j_sum if j_sum > 0 else 1 / len(week_df)
+        f_share = week_df['fan_vote_share'] / f_sum if f_sum > 0 else 1 / len(week_df)
+        
+        # 新规则: S = λ * j_share + (1-λ) * f_share
+        week_df['score'] = lam * j_share.values + (1 - lam) * f_share.values
+        
+        # 淘汰得分最低者
+        eliminated = week_df.loc[week_df['score'].idxmin(), 'celebrity_name']
         
         for name in alive:
             survival_weeks[name] = i + 1
@@ -140,7 +125,37 @@ def simulate_elimination(df_season, lam, regime='percent'):
 
 
 # ============================================================================
-# 计算指标
+# 计算分歧度（基于已反演的数据，与 λ 无关）
+# ============================================================================
+
+def compute_discrepancy(df_season):
+    """
+    计算分歧度 = Σ|fan_rank - judge_rank| * n
+    
+    这是已反演的 f 和 j 之间的固有差异，与新规则的 λ 无关
+    """
+    total = 0
+    
+    for week in df_season['week'].unique():
+        week_df = df_season[df_season['week'] == week]
+        n = len(week_df)
+        if n <= 1:
+            continue
+        
+        J = week_df['judge_total'].values
+        F = week_df['fan_vote_share'].values
+        
+        j_ranks = rankdata(-J, method='average')
+        f_ranks = rankdata(-F, method='average')
+        
+        week_disc = np.sum(np.abs(f_ranks - j_ranks))
+        total += week_disc
+    
+    return total
+
+
+# ============================================================================
+# 计算其他指标
 # ============================================================================
 
 def compute_celebrity_benefit(df_season, survival_weeks):
@@ -177,6 +192,7 @@ def compute_ccvi(df_trends, schedule, season):
 
 
 def compute_satisfaction(df_season, survival_weeks):
+    """计算观众满意度：粉丝排名 vs 最终名次的相关性"""
     stats = []
     for name, weeks in survival_weeks.items():
         data = df_season[df_season['celebrity_name'] == name]
@@ -201,102 +217,29 @@ def compute_satisfaction(df_season, survival_weeks):
     return corr if not np.isnan(corr) else 0
 
 
-def compute_discrepancy(historical_results, lam, regime='percent'):
-    """
-    计算分歧度 - 正确的反演逻辑
-    
-    核心思想：
-    1. 如果被淘汰者评委分不是最低，说明粉丝投票把他拉下来了（有争议）
-    2. λ 越小，粉丝权重越大，粉丝和评委的差异必须越大才能解释淘汰
-    3. 分歧度 = sum(|fan_rank - judge_rank|)
-    
-    反演策略：
-    - controversy = 被淘汰者评委排名偏离最后的程度 (0=无争议, 1=最争议)
-    - divergence = controversy * (1 - λ)
-    - 粉丝投票在「与评委一致」和「与评委相反」之间按 divergence 插值
-    """
-    total = 0
-    
-    for result in historical_results:
-        week_data = result['week_data']
-        eliminated = result['eliminated']
-        n = result['n']
-        
-        if eliminated is None or n <= 1:
-            continue
-        
-        names = week_data['celebrity_name'].tolist()
-        J = week_data['judge_total'].values.astype(float)
-        j_share = J / J.sum() if J.sum() > 0 else np.ones(n) / n
-        
-        elim_idx = names.index(eliminated) if eliminated in names else -1
-        if elim_idx < 0:
-            continue
-        
-        # 计算争议程度
-        j_rank = rankdata(-j_share)  # 1=最高分
-        elim_j_rank = j_rank[elim_idx]
-        controversy = (n - elim_j_rank) / (n - 1) if n > 1 else 0
-        
-        # λ 对分歧的影响
-        divergence = controversy * (1 - lam)
-        
-        # 构建反演的粉丝投票
-        f_share = np.zeros(n)
-        f_share[elim_idx] = 0.01  # 被淘汰者粉丝份额最低
-        remaining = 1 - 0.01
-        
-        j_others = np.array([j_share[i] if i != elim_idx else 0 for i in range(n)])
-        j_others_sum = j_others.sum()
-        
-        # 反 j_share：给评委低分者高粉丝分
-        inv_j = 1 / (j_share + 0.01)
-        inv_j[elim_idx] = 0
-        inv_j = inv_j / inv_j.sum() * remaining
-        
-        # 正常 j_share 比例
-        norm_j = j_others / j_others_sum * remaining if j_others_sum > 0 else np.ones(n) / n
-        norm_j[elim_idx] = 0.01
-        
-        # 按 divergence 插值
-        for i in range(n):
-            if i != elim_idx:
-                f_share[i] = (1 - divergence) * norm_j[i] + divergence * inv_j[i]
-        
-        f_share = f_share / f_share.sum()
-        
-        # 计算排名差异
-        fan_ranks = rankdata(-f_share, method='average')
-        judge_ranks = rankdata(-j_share, method='average')
-        
-        week_disc = np.sum(np.abs(fan_ranks - judge_ranks))
-        total += week_disc
-    
-    return total
-
-
 # ============================================================================
 # 主程序
 # ============================================================================
 
 def main():
     print("=" * 70)
-    print("Task 4: 动态权重优化系统 - 固定权重版")
-    print("每季使用固定 λ，搜索范围 [0.2, 0.8]，步长 0.05")
+    print("Task 4: 动态权重优化系统 - 正确版")
+    print("使用已反演的 fan_vote_share，评估新规则 S = λ*j + (1-λ)*f")
     print("=" * 70)
     
     # 加载数据
     print("\n[1/3] 加载数据...")
-    df_full, df_fan, df_trends, schedule = load_data()
+    df_fan, df_full, df_trends, schedule = load_data()
     
     weights = (0.2, 0.1, 0.3, 0.2, 0.2)
-    lambda_options = [round(x * 0.05, 2) for x in range(4, 17)]  # 0.20, 0.25, ..., 0.80
+    lambda_options = [round(x * 0.1, 1) for x in range(2, 9)]  # 0.2, 0.3, ..., 0.8
     print(f"    λ候选值: {lambda_options}")
     print(f"\n企业权重: w1=0.2, w2=0.1, w3=0.3, w4=0.2, w5=0.2")
     print("收益公式: w1*Celebrity + w2*Dancer + w3*CCVI + w4*Satisfaction - w5*Discrepancy")
+    print("\n注意：分歧度基于已反演数据，与新规则的 λ 无关")
     
     # 预热：计算归一化参数
-    print("\n[2/3] 预热阶段...")
+    print("\n[2/3] 预热阶段（计算归一化参数）...")
     all_metrics = {'celebrity': [], 'dancer': [], 'ccvi': [], 'satisfaction': [], 'discrepancy': []}
     
     for season in sorted(df_fan['season'].unique()):
@@ -304,16 +247,13 @@ def main():
         df_s['Celebrity_Average_Popularity_Score'] = df_s['Celebrity_Average_Popularity_Score'].fillna(0)
         df_s['ballroom_partner_Average_Popularity_Score'] = df_s['ballroom_partner_Average_Popularity_Score'].fillna(0)
         
-        regime = df_s['regime'].iloc[0] if 'regime' in df_s.columns else 'percent'
-        
-        survival = simulate_elimination(df_s, 0.5, regime)
-        historical = extract_historical_elimination(df_s)
+        survival = simulate_elimination_with_new_rule(df_s, 0.5)
         
         all_metrics['celebrity'].append(compute_celebrity_benefit(df_s, survival))
         all_metrics['dancer'].append(compute_dancer_effect(df_s, survival))
         all_metrics['ccvi'].append(compute_ccvi(df_trends, schedule, season))
         all_metrics['satisfaction'].append(compute_satisfaction(df_s, survival))
-        all_metrics['discrepancy'].append(compute_discrepancy(historical, 0.5, regime))
+        all_metrics['discrepancy'].append(compute_discrepancy(df_s))
     
     scale_params = {}
     for col in all_metrics:
@@ -346,19 +286,18 @@ def main():
         
         n_weeks = df_s['week'].nunique()
         regime = df_s['regime'].iloc[0] if 'regime' in df_s.columns else 'percent'
-        historical = extract_historical_elimination(df_s)
         ccvi = compute_ccvi(df_trends, schedule, season)
+        discrepancy = compute_discrepancy(df_s)  # 固定，与 λ 无关
         
         best_lam = 0.5
         best_benefit = -np.inf
         
         for lam in lambda_options:
-            survival = simulate_elimination(df_s, lam, regime)
+            survival = simulate_elimination_with_new_rule(df_s, lam)
             
             celebrity = compute_celebrity_benefit(df_s, survival)
             dancer = compute_dancer_effect(df_s, survival)
             satisfaction = compute_satisfaction(df_s, survival)
-            discrepancy = compute_discrepancy(historical, lam, regime)
             
             w1, w2, w3, w4, w5 = weights
             c_norm = normalize(celebrity, 'celebrity')
@@ -374,18 +313,17 @@ def main():
                 best_benefit = benefit
                 best_lam = lam
         
-        # 计算基准
-        survival_base = simulate_elimination(df_s, 0.5, regime)
+        # 基准 (λ=0.5)
+        survival_base = simulate_elimination_with_new_rule(df_s, 0.5)
         celebrity_base = compute_celebrity_benefit(df_s, survival_base)
         dancer_base = compute_dancer_effect(df_s, survival_base)
         satisfaction_base = compute_satisfaction(df_s, survival_base)
-        discrepancy_base = compute_discrepancy(historical, 0.5, regime)
         
         baseline = (w1 * normalize(celebrity_base, 'celebrity') + 
                    w2 * normalize(dancer_base, 'dancer') + 
                    w3 * normalize(ccvi, 'ccvi') + 
                    w4 * normalize(satisfaction_base, 'satisfaction') - 
-                   w5 * normalize(discrepancy_base, 'discrepancy'))
+                   w5 * normalize(discrepancy, 'discrepancy'))
         
         improvement = best_benefit - baseline
         
@@ -402,7 +340,7 @@ def main():
     # 保存
     print("\n" + "=" * 70)
     results_df = pd.DataFrame(results)
-    results_df.to_csv(r'd:\2026-repo\data\task4_optimal_results_fixed_lambda.csv', index=False)
+    results_df.to_csv(r'd:\2026-repo\data\task4_optimal_results_correct.csv', index=False)
     
     print("\n优化结果汇总")
     print("=" * 70)
@@ -417,7 +355,7 @@ def main():
     print("\n按赛制分组:")
     print(results_df.groupby('regime')[['optimal_lambda', 'benefit', 'improvement']].mean().round(4))
     
-    print(f"\n完成！结果保存至 data/task4_optimal_results_fixed_lambda.csv")
+    print(f"\n完成！结果保存至 data/task4_optimal_results_correct.csv")
 
 
 if __name__ == "__main__":
