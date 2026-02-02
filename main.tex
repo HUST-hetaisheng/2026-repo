@@ -373,43 +373,85 @@ This pattern is reinforced by elimination outcomes. Among the 93 divergent weeks
 \label{fig:safety_margin}
 \end{figure}
 
+% \begin{table}[H]
+% % 移除 \centering，使用 \textwidth 占满全宽
+% \setlength{\tabcolsep}{0pt} % 将默认列间距设为0，由 extracolsep 自动填充
+% \caption{Rank vs. Percentage simulation metrics (overall and by regime).}
+% \label{tab:rank_pct_metrics}
+% \renewcommand{\arraystretch}{1.2} % 稍微增加行高，防止拥挤
+% % 使用 tabular* 并设置宽度为 \textwidth
+% % @{\extracolsep{\fill}} 会自动计算列间距以填满整行
+% \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r r r r r @{}}
+% \toprule
+% \multicolumn{6}{l}{\textbf{Overall (All Seasons)}}\\
+% \midrule
+% \textbf{Metric} & \textbf{Value} & \multicolumn{4}{c}{} \\ % 使用 multicolumn 填补剩余空白
+% \midrule
+% Total weeks analyzed & 335 & \multicolumn{4}{c}{} \\
+% Method agreement rate & 0.722 & \multicolumn{4}{c}{} \\
+
+% Disagree weeks & 93 & \multicolumn{4}{c}{} \\
+% Fan-favored by Rank (count) & 37 & \multicolumn{4}{c}{} \\
+% Fan-favored by Percentage (count) & 56 & \multicolumn{4}{c}{} \\
+% Avg $\Delta_{fan}$ (disagree weeks) & 0.0086 & \multicolumn{4}{c}{} \\
+% Avg eliminated fan share (Rank) & 0.1170 & \multicolumn{4}{c}{} \\
+% Avg eliminated fan share (Pct) & 0.1146 & \multicolumn{4}{c}{} \\
+% \midrule
+% \multicolumn{6}{l}{\textbf{By Regime}}\\
+% \midrule
+% \textbf{Regime} & \textbf{Weeks} & \textbf{Agreement} & \textbf{Avg $\Delta_{fan}$} & \textbf{Fan$\to$Rank} & \textbf{Fan$\to$Pct} \\
+% \midrule
+% Bottom-2 Era (S28--34) & 73  & 0.808 & 0.0384 & 2  & 12 \\
+% Percent Era (S3--27)   & 248 & 0.694 & 0.0006 & 35 & 41 \\
+% Rank Era (S1--2)       & 14  & 0.786 & 0.0722 & 0  & 3  \\
+% \bottomrule
+% \end{tabular*}
+
+% \par\vspace{0.5em}
+% {\footnotesize 
+% \noindent \textbf{Note:} $\Delta_{fan}>0$ implies the Rank method eliminates a contestant with a higher fan share compared to the Percentage method. Columns \textbf{Fan$\to$Rank} and \textbf{Fan$\to$Pct} denote the count of weeks where that specific method was more favorable to the popular vote.}
+% \end{table}
+
 \begin{table}[H]
-% 移除 \centering，使用 \textwidth 占满全宽
-\setlength{\tabcolsep}{0pt} % 将默认列间距设为0，由 extracolsep 自动填充
-\caption{Rank vs. Percentage simulation metrics (overall and by regime).}
-\label{tab:rank_pct_metrics}
-\renewcommand{\arraystretch}{1.2} % 稍微增加行高，防止拥挤
-% 使用 tabular* 并设置宽度为 \textwidth
-% @{\extracolsep{\fill}} 会自动计算列间距以填满整行
+\setlength{\tabcolsep}{0pt}
+\renewcommand{\arraystretch}{1.2}
+\caption{Rank vs. Percentage simulation metrics (overall).}
+\label{tab:rank_pct_overall}
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r @{}}
+\toprule
+\multicolumn{2}{l}{\textbf{Overall (All Seasons)}}\\
+\midrule
+Total weeks analyzed & 335 \\
+Method agreement rate & 0.722 \\
+Disagree weeks & 93 \\
+Fan-favored by Rank (count) & 37 \\
+Fan-favored by Percentage (count) & 56 \\
+Avg $\Delta_{fan}$ (disagree weeks) & 0.0086 \\
+Avg eliminated fan share (Rank) & 0.1170 \\
+Avg eliminated fan share (Pct) & 0.1146 \\
+\bottomrule
+\end{tabular*}
+
+\par\vspace{0.5em}
+{\footnotesize 
+\noindent \textbf{Note:} $\Delta_{fan}>0$ implies the Rank method eliminates a contestant with a higher fan share compared to the Percentage method. Fan-favored counts indicate the number of weeks in which the corresponding method aligns more closely with the popular vote.}
+\end{table}
+
+\begin{table}[H]
+\setlength{\tabcolsep}{0pt}
+\renewcommand{\arraystretch}{1.2}
+\caption{Rank vs. Percentage simulation metrics by voting regime.}
+\label{tab:rank_pct_regime}
 \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r r r r r @{}}
 \toprule
-\multicolumn{6}{l}{\textbf{Overall (All Seasons)}}\\
-\midrule
-\textbf{Metric} & \textbf{Value} & \multicolumn{4}{c}{} \\ % 使用 multicolumn 填补剩余空白
-\midrule
-Total weeks analyzed & 335 & \multicolumn{4}{c}{} \\
-Method agreement rate & 0.722 & \multicolumn{4}{c}{} \\
-
-Disagree weeks & 93 & \multicolumn{4}{c}{} \\
-Fan-favored by Rank (count) & 37 & \multicolumn{4}{c}{} \\
-Fan-favored by Percentage (count) & 56 & \multicolumn{4}{c}{} \\
-Avg $\Delta_{fan}$ (disagree weeks) & 0.0086 & \multicolumn{4}{c}{} \\
-Avg eliminated fan share (Rank) & 0.1170 & \multicolumn{4}{c}{} \\
-Avg eliminated fan share (Pct) & 0.1146 & \multicolumn{4}{c}{} \\
-\midrule
-\multicolumn{6}{l}{\textbf{By Regime}}\\
-\midrule
-\textbf{Regime} & \textbf{Weeks} & \textbf{Agreement} & \textbf{Avg $\Delta_{fan}$} & \textbf{Fan$\to$Rank} & \textbf{Fan$\to$Pct} \\
+\textbf{Regime} & \textbf{Weeks} & \textbf{Agreement} & 
+\textbf{Avg $\Delta_{fan}$} & \textbf{Fan$\to$Rank} & \textbf{Fan$\to$Pct} \\
 \midrule
 Bottom-2 Era (S28--34) & 73  & 0.808 & 0.0384 & 2  & 12 \\
 Percent Era (S3--27)   & 248 & 0.694 & 0.0006 & 35 & 41 \\
 Rank Era (S1--2)       & 14  & 0.786 & 0.0722 & 0  & 3  \\
 \bottomrule
 \end{tabular*}
-
-\par\vspace{0.5em}
-{\footnotesize 
-\noindent \textbf{Note:} $\Delta_{fan}>0$ implies the Rank method eliminates a contestant with a higher fan share compared to the Percentage method. Columns \textbf{Fan$\to$Rank} and \textbf{Fan$\to$Pct} denote the count of weeks where that specific method was more favorable to the popular vote.}
 \end{table}
 
 \subsection{Mathematical Framework of Counterfactual Voting Rules}
@@ -508,7 +550,7 @@ While the percentage method maximizes engagement, it induces high volatility. Th
 
 \section{Impact of Contestant and Partner Characteristics}
 
-To identify the most influential pre-competition traits of celebrities and professional dancers on Dancing with the Stars outcomes, we supplement the original dataset with four external data dimensions:\textbf{physical attributes} (specifically Body Mass Index), aggregated and standardized weekly \textbf{social media engagement} across platforms including Twitter, Instagram, Facebook, and YouTube, weekly trends in \textbf{public attention} measured via Google Search Volume, and a quantified assessment of \textbf{prior dance experience}.
+To identify the most influential pre-competition traits of celebrities and professional dancers on Dancing with the Stars outcomes, we supplement the original dataset with four external data dimensions: \textbf{physical attributes} (specifically, BMI), aggregated and standardized weekly \textbf{social media engagement} across platforms including Twitter, Instagram, Facebook, and YouTube, weekly trends in \textbf{public attention} measured via Google Search Volume, and a quantified assessment of \textbf{prior dance experience}.
 
 Based on the enhanced dataset, we build a \textbf{multi-level regression framework} to examine performance across two temporal scales (season-level and weekly) in three dependent variables: judges' scores, fan votes, and final placement. A \textbf{mixed-effects model} is further used to isolate the specific impact of professional dancers from that of the celebrities themselves.
 
@@ -825,11 +867,40 @@ In summary, Task 4 proves that commercial peak and competitive fairness can be h
 
 \AImatter
 
-\begin{ReportAiUse}{1}
+\begin{ReportAiUse}{5}
+
 \bibitem{AI1}
 GitHub Copilot (Agent Mode)\\
-Query: Develop convex optimization model for DWTS fan vote estimation\\
-Output: Used to assist with model formulation, code debugging, and LaTeX formatting for the inverse fan vote estimation problem.
+\textbf{Query:} Design an entropy-regularized inverse optimization model to estimate latent fan vote shares from elimination outcomes.\\
+\textbf{Human Input:} We identified that naive regression approaches introduce confirmation bias. We required an unbiased approach using only elimination constraints.\\
+\textbf{Output:} Copilot assisted in formulating the MaxEnt + KL-divergence objective function and implementing the SLSQP solver in Python. All hyperparameter choices ($\lambda$, $\rho$) were manually tuned via cross-validation.
+
+\bibitem{AI2}
+GitHub Copilot (Agent Mode)\\
+\textbf{Query:} Implement a Mixed-Effects Model to quantify professional dancer impact on contestant placement.\\
+\textbf{Human Input:} We recognized that including dancer identity as fixed effects would consume excessive degrees of freedom. We decided to treat dancers as random effects to estimate the global variance attributable to partner assignment.\\
+\textbf{Output:} Copilot generated the \texttt{statsmodels.MixedLM} code structure. We manually verified ICC calculations and cross-checked results against the theoretical formula $\text{ICC} = \sigma^2_u / (\sigma^2_u + \sigma^2_\epsilon)$.
+
+\bibitem{AI3}
+GitHub Copilot (Agent Mode)\\
+\textbf{Query:} Generate counterfactual survival curves comparing Rank-Sum and Percentage-Sum elimination rules.\\
+\textbf{Human Input:} We specified the logistic survival function with threshold $\alpha=2.2$ and sensitivity $\beta_s=1.5$ based on empirical analysis of historical elimination patterns. The "Bobby Bones anomaly" was identified as a key test case.\\
+\textbf{Output:} Copilot assisted with vectorized simulation code and matplotlib visualization. All statistical interpretations (e.g., "60.2\% fan-favored by Percentage") were computed and verified manually.
+
+\bibitem{AI4}
+GitHub Copilot (Agent Mode)\\
+\textbf{Query:} Debug web scraping pipeline for social media follower counts and Google Trends data.\\
+\textbf{Human Input:} We designed the data collection strategy targeting Twitter, Instagram, Facebook, and YouTube. Rate limiting and API authentication were handled manually.\\
+\textbf{Output:} Copilot suggested error handling patterns and pandas data cleaning operations. All scraped data was manually validated against public profiles before integration.
+
+\bibitem{AI5}
+GitHub Copilot (Agent Mode)\\
+\textbf{Query:} Format regression coefficient tables and ICC results in LaTeX with proper significance notation.\\
+\textbf{Human Input:} We specified the three-level significance scheme and requested a compact table layout suitable for two-column format.\\
+\textbf{Output:} Copilot generated the \texttt{tabular} environment structure. Caption text and variable interpretations were written entirely by the team.
+
 \end{ReportAiUse}
+
+
 
 \end{document}
