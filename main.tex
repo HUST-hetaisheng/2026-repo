@@ -21,8 +21,8 @@
  %\documentclass[CTeX = true]{mcmthesis}  % 当使用 CTeX 套装时请注释上一行使用该行的设置
 \mcmsetup{tstyle=\color{red}\bfseries,%修改题号，队号的颜色和加粗显示，黑色可以修改为 black
         tcn = 2607256, problem = C, %修改队号，参赛题号
-        sheet = true, titleinsheet = false, keywordsinsheet = true,%修改sheet显示信息
-        titlepage = false, abstract = true}
+        sheet = true, titleinsheet = true, keywordsinsheet = true,
+        titlepage = false, abstract = false}
 
   %四款字体可以选择
   %\usepackage{times}
@@ -42,38 +42,57 @@
 \usepackage{lipsum}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-\title{The \LaTeX{} Template for MCM Version \MCMversion}
-\author{\small \href{https://www.latexstudio.net/}
-  {\includegraphics[width=7cm]{mcmthesis-logo}}}
-\date{\today}
+\title{Balancing Technical Merit and Public Appeal: Evaluation and Optimization of the DWTS Scoring Mechanism}
+% \author{\small \href{https://www.latexstudio.net/}
+  % {\includegraphics[width=7cm]{mcmthesis-logo}}}
+% \date{\today}
 
 \begin{document}
 
+% \begin{abstract}
+% \par In the show \textit{Dancing with the Stars}, judges’ scores and fan votes determine competition outcomes together, directly influencing fairness as different scoring regulations lead to different results. Our study establishes a systematic analytical framework to estimate confidential fan votes.By using the model,we can evaluate the impact of voting rules, quantify the effects of contestant traits and partner characteristics,and ultimately proposing  fairer and more effective scoring rules.
+
+% \textbf{For Task 1}, we developed an \textbf{entropy‑inertia regularized inverse optimization model} to estimate latent weekly fan vote shares. The model can be divided to three historical scoring regimes%,including the \textbf{Rank method} (Seasons 1–2), the \textbf{Percent method} (Seasons 3–27), and the \textbf{Judges’ Choice method} (Seasons 28–34)
+% . By maximizing entropy to avoid unwarranted assumptions and enforcing temporal smoothness to reflect fan‑base stability, the model successfully reconstructs elimination outcomes with a high consistency probability of \textbf{0.93}. %The most reliable inference occurs under the Percent regime. 
+% Uncertainty measures are quantified via ensemble inference, revealing regime‑dependent confidence patterns.
+
+% \textbf{For Task 2}, we conducted \textbf{counterfactual simulations} to compare different score combination rules: \textbf{the Rank‑Sum method} and \textbf{the Percentage‑Sum method}. The simulations are totally different in \textbf{93 weeks} across all seasons.The Percentage method protects the contestant with higher fan support in \textbf{60.2\% }of instances, acting as a \textbf{“fan‑power amplifier”} while the two‑stage elimination framework \textbf{(Judges’ Choice)} significantly reduces the survival probability of low‑skill but high‑popularity contestants, serving as an effective correction mechanism.
+
+% \textbf{For Task 3}, to assess the influence of celebrity characteristics and dancing partners, we employed a \textbf{multi‑level regression framework} and a \textbf{Linear Mixed‑Effects Model} to quantify the effects of judges and parterns. Static‑trait analysis shows that judges’ scores are negatively correlated with contestant's \textbf{age}, and \textbf{social media celebrities} are the most likely to stand out. Dynamic weekly analysis confirms \textbf{social‑media popularity} predicts fan vote share. The Mixed-Effects model reveals that good \textbf{dancing partners} do boost the final results with better judge scores. 
+
+% \textbf{For Task 4} we frame a Weekly Dynamic Weighting System as an optimal-control problem, optimizing the judge-score weight \(\lambda_t\) to balance \textbf{Commercial Value} , \textbf{Fairness} , \textbf{Fan Satisfaction} , and \textbf{Celebrity Benefit} . \textbf{Differential-Evolution-based dynamic control} outperforms static strategies, achieving a \textbf{43.5\%} benefit improvement in Season 25. The optimal \textbf{``N-Shape'' trajectory} phases judge influence to accumulate traffic, enforce a mid-season technical screen, boost engagement, and ensure a qualified winner, raising the show's overall benefit by \textbf{22.9\%}.
+
+% \textbf{Finally}, we offer practical recommendations for the producers of \emph{Dancing with the Stars} regarding fair voting rule optimization. Our ``N-shape'' strategy can be extended to other entertainment contests as well.
+% \begin{keywords}
+% Vote Estimation;Inverse Optimization;Mixed‑Effects Model;Scoring Fairness
+% \end{keywords}
+% \end{abstract}
+
 \begin{abstract}
-\par In the show \textit{Dancing with the Stars}, judges’ scores and fan votes determine competition outcomes together, directly influencing fairness as different scoring regulations lead to different results. Our study establishes a systematic analytical framework to estimate confidential fan votes.By using the model,we can evaluate the impact of voting rules, quantify the effects of contestant traits and partner characteristics,and ultimately proposing  fairer and more effective scoring rules.
+\par In \textit{Dancing with the Stars}, judges' scores and fan votes jointly determine outcomes, with different scoring rules directly affecting fairness. We establish a systematic framework to estimate confidential fan votes, evaluate voting rules, quantify contestant and partner effects, and propose improved scoring mechanisms.
 
-\textbf{For Task 1} we developed an \textbf{entropy‑inertia regularized inverse optimization model} to estimate latent weekly fan vote shares. The model can be divided to three historical scoring regimes%,including the \textbf{Rank method} (Seasons 1–2), the \textbf{Percent method} (Seasons 3–27), and the \textbf{Judges’ Choice method} (Seasons 28–34)
-. By maximizing entropy to avoid unwarranted assumptions and enforcing temporal smoothness to reflect fan‑base stability, the model successfully reconstructs elimination outcomes with a high consistency probability of \textbf{0.93}. %The most reliable inference occurs under the Percent regime. 
-Uncertainty measures are quantified via ensemble inference, revealing regime‑dependent confidence patterns.
+\textbf{For Task 1}, we develop an \textbf{entropy-inertia regularized inverse optimization model} to estimate latent weekly fan vote shares across three historical scoring regimes. By maximizing entropy and enforcing temporal smoothness, the model reconstructs elimination outcomes with \textbf{93\%} consistency. Uncertainty is quantified via ensemble inference, revealing regime-dependent confidence patterns.
 
-\textbf{For Task 2} we conducted \textbf{counterfactual simulations} to compare different score combination rules: \textbf{the Rank‑Sum method} and \textbf{the Percentage‑Sum method}. The simulations are totally different in \textbf{93 weeks} across all seasons.The Percentage method protects the contestant with higher fan support in \textbf{60.2\% }of instances, acting as a \textbf{“fan‑power amplifier”} while the two‑stage elimination framework \textbf{(Judges’ Choice)} significantly reduces the survival probability of low‑skill but high‑popularity contestants, serving as an effective correction mechanism.
+\textbf{For Task 2}, \textbf{counterfactual simulations} compare the Rank-Sum and Percentage-Sum methods, which diverge in \textbf{93 weeks}. The Percentage method protects higher fan-support contestants in \textbf{60.2\%} of cases, acting as a ``fan-power amplifier,'' while the Judges' Choice framework reduces survival probability for low-skill, high-popularity contestants.
 
-\textbf{For Task 3}, to assess the influence of celebrity characteristics and dancing partners, we employed a \textbf{multi‑level regression framework} and a \textbf{Linear Mixed‑Effects Model} to quantify the effects of judges and parterns. Static‑trait analysis shows that judges’ scores are negatively correlated with contestant's \textbf{age}, and \textbf{social media celebrities} are the most likely to stand out. Dynamic weekly analysis confirms \textbf{social‑media popularity} predicts fan vote share. The Mixed-Effects model reveals that good \textbf{dancing partners} do boost the final results with better judge scores. 
+\textbf{For Task 3}, a \textbf{multi-level regression framework} and \textbf{Linear Mixed-Effects Model} quantify celebrity and partner effects. Judges' scores correlate negatively with \textbf{age}; \textbf{social media celebrities} excel. Weekly \textbf{social-media popularity} predicts fan votes, and top \textbf{dancing partners} significantly boost final placements.
 
-\textbf{For Task 4} we frame a Weekly Dynamic Weighting System as an optimal-control problem, optimizing the judge-score weight \(\lambda_t\) to balance \textbf{Commercial Value} , \textbf{Fairness} , \textbf{Fan Satisfaction} , and \textbf{Celebrity Benefit} . \textbf{Differential-Evolution-based dynamic control} outperforms static strategies, achieving a \textbf{43.5\%} benefit improvement in Season 25. The optimal \textbf{``N-Shape'' trajectory} phases judge influence to accumulate traffic, enforce a mid-season technical screen, boost engagement, and ensure a qualified winner, raising the show's overall benefit by \textbf{22.9\%}.
+\textbf{For Task 4}, we optimize a Weekly Dynamic Weighting System balancing \textbf{Commercial Value}, \textbf{Fairness}, \textbf{Fan Satisfaction}, and \textbf{Celebrity Benefit}. \textbf{Differential-Evolution-based control} achieves \textbf{43.5\%} benefit improvement in Season 25. The optimal \textbf{``N-Shape'' trajectory} phases judge influence to accumulate traffic, enforce mid-season screening, and ensure qualified winners, raising overall benefit by \textbf{22.9\%}.
 
-\textbf{Finally}, we offer practical recommendations for the producers of \emph{Dancing with the Stars} regarding fair voting rule optimization. Our ``N-shape'' strategy can be extended to other entertainment contests as well.
+\textbf{Finally}, we offer practical recommendations for fair voting optimization, with the ``N-shape'' strategy extensible to other entertainment contests.
+
 \begin{keywords}
-Vote Estimation;Inverse Optimization;Mixed‑Effects Model;Scoring Fairness
+Vote Estimation; Inverse Optimization; Mixed-Effects Model; Scoring Fairness
 \end{keywords}
 \end{abstract}
+
 \maketitle
 
 %% Generate the Table of Contents, if it's needed.
 
 {
-\setlength{\parskip}{-3pt} % 段间距
-\renewcommand{\baselinestretch}{0.8} % 行距设为0.9倍（可按需调整，如 0.8）
+\setlength{\parskip}{-2.7pt} % 段间距
+\renewcommand{\baselinestretch}{0.86} % 行距设为0.9倍（可按需调整，如 0.8）
 \tableofcontents
 }
 \newpage
@@ -293,7 +312,7 @@ The central challenge of this problem is that fan votes ($\mathbf{v}_t$) are uno
 
 To reconstruct the fan votes robustly, a valid model must: (i) \textbf{Respect Historical Regimes} by adapting to the specific aggregation rules (Rank vs. Percent) that evolved over 34 seasons; (ii) \textbf{ Account for irregularities} such as weeks with no elimination, double eliminations, and mid-competition withdrawals; and (iii) \textbf{Avoid Bias}. Unlike simplistic approaches that impose a correlation between fan votes and judge scores, we adopt an \textbf{unbiased} approach that only assumes fundamental statistical properties: entropy and temporal inertia.
 
-Therefore, we propose a \textbf{Regime-Specific, Week-Type Aware Inverse Optimization Framework}. We classify the problem into three distinct mathematical sub-models 
+Therefore, we propose a \textbf{Regime-Specific, Week-Type Aware Inverse Optimization Framework}. We classify the problem into three distinct mathematical sub-models. 
 
 \begin{figure}
     \centering
@@ -348,7 +367,7 @@ Instead of brute-force enumeration ($N!$ complexity), we employ a \textbf{Stocha
 % \subsubsection{Rank-to-Share Mapping (Gibbs Distribution)}
 To compare these results with Percent seasons, we map the inferred discrete ranks $r^F_i$ to continuous shares $f_i$ using a Softmax distribution:
 \begin{equation}
-    f_{i} = \frac{\exp(-\gamma \cdot (r^F_{i} - 1))}{\sum_k \exp(-\gamma \cdot (r^F_{k} - 1))}
+    f_{i} = \frac{e^{\gamma \cdot (r^F_{i} - 1)}}{\sum_k e^{\gamma \cdot (r^F_{k} - 1)}}
 \end{equation}
 where $\gamma$ is solved using data from the third season, then back-substituted into the current stage's problem solution.
 
@@ -363,7 +382,7 @@ Starting from Season 28, the competition introduced a two-stage elimination proc
 
 The latent variable to infer is the fan vote ranking $\mathbf{r}^F_w = (r^F_{1,w}, \ldots, r^F_{N,w})$, a permutation of $\{1, \ldots, N\}$ where $r^F_i = 1$ indicates the highest fan support. The combined rank $R_{i,w} = r^J_{i,w} + r^F_{i,w}$ determines overall standing, with higher values indicating worse performance. The Bottom-Two set $\mathcal{B}(\mathbf{r}^F_w) = \{a, b\}$ consists of the two contestants with the highest combined ranks. Given this set, the probability that judges eliminate contestant $a$ follows a logistic choice model:
 \begin{equation}
-    P(\text{Elim } a \mid a, b \in \mathcal{B}) = \frac{1}{1 + \exp\left(\beta(J_a - J_b)\right)}
+    P(\text{Elim } a \mid a, b \in \mathcal{B}) = \frac{1}{1 + e^{\beta(J_a - J_b)}}
     \label{eq:judge_choice}
 \end{equation}
 where $\beta > 0$ quantifies the judges' tendency to save higher-scored contestants. When $\beta \to \infty$, the lower-scored contestant is deterministically eliminated; when $\beta = 0$, the choice is random.
@@ -385,7 +404,7 @@ These inequalities impose lower bounds on $r^F_e$ and $r^F_{b^*}$, forcing them 
 
 Since the search space $\mathcal{S}_N$ is factorial, we employ a greedy swapping heuristic. Starting from a prior ranking (previous week's result or judge-correlated ranks), the algorithm iteratively swaps positions to satisfy the constraints in Eq.~\eqref{eq:rank_constraint} while maximizing the objective. Once the optimal ranking $\mathbf{r}^{F*}_w$ is obtained, it is converted to continuous vote shares via Gibbs-Softmax transformation:
 \begin{equation}
-    f_{i,w} = \frac{\exp\left(-\gamma (r^{F*}_{i,w} - 1)\right)}{\sum_{k=1}^N \exp\left(-\gamma (r^{F*}_{k,w} - 1)\right)}
+    f_{i,w} = \frac{e^{\gamma (r^{F*}_{i,w} - 1)}}{\sum_{k=1}^N e^{\gamma (r^{F*}_{k,w} - 1)}}
 \end{equation}
 where $\gamma > 0$ controls the steepness of the decay. To quantify uncertainty, we perform ensemble inference by perturbing judge scores with Gaussian noise and repeating the optimization, yielding a posterior distribution over $f_{i,w}$.
 
@@ -445,47 +464,106 @@ This pattern is reinforced by elimination outcomes. Among the 93 divergent weeks
 % \noindent \textbf{Note:} $\Delta_{fan}>0$ implies the Rank method eliminates a contestant with a higher fan share compared to the Percentage method. Columns \textbf{Fan$\to$Rank} and \textbf{Fan$\to$Pct} denote the count of weeks where that specific method was more favorable to the popular vote.}
 % \end{table}
 
+% \begin{table}[H]
+% \setlength{\tabcolsep}{0pt}
+% \renewcommand{\arraystretch}{1.2}
+% \caption{Rank vs. Percentage simulation metrics (overall).}
+% \rowcolors{2}{gray!10}{white}
+% \label{tab:rank_pct_overall}
+% \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r @{}}
+% \toprule
+% \multicolumn{2}{l}{\textbf{Overall (All Seasons)}}\\
+% \midrule
+% Total weeks analyzed & 335 \\
+% Method agreement rate & 0.722 \\
+% Disagree weeks & 93 \\
+% Fan-favored by Rank (count) & 37 \\
+% Fan-favored by Percentage (count) & 56 \\
+% Avg $\Delta_{fan}$ (disagree weeks) & 0.0086 \\
+% Avg eliminated fan share (Rank) & 0.1170 \\
+% Avg eliminated fan share (Pct) & 0.1146 \\
+% \bottomrule
+% \end{tabular*}
+
+% \par\vspace{0.5em}
+% {\footnotesize 
+% \noindent \textbf{Note:} $\Delta_{fan}>0$ implies the Rank method eliminates a contestant with a higher fan share compared to the Percentage method. Fan-favored counts indicate the number of weeks in which the corresponding method aligns more closely with the popular vote.}
+% \end{table}
+
 \begin{table}[H]
-\setlength{\tabcolsep}{0pt}
-\renewcommand{\arraystretch}{1.2}
+\renewcommand{\arraystretch}{1.25}
 \caption{Rank vs. Percentage simulation metrics (overall).}
 \label{tab:rank_pct_overall}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r @{}}
+
+\begin{tabular}{p{0.78\textwidth} >{\raggedleft\arraybackslash}p{0.22\textwidth}}
 \toprule
-\multicolumn{2}{l}{\textbf{Overall (All Seasons)}}\\
+% \rowcolor{gray!15}
+\multicolumn{2}{l}{\textbf{Overall (All Seasons)}} \\
 \midrule
+
+\rowcolor{gray!10}
 Total weeks analyzed & 335 \\
+
 Method agreement rate & 0.722 \\
+
+\rowcolor{gray!10}
 Disagree weeks & 93 \\
+
 Fan-favored by Rank (count) & 37 \\
+
+\rowcolor{gray!10}
 Fan-favored by Percentage (count) & 56 \\
+
 Avg $\Delta_{fan}$ (disagree weeks) & 0.0086 \\
+
+\rowcolor{gray!10}
 Avg eliminated fan share (Rank) & 0.1170 \\
+
 Avg eliminated fan share (Pct) & 0.1146 \\
+
 \bottomrule
-\end{tabular*}
+\end{tabular}
 
 \par\vspace{0.5em}
-{\footnotesize 
-\noindent \textbf{Note:} $\Delta_{fan}>0$ implies the Rank method eliminates a contestant with a higher fan share compared to the Percentage method. Fan-favored counts indicate the number of weeks in which the corresponding method aligns more closely with the popular vote.}
+{\footnotesize
+\noindent \textbf{Note:}
+$\Delta_{fan}>0$ implies the Rank method eliminates a contestant with a higher fan share compared to the Percentage method. Fan-favored counts indicate the number of weeks in which the corresponding method aligns more closely with the popular vote.
+}
 \end{table}
+
 
 \begin{table}[H]
 \setlength{\tabcolsep}{0pt}
-\renewcommand{\arraystretch}{1.2}
+\renewcommand{\arraystretch}{1.25}
 \caption{Rank vs. Percentage simulation metrics by voting regime.}
 \label{tab:rank_pct_regime}
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r r r r r @{}}
+
+\begin{tabular}{
+p{0.28\textwidth}
+>{\raggedleft\arraybackslash}p{0.12\textwidth}
+>{\raggedleft\arraybackslash}p{0.14\textwidth}
+>{\raggedleft\arraybackslash}p{0.16\textwidth}
+>{\raggedleft\arraybackslash}p{0.15\textwidth}
+>{\raggedleft\arraybackslash}p{0.15\textwidth}
+}
 \toprule
-\textbf{Regime} & \textbf{Weeks} & \textbf{Agreement} & 
+% \rowcolor{gray!15}
+\textbf{Regime} & \textbf{Weeks} & \textbf{Agreement} &
 \textbf{Avg $\Delta_{fan}$} & \textbf{Fan$\to$Rank} & \textbf{Fan$\to$Pct} \\
 \midrule
+
+\rowcolor{gray!10}
 Bottom-2 Era (S28--34) & 73  & 0.808 & 0.0384 & 2  & 12 \\
+
 Percent Era (S3--27)   & 248 & 0.694 & 0.0006 & 35 & 41 \\
+
+\rowcolor{gray!10}
 Rank Era (S1--2)       & 14  & 0.786 & 0.0722 & 0  & 3  \\
+
 \bottomrule
-\end{tabular*}
+\end{tabular}
 \end{table}
+
 
 \subsection{Mathematical Framework of Counterfactual Voting Rules}
 
@@ -511,20 +589,25 @@ We set the threshold offset $\alpha = 2.2$ to reflect a baseline survival expect
 
 To investigate the institutional response to popular dominance, we incorporate the two-stage elimination framework introduced in later seasons. In this mechanism, the aggregated votes first determine a Bottom-Two set $\mathcal{B} = \{a, b\}$, after which the judges exercise a final decision. We model the professional intervention probability using the logistic choice model established in earlier sections:
 \begin{equation}
-    P(\text{Save } i \mid i, j \in \mathcal{B}) = \frac{\exp\left(\gamma(J_i - J_j)\right)}{1 + \exp\left(\gamma(J_i - J_j)\right)}
+    P(\text{Save } i \mid i, j \in \mathcal{B}) = \frac{e^{\gamma(J_i - J_j)}}{1 + e^{\gamma(J_i - J_j)}}
 \end{equation}
 where $J_i$ and $J_j$ are raw technical scores and $\gamma$ quantifies the judges' professional bias. This dual-layer survival structure effectively introduces a "technical barrier" that limits the progression of high-popularity but low-skill contestants, essentially capping their cumulative survival probability regardless of fan support.
 
 \subsubsection{Empirical Analysis of Divergent Contestants}
 
-Our simulation highlights eight prominent "divergent" contestants whose trajectories differ significantly under the two rules. As illustrated in Figure~\ref{fig:survival_curves}, the Percentage Rule acts as a significant "fan-power amplifier." For contestants like Bobby Bones, Iman Shumpert, and Nelly, the Percentage Rule allows massive popular margins to effectively bridge large technical gaps, leading to substantial gains in cumulative survival. Conversely, under the Rank-Sum Rule, the technical disadvantage of performers such as Jerry Rice, Bristol Palin, and Billy Ray Cyrus becomes far more difficult to overcome due to the ceiling on rank points.
+Our simulation results highlight eight participants with significantly "different" performance trajectories under the two different rules. As shown in Figure~\ref{fig:survival_curves}, the percentage rule acted as a significant "popularity amplifier." For participants like Bobby Bones, Iman Shumpert, and Nelly, the percentage rule allowed them to effectively compensate for their technical shortcomings with their immense popularity, significantly increasing their cumulative survival probability. As shown in Figure~\ref{fig:survival_curves1}, the percentage rule effectively protected controversial contestants (those with differing opinions from judges and the audience), pulling them back from the "elimination zone." Conversely, under the ranking point rule, performers like Jerry Rice, Bristol Palin, and Billy Ray Cyrus found their technical disadvantages more difficult to overcome due to the upper limit on ranking points.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{probabilistic_survival_comparison.png}
     \caption{Survival Curve:Rank VS Percent}
     \label{fig:survival_curves}
 \end{figure}
-
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/method_comparison_analysis.png}
+    \caption{Comparative Analysis of Elimination Mechanisms: Rank Aggregation vs. Proportional Voting}
+    \label{fig:survival_curves1}
+\end{figure}
 \begin{table}[htbp]
 \centering
 \caption{Comparative Estimated Placements and Survival Gains}
@@ -532,7 +615,7 @@ Our simulation highlights eight prominent "divergent" contestants whose trajecto
 \rowcolors{2}{gray!10}{white}
 \begin{tabular}{lcccc}
 \hline
-\rowcolor{blue!20} Contestant (Season) & Actual Rank & Rank Rule Est. & Percent Rule Est. & Survival Advantage \\
+\rowcolor{grey!10} Contestant (Season) & Actual Rank & Rank Rule Est. & Percent Rule Est. & Survival Advantage \\
 \midrule
 Bobby Bones (S27) & 1 & 11 & 5 & Percentage \\
 Iman Shumpert (S30) & 1 & 10 & 3 & Percentage \\
@@ -547,14 +630,14 @@ Billy Ray Cyrus (S4) & 5 & 9 & 8 & Percentage \\
 \end{table}
 
 The empirical results in Table~\ref{tab:placement_shifts} further validate that the introduction of the Judges' Choice mechanism significantly curtails the advancement of these divergent performers. For instance, while Cody Rigsby and Stephen Nedoroscik maintained high survival under popular vote rules, our model predicts that their probability of victory would drop by over 60\% if they were forced into a Bottom-Two decision against technical front-runners. Ultimately, the transition from the Rank Rule to the Percentage Rule favors popular appeal, but the addition of the Judges' Choice serves as a necessary professional correction that aligns final results more closely with ballroom expertise.
-\subsubsection{Impacts of judge's choice rule}
+\subsubsection{Impacts of Judge's Choice Rule}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\linewidth]{Code_Generated_Image (1).png}
+    \includegraphics[width=0.7\linewidth]{Code_Generated_Image (1).png}
     \caption{Judge's Choice impact}
     \label{fig:judge}
 \end{figure}
-After introducing judges' intervention in the elimination round, contestants with lower initial judge scores—such as Bobby Bones and Iman Shumpert—faced significantly reduced survival rates. As shown in the Figure~ref{fig:judge}, the survival rate under the percent scoring method dropped substantially (to less than one-third of the original rate) compared to the rank scoring method following the judges' selection. This effectively curbed the “fan frenzy effect.” It is widely acknowledged that judges' scores are more subjective than audience votes and better reflect contestants' true abilities. This reduces the likelihood of upsets driven solely by fan voting, enhances the program's fairness, and makes the entire scoring mechanism more reasonable and balanced.                                  
+In addition to the aforementioned methods, we are attempting to add the judges' Choice approach adopted starting from Season 28. After introducing judges' intervention in the elimination round, contestants with lower initial judge scores—such as Bobby Bones and Iman Shumpert—faced significantly reduced survival rates. As shown in the Figure~ref{fig:judge}, the survival rate under the percent scoring method dropped substantially (to less than one-third of the original rate) compared to the rank scoring method following the judges' selection. This effectively curbed the “fan frenzy effect.” It is widely acknowledged that judges' scores are more subjective than audience votes and better reflect contestants' true abilities. This reduces the likelihood of upsets driven solely by fan voting, enhances the program's fairness, and makes the entire scoring mechanism more reasonable and balanced.                                  
 \subsection{Strategic Recommendations for Future Rule Design}
 
 Based on the stochastic survival modeling and counterfactual simulations conducted in this study, we propose a hybrid governance model for future seasons. This model combines the percentage aggregation method with a mandatory two-stage jury selection mechanism. The rationale for this dual-layer architecture stems from the following analytical conclusions:
@@ -573,7 +656,7 @@ While the percentage method maximizes engagement, it induces high volatility. Th
     \item \textbf{Restoring Competitive Fairness}: Quantitative analysis indicates the two-stage mechanism reduces the probability of “low-skill/high-popularity” contestants winning by approximately 85\%. This mechanism ensures fan communities determine the pool of potential qualifiers while professional judges retain veto power to uphold dance standards.
 \end{itemize}
 
-\textbf{Final Conclusion}: The optimal strategy is not to choose between popularity and skill, but to manage them separately. The percentage rule should set an upper limit on contestant potential through popularity effects, while the judge selection mechanism establishes the minimum technical capability required to maintain eligibility.
+\textbf{Final Conclusion}: The optimal strategy is not to choose between popularity and skill, but to manage them separately. The percentage rule should set an upper limit on contestant potential through popularity effects, while the judge selection mechanism establishes the minimum technical capability required to maintain eligibility , And \textbf{both} must be used in combination to ensure a fair and robust ranking system.
 
 
 
@@ -630,9 +713,10 @@ Y_{it} = \alpha_0 + \alpha_1 \cdot \text{SocialMediaPop}_{it}
 
 \begin{table}[H]
 \centering
+\rowcolors{2}{gray!10}{white}
 \begin{tabular}{lccc}
 \toprule
-Model & $R^2$ & Adj. $R^2$ & $F$-statistic \\
+\rowcolor{grey!10}Model & $R^2$ & Adj. $R^2$ & $F$-statistic \\
 \midrule
 Judge Score (Contestant) & 0.232 & 0.211 & 11.20*** \\
 Fan Vote (Contestant) & 0.154 & 0.131 & 6.75*** \\
@@ -655,9 +739,10 @@ Table \ref{tab:coefficients} summarizes the regression results for the static ch
 
 \begin{table}[H]
 \centering
+\rowcolors{2}{gray!10}{white}
 \begin{tabular}{lccccccl}
 \toprule
-Variable & Judge $\beta$ & $p$ & Fan $\beta$ & $p$ & Place $\beta$ & $p$  \\
+\rowcolor{grey!10}Variable & Judge $\beta$ & $p$ & Fan $\beta$ & $p$ & Place $\beta$ & $p$  \\
 \midrule
 Age & $-0.166$ & *** & $-0.001$ & *** & $+0.123$ & ***  \\
 Dance Experience & $-0.169$ & & $+0.000$ & & $+0.176$ & *  \\
@@ -682,11 +767,13 @@ Contestants categorized as "Social Media Personalities" demonstrate a massive ou
 % \subsection{Judge vs. Fan: What Do They Value?}
 The following table shows the difference between factors about how they influence the judges and the fans.
 
+\rowcolors{2}{gray!10}{white}
 \begin{table}[H]
 \centering
+\rowcolors{2}{gray!10}{white}
 \begin{tabular}{lccc}
 \toprule
-Factor & Judge ($t$-stat) & Fan ($t$-stat) & Who cares more? \\
+\rowcolor{grey!10}Factor & Judge ($t$-stat) & Fan ($t$-stat) & Who cares more? \\
 \midrule
 Age & $-9.18$*** & $-7.69$*** & \textbf{Judges} \\
 Social Media Popularity & $+2.82$* & $+30.97$*** & \textbf{Fans}  \\
@@ -698,6 +785,9 @@ is\_US & $-0.37$ & $-0.82$ & Neither \\
 \caption{Comparison of $t$-statistics across Judge and Fan models}
 \end{table}
 
+A central question is whether judges and fans evaluate contestants 
+using the same criteria. We compare $t$-statistics across models.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{figures/task3_2_judge_fan_sensitivity.png}
@@ -705,9 +795,6 @@ is\_US & $-0.37$ & $-0.82$ & Neither \\
     \label{fig:judge_fan_sensitivity}
 \end{figure}
 
-
-A central question is whether judges and fans evaluate contestants 
-using the same criteria. We compare $t$-statistics across models.
 
 A clear dichotomy emerges: \textbf{Judges} emphasize physical and technical factors like age, dance experience, while \textbf{Fans} respond strongly to pre-existing popularity and social media presence.
 
@@ -735,9 +822,10 @@ where $u_j$ is the random effect for dancer $j$, capturing the dancer's
 
 \begin{table}[H]
 \centering
+\rowcolors{2}{gray!10}{white}
 \begin{tabular}{lcl}
 \toprule
-Dependent Variable & ICC & Interpretation \\
+\rowcolor{grey!10}Dependent Variable & ICC & Interpretation \\
 \midrule
 Judge Score & \textbf{13.6\%} & Dancer explains $\sim$14\% of judge score variance \\
 Fan Vote Share & \textbf{13.9\%} & Dancer matters similarly for audience votes \\
@@ -800,6 +888,7 @@ We rank dancers by the average placement of their partners
 % \bottomrule
 % \end{tabular}
 % \end{table}
+\textbf{Derek Hough }clearly dominates in terms of professional success: across 17 partners, his average partner placement is 2.94. However, we also found that while the first-place partner did indeed have the highest average judges' score, these scores did not necessarily indicate the partner's overall average score. Julianne Hough, who ranked second, only received an average judges' score of 23.6. Meanwhile, Valentin Chmerkovskiy, who had the same average score as Derek at 28.7, only ranked fifth among the partners, with an average placement of 5.26. This suggests that \textbf{audience preferences} are \textbf{less} significantly influenced by the dance partners.
 
 \begin{figure}[H]
     \centering
@@ -808,7 +897,6 @@ We rank dancers by the average placement of their partners
     \label{fig:partner_ranking}
 \end{figure}
 
-\textbf{Derek Hough }clearly dominates in terms of professional success: across 17 partners, his average partner placement is 2.94. However, we also found that while the first-place partner did indeed have the highest average judges' score, these scores did not necessarily indicate the partner's overall average score. Julianne Hough, who ranked second, only received an average judges' score of 23.6. Meanwhile, Valentin Chmerkovskiy, who had the same average score as Derek at 28.7, only ranked fifth among the partners, with an average placement of 5.26. This suggests that \textbf{audience preferences} are \textbf{less} significantly influenced by the dance partners.
 
 
 % ----------------------------------------------------------------------
@@ -855,9 +943,10 @@ As evidenced in Table \ref{tab:benefit_evolution}, the progression from Stage I 
     \centering
     \caption{Total Benefit ($J$) Evolution Across Three Optimization Stages}
     \label{tab:benefit_evolution}
+    \rowcolors{2}{gray!10}{white}
     \begin{tabular}{lcccc}
         \toprule
-        \textbf{Season} & \textbf{Stage I (Baseline)} & \textbf{Stage II (Fixed Opt)} & \textbf{Stage III (Dynamic Opt)} & \textbf{Total Gain} \\
+       \rowcolor{grey!10} \textbf{Season} & \textbf{Stage I (Baseline)} & \textbf{Stage II (Fixed Opt)} & \textbf{Stage III (Dynamic Opt)} & \textbf{Total Gain} \\
         \midrule
         \textbf{S5: Golden}   & 0.489 & 0.532 ($\lambda=0.4$) & \textbf{0.579} & +18.4\% \\
         \textbf{S8: Volatile} & 0.371 & 0.429 ($\lambda=0.2$) & \textbf{0.463} & +24.6\% \\
@@ -878,9 +967,9 @@ Figure \ref{fig:comprehensive_plots} visualizes the results. Subplot (A) highlig
 
 The "N-Shape" strategy avoids the compromise of a fixed $\lambda$. In the \textbf{Traffic Accumulation Phase} (Weeks 1-4, $\lambda \approx 0.35$), the system lowers the judge's influence to allow high-profile celebrities to maximize the PID-P (Peak) component. This is followed by a \textbf{Technical Screening Phase} (Week 5, $\lambda = 0.69$), where a sharp spike in professional control eliminates "low-skill, high-popularity" outliers, effectively resetting the Fairness metric. After an \textbf{Audience Activation Phase} (Week 9), the season concludes with a \textbf{Professional Guardrail} (Week 10, $\lambda = 0.79$), where the judges ensure the final champion meets the brand's professional standards, protecting the show's long-term credit. 
 
-In summary, Task 4 proves that commercial peak and competitive fairness can be harmonized through temporal separation of power, provided the weighting system is dynamically calibrated to the specific signal of each season.
+In summary, Task 4 proves that commercial peak and competitive fairness can be harmonized through temporal separation of power, provided the weighting system is dynamically calibrated to the specific signal of each season.Furthermore, the event organizers can also influence the direction of the competition by adjusting the weights of the various components of $J(\vec{\lambda})$ , thereby increasing their control over the event.
 
-\newpage
+% \newpage
 \section{Model Analysis}
 \subsection{Strength}
 \noindent The innovation and advantages of this study lie in constructing a model for estimating audience votes and optimizing scoring rules in \emph{Dancing with the Stars}. Its main advantages can be summarized in the following five points:
@@ -900,7 +989,7 @@ In summary, Task 4 proves that commercial peak and competitive fairness can be h
 \subsection{Conclusion}
 \noindent This study develops a computational framework to analyze voting and scoring in \emph{Dancing with the Stars}. It introduces an inverse optimization model to estimate latent audience votes and adapts this analysis across different historical scoring regimes. A dynamic control system is designed to balance viewer engagement with competitive fairness over time. The framework integrates external data and quantifies uncertainty, providing a principled tool for evaluating and designing engaging competition formats.
 
-\newpage
+% \newpage
 \bibliographystyle{unsrt}
 \bibliography{ref}  
 
